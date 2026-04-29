@@ -57,7 +57,7 @@ function LivePageClient() {
   const [loadingStage, setLoadingStage] = useState<
     'loading' | 'fetching' | 'ready'
   >('loading');
-  const [loadingMessage, setLoadingMessage] = useState('正在加载直播源...');
+  const [loadingMessage, setLoadingMessage] = useState('Đang tải nguồn trực tiếp...');
   const [error, setError] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
@@ -230,7 +230,7 @@ function LivePageClient() {
   const fetchLiveSources = async () => {
     try {
       setLoadingStage('fetching');
-      setLoadingMessage('正在获取直播源...');
+      setLoadingMessage('Đang lấy nguồn trực tiếp...');
 
       // 获取 AdminConfig 中的直播源信息
       const response = await fetch('/api/live/sources');
@@ -265,7 +265,7 @@ function LivePageClient() {
       }
 
       setLoadingStage('ready');
-      setLoadingMessage('✨ 准备就绪...');
+      setLoadingMessage('✨ Sẵn sàng...');
 
       setTimeout(() => {
         setLoading(false);
@@ -921,7 +921,7 @@ function LivePageClient() {
           autoPlayback: false,
           airplay: true,
           theme: '#22c55e',
-          lang: 'zh-cn',
+          lang: 'vi',
           hotkey: false,
           fastForward: false, // 直播不需要快进
           autoOrientation: true,
@@ -1205,7 +1205,7 @@ function LivePageClient() {
               }
               className='group relative flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-200'
               title={
-                isChannelListCollapsed ? '显示频道列表' : '隐藏频道列表'
+                isChannelListCollapsed ? 'Hiện danh sách kênh' : 'Ẩn danh sách kênh'
               }
             >
               <svg
@@ -1223,7 +1223,7 @@ function LivePageClient() {
                 />
               </svg>
               <span className='text-xs font-medium text-gray-600 dark:text-gray-300'>
-                {isChannelListCollapsed ? '显示' : '隐藏'}
+                {isChannelListCollapsed ? 'Hiện' : 'Ẩn'}
               </span>
 
               {/* 精致的状态指示点 */}
@@ -1260,18 +1260,18 @@ function LivePageClient() {
                       </div>
                       <div className='space-y-4'>
                         <h3 className='text-xl font-semibold text-white'>
-                          暂不支持的直播流类型
+                          Loại luồng trực tiếp chưa được hỗ trợ
                         </h3>
                         <div className='bg-orange-500/20 border border-orange-500/30 rounded-lg p-4'>
                           <p className='text-orange-300 font-medium'>
-                            当前频道直播流类型：<span className='text-white font-bold'>{unsupportedType.toUpperCase()}</span>
+                            Loại luồng trực tiếp hiện tại: <span className='text-white font-bold'>{unsupportedType.toUpperCase()}</span>
                           </p>
                           <p className='text-sm text-orange-200 mt-2'>
-                            目前仅支持 M3U8 格式的直播流
+                            Hiện tại chỉ hỗ trợ luồng trực tiếp định dạng M3U8
                           </p>
                         </div>
                         <p className='text-sm text-gray-300'>
-                          请尝试其他频道
+                          Vui lòng thử kênh khác
                         </p>
                       </div>
                     </div>
@@ -1290,7 +1290,7 @@ function LivePageClient() {
                       </div>
                       <div className='space-y-2'>
                         <p className='text-xl font-semibold text-white animate-pulse'>
-                          🔄 IPTV 加载中...
+                          🔄 IPTV đang tải...
                         </p>
                       </div>
                     </div>
@@ -1316,7 +1316,7 @@ function LivePageClient() {
                       }
                     `.trim()}
                   >
-                    频道
+                    Kênh
                   </div>
                   <div
                     onClick={() => setActiveTab('sources')}
@@ -1327,7 +1327,7 @@ function LivePageClient() {
                       }
                     `.trim()}
                   >
-                    直播源
+                    Nguồn trực tiếp
                   </div>
                 </div>
 
@@ -1340,7 +1340,7 @@ function LivePageClient() {
                       {isSwitchingSource && (
                         <div className='flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400'>
                           <div className='w-2 h-2 bg-amber-500 rounded-full animate-pulse'></div>
-                          切换直播源中...
+                          Đang chuyển nguồn trực tiếp...
                         </div>
                       )}
 
@@ -1451,10 +1451,10 @@ function LivePageClient() {
                             <Tv className='w-8 h-8 text-gray-400 dark:text-gray-600' />
                           </div>
                           <p className='text-gray-500 dark:text-gray-400 font-medium'>
-                            暂无可用频道
+                            Chưa có kênh khả dụng
                           </p>
                           <p className='text-sm text-gray-400 dark:text-gray-500 mt-1'>
-                            请选择其他直播源或稍后再试
+                            Vui lòng chọn nguồn trực tiếp khác hoặc thử lại sau
                           </p>
                         </div>
                       )}
@@ -1490,7 +1490,7 @@ function LivePageClient() {
                                   {source.name}
                                 </div>
                                 <div className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                                  {!source.channelNumber || source.channelNumber === 0 ? '-' : `${source.channelNumber} 个频道`}
+                                  {!source.channelNumber || source.channelNumber === 0 ? '-' : `${source.channelNumber} kênh`}
                                 </div>
                               </div>
 
@@ -1507,10 +1507,10 @@ function LivePageClient() {
                             <Radio className='w-8 h-8 text-gray-400 dark:text-gray-600' />
                           </div>
                           <p className='text-gray-500 dark:text-gray-400 font-medium'>
-                            暂无可用直播源
+                            Chưa có nguồn trực tiếp khả dụng
                           </p>
                           <p className='text-sm text-gray-400 dark:text-gray-500 mt-1'>
-                            请检查网络连接或联系管理员添加直播源
+                            Vui lòng kiểm tra mạng hoặc liên hệ quản trị viên để thêm nguồn trực tiếp
                           </p>
                         </div>
                       )}
@@ -1552,7 +1552,7 @@ function LivePageClient() {
                           handleToggleFavorite();
                         }}
                         className='flex-shrink-0 hover:opacity-80 transition-opacity'
-                        title={favorited ? '取消收藏' : '收藏'}
+                        title={favorited ? 'Bỏ yêu thích' : 'Yêu thích'}
                       >
                         <FavoriteIcon filled={favorited} />
                       </button>
@@ -1605,7 +1605,7 @@ const FavoriteIcon = ({ filled }: { filled: boolean }) => {
 
 export default function LivePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Đang tải...</div>}>
       <LivePageGuard />
     </Suspense>
   );
@@ -1620,7 +1620,7 @@ function LivePageGuard() {
   }, []);
 
   if (enabled === null) {
-    return <div>Loading...</div>;
+    return <div>Đang tải...</div>;
   }
 
   if (!enabled) {
@@ -1629,10 +1629,10 @@ function LivePageGuard() {
         <div className='flex flex-col items-center justify-center min-h-[60vh] text-center px-4'>
           <Radio className='h-16 w-16 text-gray-300 dark:text-gray-600 mb-4' />
           <h2 className='text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2'>
-            网页直播未开启
+            Chưa bật chế độ phát trực tiếp trên web
           </h2>
           <p className='text-gray-500 dark:text-gray-400 max-w-md'>
-            当前站点未启用网页直播功能，请联系站点管理员开启。
+            Trang hiện tại chưa bật tính năng phát trực tiếp trên web. Vui lòng liên hệ quản trị viên.
           </p>
         </div>
       </PageLayout>

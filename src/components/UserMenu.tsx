@@ -76,25 +76,25 @@ export const UserMenu: React.FC = () => {
 
   // 豆瓣数据源选项
   const doubanDataSourceOptions = [
-    { value: 'direct', label: '直连（服务器直接请求豆瓣）' },
+    { value: 'direct', label: 'Kết nối trực tiếp (máy chủ gọi Douban)' },
     { value: 'cors-proxy-zwei', label: 'Cors Proxy By Zwei' },
     {
       value: 'cmliussss-cdn-tencent',
-      label: '豆瓣 CDN By CMLiussss（腾讯云）',
+      label: 'Douban CDN bởi CMLiussss (Tencent Cloud)',
     },
-    { value: 'cmliussss-cdn-ali', label: '豆瓣 CDN By CMLiussss（阿里云）' },
-    { value: 'custom', label: '自定义代理' },
+    { value: 'cmliussss-cdn-ali', label: 'Douban CDN bởi CMLiussss (Alibaba Cloud)' },
+    { value: 'custom', label: 'Proxy tuỳ chỉnh' },
   ];
 
   // 豆瓣图片代理选项
   const doubanImageProxyTypeOptions = [
-    { value: 'server', label: '服务器代理（由服务器代理请求豆瓣）' },
+    { value: 'server', label: 'Proxy qua máy chủ (máy chủ gọi Douban)' },
     {
       value: 'cmliussss-cdn-tencent',
-      label: '豆瓣 CDN By CMLiussss（腾讯云）',
+      label: 'Douban CDN bởi CMLiussss (Tencent Cloud)',
     },
-    { value: 'cmliussss-cdn-ali', label: '豆瓣 CDN By CMLiussss（阿里云）' },
-    { value: 'custom', label: '自定义代理' },
+    { value: 'cmliussss-cdn-ali', label: 'Douban CDN bởi CMLiussss (Alibaba Cloud)' },
+    { value: 'custom', label: 'Proxy tuỳ chỉnh' },
   ];
 
   // 修改密码相关状态
@@ -206,7 +206,7 @@ export const UserMenu: React.FC = () => {
         const status = await checkForUpdates();
         setUpdateStatus(status);
       } catch (error) {
-        console.warn('版本检查失败:', error);
+        console.warn('Kiểm tra phiên bản thất bại:', error);
       } finally {
         setIsChecking(false);
       }
@@ -265,7 +265,7 @@ export const UserMenu: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
-      console.error('注销请求失败:', error);
+      console.error('Yêu cầu đăng xuất thất bại:', error);
     }
     window.location.href = '/';
   };
@@ -294,12 +294,12 @@ export const UserMenu: React.FC = () => {
 
     // 验证密码
     if (!newPassword) {
-      setPasswordError('新密码不得为空');
+      setPasswordError('Mật khẩu mới không được để trống');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError('两次输入的密码不一致');
+      setPasswordError('Hai lần nhập mật khẩu không khớp');
       return;
     }
 
@@ -319,7 +319,7 @@ export const UserMenu: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setPasswordError(data.error || '修改密码失败');
+        setPasswordError(data.error || 'Đổi mật khẩu thất bại');
         return;
       }
 
@@ -327,7 +327,7 @@ export const UserMenu: React.FC = () => {
       setIsChangePasswordOpen(false);
       await handleLogout();
     } catch (error) {
-      setPasswordError('网络错误，请稍后重试');
+      setPasswordError('Lỗi mạng, vui lòng thử lại sau');
     } finally {
       setPasswordLoading(false);
     }
@@ -466,11 +466,11 @@ export const UserMenu: React.FC = () => {
   const getRoleText = (role?: string) => {
     switch (role) {
       case 'owner':
-        return '站长';
+        return 'Chủ trang';
       case 'admin':
-        return '管理员';
+        return 'Quản trị viên';
       case 'user':
-        return '用户';
+        return 'Người dùng';
       default:
         return '';
     }
@@ -492,7 +492,7 @@ export const UserMenu: React.FC = () => {
           <div className='space-y-1'>
             <div className='flex items-center justify-between'>
               <span className='text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                当前用户
+                Người dùng hiện tại
               </span>
               <span
                 className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${(authInfo?.role || 'user') === 'owner'
@@ -510,8 +510,8 @@ export const UserMenu: React.FC = () => {
                 {authInfo?.username || 'default'}
               </div>
               <div className='text-[10px] text-gray-400 dark:text-gray-500'>
-                数据存储：
-                {storageType === 'localstorage' ? '本地' : storageType}
+                Lưu trữ:
+                {storageType === 'localstorage' ? 'Cục bộ' : storageType}
               </div>
             </div>
           </div>
@@ -525,7 +525,7 @@ export const UserMenu: React.FC = () => {
             className='w-full px-3 py-2 text-left flex items-center gap-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm'
           >
             <Settings className='w-4 h-4 text-gray-500 dark:text-gray-400' />
-            <span className='font-medium'>设置</span>
+            <span className='font-medium'>Cài đặt</span>
           </button>
 
           {/* 管理面板按钮 */}
@@ -535,7 +535,7 @@ export const UserMenu: React.FC = () => {
               className='w-full px-3 py-2 text-left flex items-center gap-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm'
             >
               <Shield className='w-4 h-4 text-gray-500 dark:text-gray-400' />
-              <span className='font-medium'>管理面板</span>
+              <span className='font-medium'>Bảng quản trị</span>
             </button>
           )}
 
@@ -546,7 +546,7 @@ export const UserMenu: React.FC = () => {
               className='w-full px-3 py-2 text-left flex items-center gap-2.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm'
             >
               <KeyRound className='w-4 h-4 text-gray-500 dark:text-gray-400' />
-              <span className='font-medium'>修改密码</span>
+            <span className='font-medium'>Đổi mật khẩu</span>
             </button>
           )}
 
@@ -559,7 +559,7 @@ export const UserMenu: React.FC = () => {
             className='w-full px-3 py-2 text-left flex items-center gap-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm'
           >
             <LogOut className='w-4 h-4' />
-            <span className='font-medium'>登出</span>
+            <span className='font-medium'>Đăng xuất</span>
           </button>
 
           {/* 分割线 */}
@@ -631,20 +631,20 @@ export const UserMenu: React.FC = () => {
           <div className='flex items-center justify-between mb-6'>
             <div className='flex items-center gap-3'>
               <h3 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                本地设置
+                Cài đặt cục bộ
               </h3>
               <button
                 onClick={handleResetSettings}
                 className='px-2 py-1 text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border border-red-200 hover:border-red-300 dark:border-red-800 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors'
-                title='重置为默认设置'
+                title='Đặt lại về mặc định'
               >
-                恢复默认
+                Khôi phục mặc định
               </button>
             </div>
-            <button
+              <button
               onClick={handleCloseSettings}
               className='w-8 h-8 p-1 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
-              aria-label='Close'
+                aria-label='Đóng'
             >
               <X className='w-full h-full' />
             </button>
@@ -656,10 +656,10 @@ export const UserMenu: React.FC = () => {
             <div className='space-y-3'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  豆瓣数据代理
+                  Proxy dữ liệu Douban
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  选择获取豆瓣数据的方式
+                  Chọn cách lấy dữ liệu Douban
                 </p>
               </div>
               <div className='relative' data-dropdown='douban-datasource'>
@@ -734,16 +734,16 @@ export const UserMenu: React.FC = () => {
               <div className='space-y-3'>
                 <div>
                   <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    豆瓣代理地址
+                    Địa chỉ proxy Douban
                   </h4>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    自定义代理服务器地址
+                    Địa chỉ máy chủ proxy tuỳ chỉnh
                   </p>
                 </div>
                 <input
                   type='text'
                   className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
-                  placeholder='例如: https://proxy.example.com/fetch?url='
+                  placeholder='Ví dụ: https://proxy.example.com/fetch?url='
                   value={doubanProxyUrl}
                   onChange={(e) => handleDoubanProxyUrlChange(e.target.value)}
                 />
@@ -757,10 +757,10 @@ export const UserMenu: React.FC = () => {
             <div className='space-y-3'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  豆瓣图片代理
+                  Proxy ảnh Douban
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  选择获取豆瓣图片的方式
+                  Chọn cách lấy ảnh Douban
                 </p>
               </div>
               <div className='relative' data-dropdown='douban-image-proxy'>
@@ -842,16 +842,16 @@ export const UserMenu: React.FC = () => {
               <div className='space-y-3'>
                 <div>
                   <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                    豆瓣图片代理地址
+                    Địa chỉ proxy ảnh Douban
                   </h4>
                   <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                    自定义图片代理服务器地址
+                    Địa chỉ máy chủ proxy ảnh tuỳ chỉnh
                   </p>
                 </div>
                 <input
                   type='text'
                   className='w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm hover:border-gray-400 dark:hover:border-gray-500'
-                  placeholder='例如: https://proxy.example.com/fetch?url='
+                  placeholder='Ví dụ: https://proxy.example.com/fetch?url='
                   value={doubanImageProxyUrl}
                   onChange={(e) =>
                     handleDoubanImageProxyUrlChange(e.target.value)
@@ -867,10 +867,10 @@ export const UserMenu: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  默认聚合搜索结果
+                  Mặc định gộp kết quả tìm kiếm
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  搜索时默认按标题和年份聚合显示结果
+                  Khi tìm kiếm, mặc định gộp theo tiêu đề và năm
                 </p>
               </div>
               <label className='flex items-center cursor-pointer'>
@@ -891,10 +891,10 @@ export const UserMenu: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  优选和测速
+                  Tối ưu & đo tốc độ
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  如出现播放器劫持问题可关闭
+                  Có thể tắt nếu gặp vấn đề bị “hijack” trình phát
                 </p>
               </div>
               <label className='flex items-center cursor-pointer'>
@@ -915,10 +915,10 @@ export const UserMenu: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  流式搜索输出
+                  Kết quả tìm kiếm dạng “stream”
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  启用搜索结果实时流式输出，关闭后使用传统一次性搜索
+                  Bật để nhận kết quả theo thời gian thực; tắt để dùng tìm kiếm trả về một lần
                 </p>
               </div>
               <label className='flex items-center cursor-pointer'>
@@ -939,10 +939,10 @@ export const UserMenu: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                  IPTV 视频浏览器直连
+                  IPTV: trình duyệt kết nối trực tiếp
                 </h4>
                 <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                  开启 IPTV 视频浏览器直连时，需要自备 Allow CORS 插件
+                  Khi bật, bạn cần tự cài extension “Allow CORS”
                 </p>
               </div>
               <label className='flex items-center cursor-pointer'>
@@ -963,7 +963,7 @@ export const UserMenu: React.FC = () => {
           {/* 底部说明 */}
           <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700'>
             <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-              这些设置保存在本地浏览器中
+              Các cài đặt này được lưu trong trình duyệt của bạn
             </p>
           </div>
         </div>
@@ -1010,12 +1010,12 @@ export const UserMenu: React.FC = () => {
           {/* 标题栏 */}
           <div className='flex items-center justify-between mb-6'>
             <h3 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-              修改密码
+              Đổi mật khẩu
             </h3>
             <button
               onClick={handleCloseChangePassword}
               className='w-8 h-8 p-1 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
-              aria-label='Close'
+              aria-label='Đóng'
             >
               <X className='w-full h-full' />
             </button>
@@ -1026,12 +1026,12 @@ export const UserMenu: React.FC = () => {
             {/* 新密码输入 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                新密码
+                Mật khẩu mới
               </label>
               <input
                 type='password'
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400'
-                placeholder='请输入新密码'
+                placeholder='Nhập mật khẩu mới'
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 disabled={passwordLoading}
@@ -1041,12 +1041,12 @@ export const UserMenu: React.FC = () => {
             {/* 确认密码输入 */}
             <div>
               <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                确认密码
+                Xác nhận mật khẩu
               </label>
               <input
                 type='password'
                 className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400'
-                placeholder='请再次输入新密码'
+                placeholder='Nhập lại mật khẩu mới'
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={passwordLoading}
@@ -1068,21 +1068,21 @@ export const UserMenu: React.FC = () => {
               className='flex-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors'
               disabled={passwordLoading}
             >
-              取消
+              Hủy
             </button>
             <button
               onClick={handleSubmitChangePassword}
               className='flex-1 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
               disabled={passwordLoading || !newPassword || !confirmPassword}
             >
-              {passwordLoading ? '修改中...' : '确认修改'}
+              {passwordLoading ? 'Đang đổi...' : 'Xác nhận'}
             </button>
           </div>
 
           {/* 底部说明 */}
           <div className='mt-4 pt-4 border-t border-gray-200 dark:border-gray-700'>
             <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-              修改密码后需要重新登录
+              Sau khi đổi mật khẩu, bạn cần đăng nhập lại
             </p>
           </div>
         </div>
@@ -1096,7 +1096,7 @@ export const UserMenu: React.FC = () => {
         <button
           onClick={handleMenuClick}
           className='w-10 h-10 p-2 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-200/50 dark:text-gray-300 dark:hover:bg-gray-700/50 transition-colors'
-          aria-label='User Menu'
+          aria-label='Tài khoản'
         >
           <User className='w-full h-full' />
         </button>

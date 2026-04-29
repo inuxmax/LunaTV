@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: siteName,
-    description: '影视聚合',
+    description: 'Tổng hợp phim ảnh',
     manifest: '/manifest.json',
   };
 }
@@ -44,7 +44,7 @@ export default async function RootLayout({
   let siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'MoonTV';
   let announcement =
     process.env.ANNOUNCEMENT ||
-    '本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。';
+    'Trang web này chỉ cung cấp dịch vụ tìm kiếm thông tin phim. Mọi nội dung đến từ bên thứ ba. Chúng tôi không lưu trữ tài nguyên video và không chịu trách nhiệm về độ chính xác, hợp pháp hoặc đầy đủ của nội dung.';
 
   let doubanProxyType = process.env.NEXT_PUBLIC_DOUBAN_PROXY_TYPE || 'cmliussss-cdn-tencent';
   let doubanProxy = process.env.NEXT_PUBLIC_DOUBAN_PROXY || '';
@@ -95,7 +95,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang='zh-CN' suppressHydrationWarning>
+    <html lang='vi' suppressHydrationWarning>
       <head>
         <meta
           name='viewport'

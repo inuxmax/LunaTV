@@ -174,8 +174,8 @@ function HomeClient() {
         <div className='mb-8 flex justify-center'>
           <CapsuleSwitch
             options={[
-              { label: '首页', value: 'home' },
-              { label: '收藏夹', value: 'favorites' },
+              { label: 'Trang chủ', value: 'home' },
+              { label: 'Yêu thích', value: 'favorites' },
             ]}
             active={activeTab}
             onChange={(value) => setActiveTab(value as 'home' | 'favorites')}
@@ -188,7 +188,7 @@ function HomeClient() {
             <section className='mb-8'>
               <div className='mb-4 flex items-center justify-between'>
                 <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                  我的收藏
+                  Yêu thích của tôi
                 </h2>
                 {favoriteItems.length > 0 && (
                   <button
@@ -198,7 +198,7 @@ function HomeClient() {
                       setFavoriteItems([]);
                     }}
                   >
-                    清空
+                    Xóa tất cả
                   </button>
                 )}
               </div>
@@ -215,7 +215,7 @@ function HomeClient() {
                 ))}
                 {favoriteItems.length === 0 && (
                   <div className='col-span-full text-center text-gray-500 py-8 dark:text-gray-400'>
-                    暂无收藏内容
+                    Chưa có nội dung yêu thích
                   </div>
                 )}
               </div>
@@ -230,13 +230,13 @@ function HomeClient() {
               <section className='mb-8'>
                 <div className='mb-4 flex items-center justify-between'>
                   <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                    热门电影
+                    Phim đang hot
                   </h2>
                   <Link
                     href='/douban?type=movie'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    Xem thêm
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -278,13 +278,13 @@ function HomeClient() {
               <section className='mb-8'>
                 <div className='mb-4 flex items-center justify-between'>
                   <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                    热门剧集
+                    Phim bộ đang hot
                   </h2>
                   <Link
                     href='/douban?type=tv'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    Xem thêm
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -325,13 +325,13 @@ function HomeClient() {
               <section className='mb-8'>
                 <div className='mb-4 flex items-center justify-between'>
                   <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                    新番放送
+                    Lịch phát sóng anime
                   </h2>
                   <Link
                     href='/douban?type=anime'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    Xem thêm
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -400,13 +400,13 @@ function HomeClient() {
               <section className='mb-8'>
                 <div className='mb-4 flex items-center justify-between'>
                   <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                    热门综艺
+                    Chương trình giải trí đang hot
                   </h2>
                   <Link
                     href='/douban?type=show'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    Xem thêm
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -485,12 +485,12 @@ function HomeClient() {
           >
             <div className='flex justify-between items-start mb-4'>
               <h3 className='text-2xl font-bold tracking-tight text-gray-800 dark:text-white border-b border-green-500 pb-1'>
-                提示
+                Thông báo
               </h3>
               <button
                 onClick={() => handleCloseAnnouncement(announcement)}
                 className='text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-white transition-colors'
-                aria-label='关闭'
+                aria-label='Đóng'
               ></button>
             </div>
             <div className='mb-6'>
@@ -505,7 +505,7 @@ function HomeClient() {
               onClick={() => handleCloseAnnouncement(announcement)}
               className='w-full rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-4 py-3 text-white font-medium shadow-md hover:shadow-lg hover:from-green-700 hover:to-green-800 dark:from-green-600 dark:to-green-700 dark:hover:from-green-700 dark:hover:to-green-800 transition-all duration-300 transform hover:-translate-y-0.5'
             >
-              我知道了
+              Tôi đã hiểu
             </button>
           </div>
         </div>

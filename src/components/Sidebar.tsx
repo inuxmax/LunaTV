@@ -127,22 +127,22 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
   const [menuItems, setMenuItems] = useState([
     {
       icon: Film,
-      label: '电影',
+      label: 'Phim lẻ',
       href: '/douban?type=movie',
     },
     {
       icon: Tv,
-      label: '剧集',
+      label: 'Phim bộ',
       href: '/douban?type=tv',
     },
     {
       icon: Cat,
-      label: '动漫',
+      label: 'Anime',
       href: '/douban?type=anime',
     },
     {
       icon: Clover,
-      label: '综艺',
+      label: 'Giải trí',
       href: '/douban?type=show',
     },
   ]);
@@ -156,7 +156,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
           ...prevItems,
           {
             icon: Radio,
-            label: '直播',
+            label: 'Trực tiếp',
             href: '/live',
           },
         ];
@@ -169,7 +169,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
           ...prevItems,
           {
             icon: Star,
-            label: '自定义',
+            label: 'Tùy chỉnh',
             href: '/douban?type=custom',
           },
         ];
@@ -224,7 +224,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
                 </div>
                 {!isCollapsed && (
                   <span className='whitespace-nowrap transition-opacity duration-200 opacity-100'>
-                    首页
+                    Trang chủ
                   </span>
                 )}
               </Link>
@@ -244,7 +244,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
                 </div>
                 {!isCollapsed && (
                   <span className='whitespace-nowrap transition-opacity duration-200 opacity-100'>
-                    搜索
+                    Tìm kiếm
                   </span>
                 )}
               </Link>

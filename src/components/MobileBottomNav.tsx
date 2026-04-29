@@ -21,30 +21,30 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
   const currentActive = activePath ?? pathname;
 
   const [navItems, setNavItems] = useState([
-    { icon: Home, label: '首页', href: '/' },
+    { icon: Home, label: 'Trang chủ', href: '/' },
     {
       icon: Film,
-      label: '电影',
+      label: 'Phim lẻ',
       href: '/douban?type=movie',
     },
     {
       icon: Tv,
-      label: '剧集',
+      label: 'Phim bộ',
       href: '/douban?type=tv',
     },
     {
       icon: Cat,
-      label: '动漫',
+      label: 'Anime',
       href: '/douban?type=anime',
     },
     {
       icon: Clover,
-      label: '综艺',
+      label: 'Giải trí',
       href: '/douban?type=show',
     },
     {
       icon: Radio,
-      label: '直播',
+      label: 'Trực tiếp',
       href: '/live',
     },
   ]);
@@ -56,7 +56,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
         ...prevItems,
         {
           icon: Star,
-          label: '自定义',
+          label: 'Tùy chỉnh',
           href: '/douban?type=custom',
         },
       ]);

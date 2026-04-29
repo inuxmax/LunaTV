@@ -685,21 +685,21 @@ function DoubanPageClient() {
   const getPageTitle = () => {
     // 根据 type 生成标题
     return type === 'movie'
-      ? '电影'
+      ? 'Phim lẻ'
       : type === 'tv'
-        ? '电视剧'
+        ? 'Phim bộ'
         : type === 'anime'
-          ? '动漫'
+          ? 'Anime'
           : type === 'show'
-            ? '综艺'
-            : '自定义';
+            ? 'Giải trí'
+            : 'Tùy chỉnh';
   };
 
   const getPageDescription = () => {
     if (type === 'anime' && primarySelection === '每日放送') {
-      return '来自 Bangumi 番组计划的精选内容';
+      return 'Nội dung chọn lọc từ Bangumi';
     }
-    return '来自豆瓣的精选内容';
+    return 'Nội dung chọn lọc từ Douban';
   };
 
   const getActivePath = () => {
@@ -800,7 +800,7 @@ function DoubanPageClient() {
               {isLoadingMore && (
                 <div className='flex items-center gap-2'>
                   <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-green-500'></div>
-                  <span className='text-gray-600'>加载中...</span>
+                  <span className='text-gray-600'>Đang tải...</span>
                 </div>
               )}
             </div>
@@ -808,12 +808,12 @@ function DoubanPageClient() {
 
           {/* 没有更多数据提示 */}
           {!hasMore && doubanData.length > 0 && (
-            <div className='text-center text-gray-500 py-8'>已加载全部内容</div>
+            <div className='text-center text-gray-500 py-8'>Đã tải hết nội dung</div>
           )}
 
           {/* 空状态 */}
           {!loading && doubanData.length === 0 && (
-            <div className='text-center text-gray-500 py-8'>暂无相关内容</div>
+            <div className='text-center text-gray-500 py-8'>Chưa có nội dung phù hợp</div>
           )}
         </div>
       </div>

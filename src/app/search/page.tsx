@@ -223,14 +223,14 @@ function SearchPageClient() {
     });
 
     const sourceOptions: { label: string; value: string }[] = [
-      { label: '全部来源', value: 'all' },
+      { label: 'Tất cả nguồn', value: 'all' },
       ...Array.from(sourcesSet.entries())
         .sort((a, b) => a[1].localeCompare(b[1]))
         .map(([value, label]) => ({ label, value })),
     ];
 
     const titleOptions: { label: string; value: string }[] = [
-      { label: '全部标题', value: 'all' },
+      { label: 'Tất cả tiêu đề', value: 'all' },
       ...Array.from(titlesSet.values())
         .sort((a, b) => a.localeCompare(b))
         .map((t) => ({ label: t, value: t })),
@@ -241,21 +241,21 @@ function SearchPageClient() {
     const knownYears = years.filter((y) => y !== 'unknown').sort((a, b) => parseInt(b) - parseInt(a));
     const hasUnknown = years.includes('unknown');
     const yearOptions: { label: string; value: string }[] = [
-      { label: '全部年份', value: 'all' },
+      { label: 'Tất cả năm', value: 'all' },
       ...knownYears.map((y) => ({ label: y, value: y })),
-      ...(hasUnknown ? [{ label: '未知', value: 'unknown' }] : []),
+      ...(hasUnknown ? [{ label: 'Không rõ', value: 'unknown' }] : []),
     ];
 
     const categoriesAll: SearchFilterCategory[] = [
-      { key: 'source', label: '来源', options: sourceOptions },
-      { key: 'title', label: '标题', options: titleOptions },
-      { key: 'year', label: '年份', options: yearOptions },
+      { key: 'source', label: 'Nguồn', options: sourceOptions },
+      { key: 'title', label: 'Tiêu đề', options: titleOptions },
+      { key: 'year', label: 'Năm', options: yearOptions },
     ];
 
     const categoriesAgg: SearchFilterCategory[] = [
-      { key: 'source', label: '来源', options: sourceOptions },
-      { key: 'title', label: '标题', options: titleOptions },
-      { key: 'year', label: '年份', options: yearOptions },
+      { key: 'source', label: 'Nguồn', options: sourceOptions },
+      { key: 'title', label: 'Tiêu đề', options: titleOptions },
+      { key: 'year', label: 'Năm', options: yearOptions },
     ];
 
     return { categoriesAll, categoriesAgg };
@@ -652,7 +652,7 @@ function SearchPageClient() {
                 value={searchQuery}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
-                placeholder='搜索电影、电视剧...'
+                placeholder='Tìm phim, phim bộ...'
                 autoComplete="off"
                 className='w-full h-12 rounded-lg bg-gray-50/80 py-3 pl-10 pr-12 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:bg-white border border-gray-200/50 shadow-sm dark:bg-gray-800 dark:text-gray-300 dark:placeholder-gray-500 dark:focus:bg-gray-700 dark:border-gray-700'
               />
@@ -667,7 +667,7 @@ function SearchPageClient() {
                     document.getElementById('searchInput')?.focus();
                   }}
                   className='absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors dark:text-gray-500 dark:hover:text-gray-300'
-                  aria-label='清除搜索内容'
+                  aria-label='Xóa nội dung tìm kiếm'
                 >
                   <X className='h-5 w-5' />
                 </button>
@@ -704,7 +704,7 @@ function SearchPageClient() {
               {/* 标题 */}
               <div className='mb-4'>
                 <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                  搜索结果
+                  Kết quả tìm kiếm
                   {totalSources > 0 && useFluidSearch && (
                     <span className='ml-2 text-sm font-normal text-gray-500 dark:text-gray-400'>
                       {completedSources}/{totalSources}
@@ -736,7 +736,7 @@ function SearchPageClient() {
                 </div>
                 {/* 聚合开关 */}
                 <label className='flex items-center gap-2 cursor-pointer select-none shrink-0'>
-                  <span className='text-xs sm:text-sm text-gray-700 dark:text-gray-300'>聚合</span>
+                  <span className='text-xs sm:text-sm text-gray-700 dark:text-gray-300'>Gộp nhóm</span>
                   <div className='relative'>
                     <input
                       type='checkbox'
@@ -756,7 +756,7 @@ function SearchPageClient() {
                   </div>
                 ) : (
                   <div className='text-center text-gray-500 py-8 dark:text-gray-400'>
-                    未找到相关结果
+                    Không tìm thấy kết quả phù hợp
                   </div>
                 )
               ) : (
@@ -840,7 +840,7 @@ function SearchPageClient() {
             // 搜索历史
             <section className='mb-12'>
               <h2 className='mb-4 text-xl font-bold text-gray-800 text-left dark:text-gray-200'>
-                搜索历史
+                Lịch sử tìm kiếm
                 {searchHistory.length > 0 && (
                   <button
                     onClick={() => {
@@ -848,7 +848,7 @@ function SearchPageClient() {
                     }}
                     className='ml-3 text-sm text-gray-500 hover:text-red-500 transition-colors dark:text-gray-400 dark:hover:text-red-500'
                   >
-                    清空
+                    Xóa tất cả
                   </button>
                 )}
               </h2>
@@ -868,7 +868,7 @@ function SearchPageClient() {
                     </button>
                     {/* 删除按钮 */}
                     <button
-                      aria-label='删除搜索历史'
+                      aria-label='Xóa lịch sử tìm kiếm'
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
@@ -893,7 +893,7 @@ function SearchPageClient() {
           ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
-        aria-label='返回顶部'
+        aria-label='Lên đầu trang'
       >
         <ChevronUp className='w-6 h-6 transition-transform group-hover:scale-110' />
       </button>

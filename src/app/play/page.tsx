@@ -53,7 +53,7 @@ function PlayPageClient() {
   const [loadingStage, setLoadingStage] = useState<
     'searching' | 'preferring' | 'fetching' | 'ready'
   >('searching');
-  const [loadingMessage, setLoadingMessage] = useState('正在搜索播放源...');
+  const [loadingMessage, setLoadingMessage] = useState('Đang tìm nguồn phát...');
   const [error, setError] = useState<string | null>(null);
   const [detail, setDetail] = useState<SearchResult | null>(null);
 
@@ -710,7 +710,7 @@ function PlayPageClient() {
 
     const initAll = async () => {
       if (!currentSource && !currentId && !videoTitle && !searchTitle) {
-        setError('缺少必要参数');
+        setError('Thiếu tham số cần thiết');
         setLoading(false);
         return;
       }
@@ -718,8 +718,8 @@ function PlayPageClient() {
       setLoadingStage(currentSource && currentId ? 'fetching' : 'searching');
       setLoadingMessage(
         currentSource && currentId
-          ? '🎬 正在获取视频详情...'
-          : '🔍 正在搜索播放源...'
+          ? '🎬 Đang lấy chi tiết video...'
+          : '🔍 Đang tìm nguồn phát...'
       );
 
       let sourcesInfo = await fetchSourcesData(searchTitle || videoTitle);
@@ -733,7 +733,7 @@ function PlayPageClient() {
         sourcesInfo = await fetchSourceDetail(currentSource, currentId);
       }
       if (sourcesInfo.length === 0) {
-        setError('未找到匹配结果');
+        setError('Không tìm thấy kết quả phù hợp');
         setLoading(false);
         return;
       }
@@ -747,7 +747,7 @@ function PlayPageClient() {
         if (target) {
           detailData = target;
         } else {
-          setError('未找到匹配结果');
+          setError('Không tìm thấy kết quả phù hợp');
           setLoading(false);
           return;
         }
@@ -759,7 +759,7 @@ function PlayPageClient() {
         optimizationEnabled
       ) {
         setLoadingStage('preferring');
-        setLoadingMessage('⚡ 正在优选最佳播放源...');
+        setLoadingMessage('⚡ Đang chọn nguồn phát tốt nhất...')
 
         detailData = await preferBestSource(sourcesInfo);
       }
@@ -788,7 +788,7 @@ function PlayPageClient() {
       window.history.replaceState({}, '', newUrl.toString());
 
       setLoadingStage('ready');
-      setLoadingMessage('✨ 准备就绪，即将开始播放...');
+      setLoadingMessage('✨ Sẵn sàng, sắp bắt đầu phát...');
 
       // 短暂延迟让用户看到完成状态
       setTimeout(() => {
@@ -894,7 +894,7 @@ function PlayPageClient() {
         (source) => source.source === newSource && source.id === newId
       );
       if (!newDetail) {
-        setError('未找到匹配结果');
+        setError('Không tìm thấy kết quả phù hợp');
         return;
       }
 
@@ -934,7 +934,7 @@ function PlayPageClient() {
     } catch (err) {
       // 隐藏换源加载状态
       setIsVideoLoading(false);
-      setError(err instanceof Error ? err.message : '换源失败');
+      setError(err instanceof Error ? err.message : 'Chuyển nguồn thất bại');
     }
   };
 
@@ -1251,7 +1251,7 @@ function PlayPageClient() {
     }
 
     if (!videoUrl) {
-      setError('视频地址无效');
+        setError('Địa chỉ video không hợp lệ');
       return;
     }
     console.log(videoUrl);
@@ -1313,7 +1313,7 @@ function PlayPageClient() {
         autoPlayback: false,
         airplay: true,
         theme: '#22c55e',
-        lang: 'zh-cn',
+        lang: 'vi',
         hotkey: false,
         fastForward: true,
         autoOrientation: true,
@@ -1381,9 +1381,9 @@ function PlayPageClient() {
         },
         settings: [
           {
-            html: '去广告',
+            html: 'Chặn quảng cáo',
             icon: '<text x="50%" y="50%" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff">AD</text>',
-            tooltip: blockAdEnabled ? '已开启' : '已关闭',
+            tooltip: blockAdEnabled ? 'Đã bật' : 'Đã tắt',
             onClick() {
               const newVal = !blockAdEnabled;
               try {
@@ -1403,12 +1403,12 @@ function PlayPageClient() {
               } catch (_) {
                 // ignore
               }
-              return newVal ? '当前开启' : '当前关闭';
+              return newVal ? 'Đang bật' : 'Đang tắt';
             },
           },
           {
-            name: '跳过片头片尾',
-            html: '跳过片头片尾',
+            name: 'Bỏ qua đầu/cuối phim',
+            html: 'Bỏ qua đầu/cuối phim',
             switch: skipConfigRef.current.enable,
             onSwitch: function (item) {
               const newConfig = {
@@ -1420,7 +1420,7 @@ function PlayPageClient() {
             },
           },
           {
-            html: '删除跳过配置',
+            html: 'Xóa cấu hình bỏ qua',
             onClick: function () {
               handleSkipConfigChange({
                 enable: false,
@@ -1431,12 +1431,12 @@ function PlayPageClient() {
             },
           },
           {
-            name: '设置片头',
-            html: '设置片头',
+            name: 'Đặt mốc đầu phim',
+            html: 'Đặt mốc đầu phim',
             icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="12" r="2" fill="#ffffff"/><path d="M9 12L17 12" stroke="#ffffff" stroke-width="2"/><path d="M17 6L17 18" stroke="#ffffff" stroke-width="2"/></svg>',
             tooltip:
               skipConfigRef.current.intro_time === 0
-                ? '设置片头时间'
+                ? 'Đặt thời gian đầu phim'
                 : `${formatTime(skipConfigRef.current.intro_time)}`,
             onClick: function () {
               const currentTime = artPlayerRef.current?.currentTime || 0;
@@ -1451,12 +1451,12 @@ function PlayPageClient() {
             },
           },
           {
-            name: '设置片尾',
-            html: '设置片尾',
+            name: 'Đặt mốc cuối phim',
+            html: 'Đặt mốc cuối phim',
             icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 6L7 18" stroke="#ffffff" stroke-width="2"/><path d="M7 12L15 12" stroke="#ffffff" stroke-width="2"/><circle cx="19" cy="12" r="2" fill="#ffffff"/></svg>',
             tooltip:
               skipConfigRef.current.outro_time >= 0
-                ? '设置片尾时间'
+                ? 'Đặt thời gian cuối phim'
                 : `-${formatTime(-skipConfigRef.current.outro_time)}`,
             onClick: function () {
               const outroTime =
@@ -1481,7 +1481,7 @@ function PlayPageClient() {
             position: 'left',
             index: 13,
             html: '<i class="art-icon flex"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" fill="currentColor"/></svg></i>',
-            tooltip: '播放下一集',
+            tooltip: 'Phát tập tiếp theo',
             click: function () {
               handleNextEpisode();
             },
@@ -1650,7 +1650,7 @@ function PlayPageClient() {
       }
     } catch (err) {
       console.error('创建播放器失败:', err);
-      setError('播放器初始化失败');
+      setError('Khởi tạo trình phát thất bại');
     }
   }, [Artplayer, Hls, videoUrl, loading, blockAdEnabled]);
 
@@ -1789,7 +1789,7 @@ function PlayPageClient() {
             {/* 错误信息 */}
             <div className='space-y-4 mb-8'>
               <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>
-                哎呀，出现了一些问题
+                Đã có sự cố xảy ra
               </h2>
               <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
                 <p className='text-red-600 dark:text-red-400 font-medium'>
@@ -1797,7 +1797,7 @@ function PlayPageClient() {
                 </p>
               </div>
               <p className='text-sm text-gray-500 dark:text-gray-400'>
-                请检查网络连接或尝试刷新页面
+                Vui lòng kiểm tra mạng hoặc tải lại trang
               </p>
             </div>
 
@@ -1811,14 +1811,14 @@ function PlayPageClient() {
                 }
                 className='w-full px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl'
               >
-                {videoTitle ? '🔍 返回搜索' : '← 返回上页'}
+                {videoTitle ? '🔍 Quay lại tìm kiếm' : '← Quay lại trang trước'}
               </button>
 
               <button
                 onClick={() => window.location.reload()}
                 className='w-full px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200'
               >
-                🔄 重新尝试
+                🔄 Thử lại
               </button>
             </div>
           </div>
@@ -1833,7 +1833,7 @@ function PlayPageClient() {
         {/* 第一行：影片标题 */}
         <div className='py-1'>
           <h1 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-            {videoTitle || '影片标题'}
+            {videoTitle || 'Tên phim'}
             {totalEpisodes > 1 && (
               <span className='text-gray-500 dark:text-gray-400'>
                 {` > ${detail?.episodes_titles?.[currentEpisodeIndex] || `第 ${currentEpisodeIndex + 1} 集`}`}
@@ -1851,7 +1851,7 @@ function PlayPageClient() {
               }
               className='group relative flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-200'
               title={
-                isEpisodeSelectorCollapsed ? '显示选集面板' : '隐藏选集面板'
+                isEpisodeSelectorCollapsed ? 'Hiện bảng danh sách tập' : 'Ẩn bảng danh sách tập'
               }
             >
               <svg
@@ -1869,7 +1869,7 @@ function PlayPageClient() {
                 />
               </svg>
               <span className='text-xs font-medium text-gray-600 dark:text-gray-300'>
-                {isEpisodeSelectorCollapsed ? '显示' : '隐藏'}
+                {isEpisodeSelectorCollapsed ? 'Hiện' : 'Ẩn'}
               </span>
 
               {/* 精致的状态指示点 */}
@@ -1929,8 +1929,8 @@ function PlayPageClient() {
                       <div className='space-y-2'>
                         <p className='text-xl font-semibold text-white animate-pulse'>
                           {videoLoadingStage === 'sourceChanging'
-                            ? '🔄 切换播放源...'
-                            : '🔄 视频加载中...'}
+                            ? '🔄 Đang chuyển nguồn phát...'
+                            : '🔄 Video đang tải...'}
                         </p>
                       </div>
                     </div>
@@ -1971,7 +1971,7 @@ function PlayPageClient() {
             <div className='p-6 flex flex-col min-h-0'>
               {/* 标题 */}
               <h1 className='text-3xl font-bold mb-2 tracking-wide flex items-center flex-shrink-0 text-center md:text-left w-full'>
-                {videoTitle || '影片标题'}
+                {videoTitle || 'Tên phim'}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -2052,7 +2052,7 @@ function PlayPageClient() {
                   </>
                 ) : (
                   <span className='text-gray-600 dark:text-gray-400'>
-                    封面图片
+                    Ảnh bìa
                   </span>
                 )}
               </div>
@@ -2091,7 +2091,7 @@ const FavoriteIcon = ({ filled }: { filled: boolean }) => {
 
 export default function PlayPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Đang tải...</div>}>
       <PlayPageClient />
     </Suspense>
   );

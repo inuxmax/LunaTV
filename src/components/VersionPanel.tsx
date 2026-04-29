@@ -98,13 +98,13 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
         }
       } else {
         console.error(
-          '获取远程变更日志失败:',
+          'Không lấy được changelog từ xa:',
           response.status,
           response.statusText
         );
       }
     } catch (error) {
-      console.error('获取远程变更日志失败:', error);
+      console.error('Không lấy được changelog từ xa:', error);
     }
   };
 
@@ -202,13 +202,13 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
             </h4>
             {isCurrentVersion && (
               <span className='px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full'>
-                当前版本
+                Phiên bản hiện tại
               </span>
             )}
             {isUpdate && (
               <span className='px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full flex items-center gap-1'>
                 <Download className='w-3 h-3' />
-                可更新
+                Có bản cập nhật
               </span>
             )}
           </div>
@@ -223,7 +223,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
             <div>
               <h5 className='text-sm font-medium text-green-700 dark:text-green-400 mb-2 flex items-center gap-1'>
                 <Plus className='w-4 h-4' />
-                新增功能
+                Tính năng mới
               </h5>
               <ul className='space-y-1'>
                 {entry.added.map((item, index) => (
@@ -243,7 +243,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
             <div>
               <h5 className='text-sm font-medium text-blue-700 dark:text-blue-400 mb-2 flex items-center gap-1'>
                 <RefreshCw className='w-4 h-4' />
-                功能改进
+                Cải tiến
               </h5>
               <ul className='space-y-1'>
                 {entry.changed.map((item, index) => (
@@ -263,7 +263,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
             <div>
               <h5 className='text-sm font-medium text-purple-700 dark:text-purple-400 mb-2 flex items-center gap-1'>
                 <Bug className='w-4 h-4' />
-                问题修复
+                Sửa lỗi
               </h5>
               <ul className='space-y-1'>
                 {entry.fixed.map((item, index) => (
@@ -318,7 +318,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
         <div className='flex items-center justify-between p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700'>
           <div className='flex items-center gap-2 sm:gap-3'>
             <h3 className='text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200'>
-              版本信息
+              Thông tin phiên bản
             </h3>
             <div className='flex flex-wrap items-center gap-1 sm:gap-2'>
               <span className='px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded-full'>
@@ -327,8 +327,8 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
               {hasUpdate && (
                 <span className='px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full flex items-center gap-1'>
                   <Download className='w-3 h-3 sm:w-4 sm:h-4' />
-                  <span className='hidden sm:inline'>有新版本可用</span>
-                  <span className='sm:hidden'>可更新</span>
+                  <span className='hidden sm:inline'>Có bản cập nhật mới</span>
+                  <span className='sm:hidden'>Cập nhật</span>
                 </span>
               )}
             </div>
@@ -336,7 +336,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
           <button
             onClick={onClose}
             className='w-6 h-6 sm:w-8 sm:h-8 p-1 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
-            aria-label='关闭'
+            aria-label='Đóng'
           >
             <X className='w-full h-full' />
           </button>
@@ -355,7 +355,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     </div>
                     <div className='min-w-0 flex-1'>
                       <h4 className='text-sm sm:text-base font-semibold text-yellow-800 dark:text-yellow-200'>
-                        发现新版本
+                        Phát hiện phiên bản mới
                       </h4>
                       <p className='text-xs sm:text-sm text-yellow-700 dark:text-yellow-300 break-all'>
                         v{CURRENT_VERSION} → v{latestVersion}
@@ -369,7 +369,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     className='inline-flex items-center justify-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-xs sm:text-sm rounded-lg transition-colors shadow-sm w-full'
                   >
                     <Download className='w-3 h-3 sm:w-4 sm:h-4' />
-                    前往仓库
+                    Mở kho mã nguồn
                   </a>
                 </div>
               </div>
@@ -385,10 +385,10 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     </div>
                     <div className='min-w-0 flex-1'>
                       <h4 className='text-sm sm:text-base font-semibold text-green-800 dark:text-green-200'>
-                        当前为最新版本
+                        Bạn đang dùng bản mới nhất
                       </h4>
                       <p className='text-xs sm:text-sm text-green-700 dark:text-green-300 break-all'>
-                        已是最新版本 v{CURRENT_VERSION}
+                        Phiên bản hiện tại: v{CURRENT_VERSION}
                       </p>
                     </div>
                   </div>
@@ -399,7 +399,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     className='inline-flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm rounded-lg transition-colors shadow-sm w-full'
                   >
                     <CheckCircle className='w-3 h-3 sm:w-4 sm:h-4' />
-                    前往仓库
+                    Mở kho mã nguồn
                   </a>
                 </div>
               </div>
@@ -411,7 +411,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                 <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-3'>
                   <h4 className='text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2'>
                     <Download className='w-5 h-5 text-yellow-500' />
-                    远程更新内容
+                    Nội dung cập nhật
                   </h4>
                   <button
                     onClick={() => setShowRemoteContent(!showRemoteContent)}
@@ -420,12 +420,12 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                     {showRemoteContent ? (
                       <>
                         <ChevronUp className='w-4 h-4' />
-                        收起
+                        Thu gọn
                       </>
                     ) : (
                       <>
                         <ChevronDown className='w-4 h-4' />
-                        查看更新内容
+                        Xem nội dung cập nhật
                       </>
                     )}
                   </button>
@@ -456,7 +456,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
                               </h4>
                               {entry.version === latestVersion && (
                                 <span className='px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full flex items-center gap-1'>
-                                  远程最新
+                                  Mới nhất (từ xa)
                                 </span>
                               )}
                             </div>
@@ -534,7 +534,7 @@ export const VersionPanel: React.FC<VersionPanelProps> = ({
             {/* 变更日志标题 */}
             <div className='border-b border-gray-200 dark:border-gray-700 pb-4'>
               <h4 className='text-lg font-semibold text-gray-800 dark:text-gray-200 pb-3 sm:pb-4'>
-                变更日志
+                    Changelog
               </h4>
 
               <div className='space-y-4'>
