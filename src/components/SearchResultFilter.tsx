@@ -191,9 +191,9 @@ const SearchResultFilter: React.FC<SearchResultFilterProps> = ({ categories, val
               ? 'text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer'
               : 'text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 cursor-pointer'
               }`}
-            aria-label={`Sắp xếp theo năm (${mergedValues.yearOrder === 'none' ? 'mặc định' : mergedValues.yearOrder === 'desc' ? 'giảm dần' : 'tăng dần'})`}
+            aria-label={`按年份${mergedValues.yearOrder === 'none' ? '排序' : mergedValues.yearOrder === 'desc' ? '降序' : '升序'}排序`}
           >
-            <span>Năm</span>
+            <span>年份</span>
             {mergedValues.yearOrder === 'none' ? (
               <ArrowUpDown className='inline-block ml-1 w-4 h-4 sm:w-4 sm:h-4' />
             ) : mergedValues.yearOrder === 'desc' ? (

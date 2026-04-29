@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cảnh báo bảo mật - MoonTV',
-  description: 'Cảnh báo cấu hình bảo mật của trang',
+  title: '安全警告 - LunaTV',
+  description: '站点安全配置警告',
 };
 
 export default function WarningPage() {
@@ -31,7 +31,7 @@ export default function WarningPage() {
         {/* 标题 */}
         <div className='text-center mb-6 sm:mb-8'>
           <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-2'>
-            Cảnh báo cấu hình an toàn & tuân thủ
+            安全合规配置警告
           </h1>
           <div className='w-12 sm:w-16 h-1 bg-red-500 mx-auto rounded-full'></div>
         </div>
@@ -40,47 +40,47 @@ export default function WarningPage() {
         <div className='space-y-4 sm:space-y-6 text-gray-700'>
           <div className='bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded-r-lg'>
             <p className='text-base sm:text-lg font-semibold text-red-800 mb-2'>
-              ⚠️ Cảnh báo rủi ro bảo mật
+              ⚠️ 安全风险提示
             </p>
             <p className='text-sm sm:text-base text-red-700'>
-              Hệ thống phát hiện trang của bạn chưa cấu hình kiểm soát truy cập, có thể gây rủi ro bảo mật và vấn đề tuân thủ pháp lý.
+              检测到您的站点未配置访问控制，存在潜在的安全风险和法律合规问题。
             </p>
           </div>
 
           <div className='space-y-3 sm:space-y-4'>
             <h2 className='text-lg sm:text-xl font-semibold text-gray-900'>
-              Rủi ro chính
+              主要风险
             </h2>
             <ul className='space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600'>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
-                <span>Truy cập trái phép có thể khiến nội dung bị phát tán</span>
+                <span>未经授权的访问可能导致内容被恶意传播</span>
               </li>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
-                <span>Tài nguyên máy chủ có thể bị lạm dụng, ảnh hưởng dịch vụ</span>
+                <span>服务器资源可能被滥用，影响正常服务</span>
               </li>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
-                <span>Có thể nhận thông báo pháp lý từ bên liên quan</span>
+                <span>可能收到相关权利方的法律通知</span>
               </li>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
-                <span>Nhà cung cấp dịch vụ có thể ngừng dịch vụ vì vấn đề tuân thủ</span>
+                <span>服务提供商可能因合规问题终止服务</span>
               </li>
             </ul>
           </div>
 
           <div className='bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4'>
             <h3 className='text-base sm:text-lg font-semibold text-yellow-800 mb-2'>
-              🔒 Khuyến nghị cấu hình
+              🔒 安全配置建议
             </h3>
             <p className='text-sm sm:text-base text-yellow-700'>
-              Vui lòng cấu hình ngay{' '}
+              请立即配置{' '}
               <code className='bg-yellow-100 px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono'>
                 PASSWORD
               </code>{' '}
-              để bật kiểm soát truy cập.
+              环境变量以启用访问控制。
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function WarningPage() {
         {/* 底部装饰 */}
         <div className='mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200'>
           <div className='text-center text-xs sm:text-sm text-gray-500'>
-            <p>Để đảm bảo an toàn và tuân thủ, vui lòng hoàn tất cấu hình bảo mật sớm</p>
+            <p>为确保系统安全性和合规性，请及时完成安全配置</p>
           </div>
         </div>
       </div>

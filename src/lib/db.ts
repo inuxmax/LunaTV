@@ -1,19 +1,23 @@
-/* eslint-disable no-console, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-console, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-empty-function */
+
+import { SqliteStorage } from '@/lib/sqlite.db';
 
 import { AdminConfig } from './admin.types';
+import { hashPassword } from './bcrypt';
 import { KvrocksStorage } from './kvrocks.db';
 import { RedisStorage } from './redis.db';
-import { Favorite, IStorage, PlayRecord, SkipConfig } from './types';
+import { DbUser, Favorite, IStorage, PlayRecord, SkipConfig } from './types';
 import { UpstashRedisStorage } from './upstash.db';
 
 // storage type 常量: 'localstorage' | 'redis' | 'upstash'，默认 'localstorage'
 const STORAGE_TYPE =
   (process.env.NEXT_PUBLIC_STORAGE_TYPE as
     | 'localstorage'
+    | 'sqlite'
     | 'redis'
     | 'upstash'
     | 'kvrocks'
-    | undefined) || 'localstorage';
+    | undefined) || 'sqlite';
 
 // 创建存储实例
 function createStorage(): IStorage {
@@ -24,6 +28,8 @@ function createStorage(): IStorage {
       return new UpstashRedisStorage();
     case 'kvrocks':
       return new KvrocksStorage();
+    case 'sqlite':
+      return new SqliteStorage();
     case 'localstorage':
     default:
       return null as unknown as IStorage;
@@ -54,14 +60,12 @@ export class DbManager {
     this.storage = getStorage();
     // 启动时自动触发数据迁移（异步，不阻塞构造）
     if (this.storage && typeof this.storage.migrateData === 'function') {
-      this.migrationPromise = this.storage.migrateData().then(async () => {
-        // 数据结构迁移完成后，执行密码哈希迁移
-        if (typeof this.storage.migratePasswords === 'function') {
-          await this.storage.migratePasswords();
-        }
-      }).catch((err) => {
-        console.error('数据迁移异常:', err);
-      });
+      this.migrationPromise = this.storage
+        .migrateData()
+        .then(async () => {})
+        .catch((err) => {
+          console.error('数据迁移异常:', err);
+        });
     }
   }
 
@@ -163,21 +167,29 @@ export class DbManager {
   }
 
   // ---------- 用户相关 ----------
-  async registerUser(userName: string, password: string): Promise<void> {
-    await this.storage.registerUser(userName, password);
+  async registerUser(userName: string, password: string): Promise<string> {
+    const hashedPassword = await hashPassword(password);
+    return await this.storage.registerUser(userName, hashedPassword);
   }
 
   async verifyUser(userName: string, password: string): Promise<boolean> {
     return this.storage.verifyUser(userName, password);
   }
-
+  async getUser(userName: string): Promise<any> {
+    return this.storage.getUser(userName);
+  }
+  //生成新Key
+  async generateNewKey(userName: string): Promise<any> {
+    return this.storage.generateNewKey(userName);
+  }
   // 检查用户是否已存在
   async checkUserExist(userName: string): Promise<boolean> {
     return this.storage.checkUserExist(userName);
   }
 
   async changePassword(userName: string, newPassword: string): Promise<void> {
-    await this.storage.changePassword(userName, newPassword);
+    const hashedPassword = await hashPassword(newPassword);
+    await this.storage.changePassword(userName, hashedPassword);
   }
 
   async deleteUser(userName: string): Promise<void> {
@@ -197,8 +209,25 @@ export class DbManager {
     await this.storage.deleteSearchHistory(userName, keyword);
   }
 
+  async getCacheByKey(key: string): Promise<any> {
+    const result = await this.storage.getCacheByKey(key);
+    return result ? JSON.parse(result) : null;
+  }
+
+  async setCacheByKey(key: string, data: any, ttl: number): Promise<void> {
+    this.storage.setCacheByKey(key, JSON.stringify(data), ttl);
+  }
+
+  async clearExpiredCache(): Promise<number> {
+    return this.storage.clearExpiredCache();
+  }
+
+  async clearAllCache(keysPrefix: string): Promise<number> {
+    return this.storage.clearAllCache(keysPrefix);
+  }
+
   // 获取全部用户名
-  async getAllUsers(): Promise<string[]> {
+  async getAllUsers(): Promise<DbUser[]> {
     if (typeof (this.storage as any).getAllUsers === 'function') {
       return (this.storage as any).getAllUsers();
     }

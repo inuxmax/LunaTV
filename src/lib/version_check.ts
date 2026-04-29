@@ -2,7 +2,7 @@
 
 'use client';
 
-import { CURRENT_VERSION } from "@/lib/version";
+import { CURRENT_VERSION } from '@/lib/utils';
 
 // 版本检查结果枚举
 export enum UpdateStatus {
@@ -11,34 +11,50 @@ export enum UpdateStatus {
   FETCH_FAILED = 'fetch_failed', // 获取失败
 }
 
+interface UpdateInfo {
+  status: UpdateStatus;
+  latestVersion: string;
+}
+const branch = process.env.GIT_BRANCH || 'main';
 // 远程版本检查URL配置
 const VERSION_CHECK_URLS = [
-  'https://raw.githubusercontent.com/MoonTechLab/LunaTV/main/VERSION.txt',
+  `https://raw.githubusercontent.com/${process.env.GIT_USER}/${
+    process.env.GIT_REPO
+  }/${branch}/VERSION_${branch.toUpperCase()}.txt`,
+  `https://cdn.jsdelivr.net/gh/${process.env.GIT_USER}/${
+    process.env.GIT_REPO
+  }@${branch}/VERSION_${branch.toUpperCase()}.txt`,
 ];
 
 /**
  * 检查是否有新版本可用
  * @returns Promise<UpdateStatus> - 返回版本检查状态
  */
-export async function checkForUpdates(): Promise<UpdateStatus> {
+export async function checkForUpdates(): Promise<UpdateInfo> {
   try {
     // 尝试从主要URL获取版本信息
     const primaryVersion = await fetchVersionFromUrl(VERSION_CHECK_URLS[0]);
     if (primaryVersion) {
-      return compareVersions(primaryVersion);
+      return {
+        status: compareVersions(primaryVersion),
+        latestVersion: primaryVersion,
+      };
     }
 
     // 如果主要URL失败，尝试备用URL
     const backupVersion = await fetchVersionFromUrl(VERSION_CHECK_URLS[1]);
     if (backupVersion) {
-      return compareVersions(backupVersion);
+      return {
+        status: compareVersions(backupVersion),
+        latestVersion: backupVersion,
+      };
     }
 
     // 如果两个URL都失败，返回获取失败状态
-    return UpdateStatus.FETCH_FAILED;
+    return { status: UpdateStatus.FETCH_FAILED, latestVersion: '5.0.0' };
   } catch (error) {
     console.error('版本检查失败:', error);
-    return UpdateStatus.FETCH_FAILED;
+    return { status: UpdateStatus.FETCH_FAILED, latestVersion: '5.0.0' };
   }
 }
 
@@ -73,7 +89,7 @@ async function fetchVersionFromUrl(url: string): Promise<string | null> {
     }
 
     const version = await response.text();
-    return version.trim();
+    return version;
   } catch (error) {
     console.warn(`从 ${url} 获取版本信息失败:`, error);
     return null;
@@ -90,7 +106,9 @@ export function compareVersions(remoteVersion: string): UpdateStatus {
   if (remoteVersion === CURRENT_VERSION) {
     return UpdateStatus.NO_UPDATE;
   }
-
+  if (remoteVersion != CURRENT_VERSION && branch === 'dev') {
+    return UpdateStatus.HAS_UPDATE;
+  }
   try {
     // 解析版本号为数字数组 [X, Y, Z]
     const currentParts = CURRENT_VERSION.split('.').map((part) => {

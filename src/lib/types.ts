@@ -12,6 +12,29 @@ export interface PlayRecord {
   total_time: number; // 总进度（秒）
   save_time: number; // 记录保存时间（时间戳）
   search_title: string; // 搜索时使用的标题
+  episode_title: string;
+  episode_url: string;
+  tvbox_record?: TVBoxRecord; //TVBox记录
+}
+
+//TVBox播放记录结构
+export interface TVBoxRecord {
+  cid: number; //源站ID
+  createTime: number; //创建时间
+  duration: number; //时长
+  ending: number | bigint; //跳过片尾：默认占位符（-9223372036854776000）
+  opening: number | bigint; //跳过片头：默认占位符（-9223372036854776000）
+  episodeUrl: string; //视频流具体播放地址
+  key: string; //唯一标识，格式: vod_key@@@id@@@cid
+  position: number; //播放位置
+  revPlay: boolean; //循环播放
+  revSort: boolean; //反向排序
+  scale: number; //画面比例
+  speed: number; //播放倍速
+  vodFlag: string; //播放标志（源）
+  vodName: string; //名称
+  vodPic: string; //海报
+  vodRemarks: string; //播放备注
 }
 
 // 收藏数据结构
@@ -24,6 +47,25 @@ export interface Favorite {
   save_time: number; // 记录保存时间（时间戳）
   search_title: string; // 搜索时使用的标题
   origin?: 'vod' | 'live';
+  tvbox_record: KeepItem; //TVBox记录
+}
+
+//TVBox收藏结构
+export interface KeepItem {
+  cid: number; //源站ID
+  createTime: number; //
+  key: string; //唯一标识，格式: vod_key@@@id@@@cid
+  siteName: string; //站点名称;
+  type: number; //视频类型:0-vod，1-live
+  vodName: string; //名称
+  vodPic: string; //海报
+  ext_param: string; //点播源（适配lunatv）
+}
+
+export interface DbUser {
+  user_name: string;
+  key: string; // key
+  password: string;
 }
 
 // 存储接口
@@ -47,8 +89,12 @@ export interface IStorage {
   deleteAllFavorites(userName: string): Promise<void>;
 
   // 用户相关
-  registerUser(userName: string, password: string): Promise<void>;
+  registerUser(userName: string, password: string): Promise<string>;
   verifyUser(userName: string, password: string): Promise<boolean>;
+  //查询用户信息
+  getUser(userName: string): Promise<any>;
+  //生成新Key
+  generateNewKey(userName: string): Promise<void>;
   // 检查用户是否存在（无需密码）
   checkUserExist(userName: string): Promise<boolean>;
   // 修改用户密码
@@ -61,8 +107,14 @@ export interface IStorage {
   addSearchHistory(userName: string, keyword: string): Promise<void>;
   deleteSearchHistory(userName: string, keyword?: string): Promise<void>;
 
+  //缓存相关
+  getCacheByKey(key: string): Promise<any>;
+  setCacheByKey(key: string, data: any, ttl: number): Promise<void>;
+  clearExpiredCache(): Promise<number>;
+  clearAllCache(keysPrefix: string): Promise<number>;
+
   // 用户列表
-  getAllUsers(): Promise<string[]>;
+  getAllUsers(): Promise<DbUser[]>;
 
   // 管理员配置相关
   getAdminConfig(): Promise<AdminConfig | null>;
@@ -86,9 +138,6 @@ export interface IStorage {
   // 数据迁移（旧扁平 key → Hash 结构）
   migrateData?(): Promise<void>;
 
-  // 密码迁移（明文 → 加盐哈希）
-  migratePasswords?(): Promise<void>;
-
   // 数据清理相关
   clearAllData(): Promise<void>;
 }
@@ -107,6 +156,7 @@ export interface SearchResult {
   desc?: string;
   type_name?: string;
   douban_id?: number;
+  rate?: string;
 }
 
 // 豆瓣数据结构
@@ -129,4 +179,33 @@ export interface SkipConfig {
   enable: boolean; // 是否启用跳过片头片尾
   intro_time: number; // 片头时间（秒）
   outro_time: number; // 片尾时间（秒）
+}
+
+// tvbox列表内容数据结构
+export interface TvboxContentItem {
+  vod_id: string;
+  vod_name: string;
+  vod_pic: string;
+  vod_remarks: string;
+}
+
+// 豆瓣数据结构
+export interface ShortDramaItem {
+  vod_id: string;
+  vod_name: string;
+  vod_pic: string;
+  vod_tag: string;
+  vod_remarks: string;
+}
+
+export interface Source {
+  key: string;
+  name: string;
+}
+
+export interface CategoryNode {
+  id: number;
+  name: string;
+  parentId: number;
+  children: CategoryNode[];
 }

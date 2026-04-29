@@ -1,6 +1,6 @@
 /* eslint-disable no-console,@typescript-eslint/no-explicit-any */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { getConfig, refineConfig } from '@/lib/config';
 import { db } from '@/lib/db';
@@ -10,8 +10,7 @@ import { SearchResult } from '@/lib/types';
 
 export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest) {
-  console.log(request.url);
+export async function GET() {
   try {
     console.log('Cron job triggered:', new Date().toISOString());
 
@@ -41,6 +40,7 @@ async function cronJob() {
   await refreshConfig();
   await refreshAllLiveChannels();
   await refreshRecordAndFavorites();
+  await refreshApiCaches();
 }
 
 async function refreshAllLiveChannels() {
@@ -48,13 +48,16 @@ async function refreshAllLiveChannels() {
 
   // 并发刷新所有启用的直播源
   const refreshPromises = (config.LiveConfig || [])
-    .filter(liveInfo => !liveInfo.disabled)
+    .filter((liveInfo) => !liveInfo.disabled)
     .map(async (liveInfo) => {
       try {
         const nums = await refreshLiveChannels(liveInfo);
         liveInfo.channelNumber = nums;
       } catch (error) {
-        console.error(`刷新直播源失败 [${liveInfo.name || liveInfo.key}]:`, error);
+        console.error(
+          `刷新直播源失败 [${liveInfo.name || liveInfo.key}]:`,
+          error
+        );
         liveInfo.channelNumber = 0;
       }
     });
@@ -68,7 +71,12 @@ async function refreshAllLiveChannels() {
 
 async function refreshConfig() {
   let config = await getConfig();
-  if (config && config.ConfigSubscribtion && config.ConfigSubscribtion.URL && config.ConfigSubscribtion.AutoUpdate) {
+  if (
+    config &&
+    config.ConfigSubscribtion &&
+    config.ConfigSubscribtion.URL &&
+    config.ConfigSubscribtion.AutoUpdate
+  ) {
     try {
       const response = await fetch(config.ConfigSubscribtion.URL);
 
@@ -109,8 +117,17 @@ async function refreshConfig() {
 async function refreshRecordAndFavorites() {
   try {
     const users = await db.getAllUsers();
-    if (process.env.USERNAME && !users.includes(process.env.USERNAME)) {
-      users.push(process.env.USERNAME);
+
+    // 检查环境变量中的用户名是否已存在于用户对象列表中
+    if (
+      process.env.USERNAME &&
+      !users.some((u) => u.user_name === process.env.USERNAME)
+    ) {
+      users.push({
+        user_name: process.env.USERNAME,
+        key: '',
+        password: '',
+      });
     }
     // 函数级缓存：key 为 `${source}+${id}`，值为 Promise<VideoDetail | null>
     const detailCache = new Map<string, Promise<SearchResult | null>>();
@@ -156,7 +173,11 @@ async function refreshRecordAndFavorites() {
           results[i] = await tasks[i]();
         }
       };
-      await Promise.all(Array.from({ length: Math.min(concurrency, tasks.length) }, () => worker()));
+      await Promise.all(
+        Array.from({ length: Math.min(concurrency, tasks.length) }, () =>
+          worker()
+        )
+      );
       return results;
     };
 
@@ -198,6 +219,9 @@ async function refreshRecordAndFavorites() {
                 total_time: record.total_time,
                 save_time: record.save_time,
                 search_title: record.search_title,
+                episode_title: record.episode_title,
+                episode_url: record.episode_url,
+                tvbox_record: record.tvbox_record,
               });
               console.log(
                 `更新播放记录: ${record.title} (${record.total_episodes} -> ${episodeCount})`
@@ -250,6 +274,7 @@ async function refreshRecordAndFavorites() {
                 total_episodes: favEpisodeCount,
                 save_time: fav.save_time,
                 search_title: fav.search_title,
+                tvbox_record: fav.tvbox_record,
               });
               console.log(
                 `更新收藏: ${fav.title} (${fav.total_episodes} -> ${favEpisodeCount})`
@@ -270,11 +295,15 @@ async function refreshRecordAndFavorites() {
     };
 
     // 用户间并发处理（限制 3 个用户同时处理）
-    const userTasks = users.map((user) => () => processUser(user));
+    const userTasks = users.map((user) => () => processUser(user.user_name));
     await runWithConcurrency(userTasks, 3);
 
     console.log('刷新播放记录/收藏任务完成');
   } catch (err) {
     console.error('刷新播放记录/收藏任务启动失败', err);
   }
+}
+async function refreshApiCaches() {
+  //清理过期缓存（主要是针对sqlite）
+  await db.clearExpiredCache();
 }

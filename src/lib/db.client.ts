@@ -40,6 +40,8 @@ export interface PlayRecord {
   total_time: number; // 总进度（秒）
   save_time: number; // 记录保存时间（时间戳）
   search_title?: string; // 搜索时使用的标题
+  episode_title?: string; //播放集标题
+  episode_url?: string; //播放集地址
 }
 
 // ---- 收藏类型 ----
@@ -69,12 +71,12 @@ interface UserCacheStore {
 }
 
 // ---- 常量 ----
-const PLAY_RECORDS_KEY = 'moontv_play_records';
-const FAVORITES_KEY = 'moontv_favorites';
-const SEARCH_HISTORY_KEY = 'moontv_search_history';
+const PLAY_RECORDS_KEY = 'lunatv_play_records';
+const FAVORITES_KEY = 'lunatv_favorites';
+const SEARCH_HISTORY_KEY = 'lunatv_search_history';
 
 // 缓存相关常量
-const CACHE_PREFIX = 'moontv_cache_';
+const CACHE_PREFIX = 'lunatv_cache_';
 const CACHE_VERSION = '1.0.0';
 const CACHE_EXPIRE_TIME = 60 * 60 * 1000; // 一小时缓存过期
 
@@ -196,7 +198,7 @@ class HybridCacheManager {
   private clearAllCache(): void {
     const keys = Object.keys(localStorage);
     keys.forEach((key) => {
-      if (key.startsWith('moontv_cache_')) {
+      if (key.startsWith('lunatv_cache_')) {
         localStorage.removeItem(key);
       }
     });
@@ -570,9 +572,19 @@ export async function savePlayRecord(
   source: string,
   id: string,
   record: PlayRecord
-): Promise<void> {
+): Promise<boolean> {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  try {
+    const incognito = window.localStorage.getItem('incognito_mode') === 'true';
+    if (incognito) {
+      return false;
+    }
+  } catch (e) {
+    console.error('Storage access failed', e);
+  }
   const key = generateStorageKey(source, id);
-
   // 数据库存储模式：乐观更新策略（包括 redis 和 upstash）
   if (STORAGE_TYPE !== 'localstorage') {
     // 立即更新缓存
@@ -601,13 +613,13 @@ export async function savePlayRecord(
       triggerGlobalError('保存播放记录失败');
       throw err;
     }
-    return;
+    return true;
   }
 
   // localstorage 模式
   if (typeof window === 'undefined') {
     console.warn('无法在服务端保存播放记录到 localStorage');
-    return;
+    return false;
   }
 
   try {
@@ -624,6 +636,7 @@ export async function savePlayRecord(
     triggerGlobalError('保存播放记录失败');
     throw err;
   }
+  return true;
 }
 
 /**
@@ -756,6 +769,17 @@ export async function getSearchHistory(): Promise<string[]> {
  * 数据库存储模式下使用乐观更新：先更新缓存，再异步同步到数据库。
  */
 export async function addSearchHistory(keyword: string): Promise<void> {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  try {
+    const incognito = window.localStorage.getItem('incognito_mode') === 'true';
+    if (incognito) {
+      return;
+    }
+  } catch (e) {
+    console.error('Storage access failed', e);
+  }
   const trimmed = keyword.trim();
   if (!trimmed) return;
 
@@ -1358,7 +1382,7 @@ export function subscribeToDataUpdates<T>(
   callback: (data: T) => void
 ): () => void {
   if (typeof window === 'undefined') {
-    return () => { };
+    return () => {};
   }
 
   const handleUpdate = (event: CustomEvent) => {
@@ -1457,7 +1481,7 @@ export async function getSkipConfig(
 
   // localStorage 模式
   try {
-    const raw = localStorage.getItem('moontv_skip_configs');
+    const raw = localStorage.getItem('lunatv_skip_configs');
     if (!raw) return null;
     const configs = JSON.parse(raw) as Record<string, SkipConfig>;
     return configs[key] || null;
@@ -1516,10 +1540,10 @@ export async function saveSkipConfig(
   }
 
   try {
-    const raw = localStorage.getItem('moontv_skip_configs');
+    const raw = localStorage.getItem('lunatv_skip_configs');
     const configs = raw ? (JSON.parse(raw) as Record<string, SkipConfig>) : {};
     configs[key] = config;
-    localStorage.setItem('moontv_skip_configs', JSON.stringify(configs));
+    localStorage.setItem('lunatv_skip_configs', JSON.stringify(configs));
     window.dispatchEvent(
       new CustomEvent('skipConfigsUpdated', {
         detail: configs,
@@ -1586,7 +1610,7 @@ export async function getAllSkipConfigs(): Promise<Record<string, SkipConfig>> {
 
   // localStorage 模式
   try {
-    const raw = localStorage.getItem('moontv_skip_configs');
+    const raw = localStorage.getItem('lunatv_skip_configs');
     if (!raw) return {};
     return JSON.parse(raw) as Record<string, SkipConfig>;
   } catch (err) {
@@ -1639,11 +1663,11 @@ export async function deleteSkipConfig(
   }
 
   try {
-    const raw = localStorage.getItem('moontv_skip_configs');
+    const raw = localStorage.getItem('lunatv_skip_configs');
     if (raw) {
       const configs = JSON.parse(raw) as Record<string, SkipConfig>;
       delete configs[key];
-      localStorage.setItem('moontv_skip_configs', JSON.stringify(configs));
+      localStorage.setItem('lunatv_skip_configs', JSON.stringify(configs));
       window.dispatchEvent(
         new CustomEvent('skipConfigsUpdated', {
           detail: configs,
