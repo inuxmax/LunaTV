@@ -1,252 +1,252 @@
 /* eslint-disable no-console */
-'use client';
-import {
-  closestCenter,
+'sử dụng ứng dụng khách';
+nhập khẩu {
+  Trung tâm gần nhất,
   DndContext,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import {
-  restrictToParentElement,
-  restrictToVerticalAxis,
-} from '@dnd-kit/modifiers';
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+  cảm biến con trỏ,
+  Cảm biến cảm ứng,
+  sử dụngCảm biến,
+  sử dụngCảm biến,
+} từ '@dnd-kit/core';
+nhập khẩu {
+  hạn chếToParentElement,
+  hạn chếToVerticalAxis,
+} từ '@dnd-kit/modifiers';
+nhập khẩu {
+  mảngDi chuyển,
+  Có thể sắp xếpContext,
+  sử dụngCó thể sắp xếp,
+  dọcListSortingStrategy,
+} từ '@dnd-kit/sortable';
+nhập { CSS } từ '@dnd-kit/utilities';
+nhập { GripVertical } từ 'lucide-react';
+nhập React, { useEffect, useState } từ 'Reac';
 
-import { SectionConfigProps } from '@/lib/admin.types';
+nhập {SectionConfigProps } từ '@/lib/admin.types';
 
-import { styles, useLoadingState } from '@/app/admin/components/UIComponents';
-// 自定义分类数据类型
-interface CustomCategory {
-  name?: string;
-  type: 'movie' | 'tv';
-  query: string;
-  disabled?: boolean;
-  from: 'config' | 'custom';
+nhập { styles, useLoadingState } từ '@/app/admin/comComponents/UIComponents';
+// Kiểu dữ liệu phân loại tùy chỉnh
+giao diện Danh mục tùy chỉnh {
+  tên?: chuỗi;
+  loại: 'phim' | 'TV';
+  truy vấn: chuỗi;
+  bị vô hiệu hóa?: boolean;
+  từ: 'cấu hình' | 'phong tục';
 }
 const CategorySection = ({
-  config,
-  refresh,
-  showAlert,
-  showError,
-}: SectionConfigProps) => {
+  cấu hình,
+  làm mới,
+  hiển thị,
+  hiển thịLỗi,
+}: MụcConfigProps) => {
   const { isLoading, withLoading } = useLoadingState();
-  const [categories, setCategories] = useState<CustomCategory[]>([]);
+  const [danh mục, setCategories] = useState<CustomCategory[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [orderChanged, setOrderChanged] = useState(false);
   const [newCategory, setNewCategory] = useState<CustomCategory>({
-    name: '',
-    type: 'movie',
-    query: '',
-    disabled: false,
-    from: 'config',
+    tên: '',
+    loại: 'phim',
+    truy vấn: '',
+    bị vô hiệu hóa: sai,
+    từ: 'cấu hình',
   });
 
-  // dnd-kit 传感器
-  const sensors = useSensors(
+  // cảm biến dnd-kit
+  cảm biến const = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5, // 轻微位移即可触发
+      ràng buộc kích hoạt: {
+        khoảng cách: 5, // Kích hoạt bởi sự dịch chuyển nhẹ
       },
     }),
     useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 150, // 长按 150ms 后触发，避免与滚动冲突
-        tolerance: 5,
+      ràng buộc kích hoạt: {
+        độ trễ: 150, // Được kích hoạt sau khi nhấn lâu trong 150 mili giây để tránh xung đột khi cuộn
+        dung sai: 5,
       },
     })
   );
 
-  // 初始化
+  // khởi tạo
   useEffect(() => {
     if (config?.CustomCategories) {
       setCategories(config.CustomCategories);
-      // 进入时重置 orderChanged
-      setOrderChanged(false);
+      //Đặt lại thứ tựĐã thay đổi khi nhập
+      setOrderChanged(sai);
     }
-  }, [config]);
+  }, [cấu hình]);
 
-  // 通用 API 请求
-  const callCategoryApi = async (body: Record<string, any>) => {
-    try {
-      const resp = await fetch('/api/admin/category', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body }),
+  // Yêu cầu API chung
+  const callCategoryApi = async (body: Record<string, Any>) => {
+    thử {
+      const resp = đang chờ tìm nạp('/api/admin/category', {
+        phương thức: 'BÀI',
+        tiêu đề: { 'Content-Type': 'application/json' },
+        nội dung: JSON.stringify({ ...body }),
       });
 
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `操作失败: ${resp.status}`);
+      nếu (!resp.ok) {
+        const data = đang chờ resp.json().catch(() => ({}));
+        ném Lỗi mới(data.error || `Thao tác không thành công: ${resp.status}`);
       }
 
-      // 成功后刷新配置
-      await refresh();
-    } catch (err) {
-      showError(err instanceof Error ? err.message : '操作失败', showAlert);
-      throw err; // 向上抛出方便调用处判断
+      // Làm mới cấu hình sau khi thành công
+      đang chờ làm mới();
+    } bắt (lỗi) {
+      showError(err instanceof Error? err.message: 'Thao tác thất bại', showAlert);
+      ném lỗi; // Ném lên trên để thuận tiện cho việc phán đoán tại vị trí gọi
     }
   };
 
-  const handleToggleEnable = (query: string, type: 'movie' | 'tv') => {
-    const target = categories.find((c) => c.query === query && c.type === type);
-    if (!target) return;
-    const action = target.disabled ? 'enable' : 'disable';
-    withLoading(`toggleCategory_${query}_${type}`, () =>
-      callCategoryApi({ action, query, type })
+  const handToggleEnable = (truy vấn: chuỗi, gõ: 'phim' | 'tv') => {
+    const target = chuyên mục.find((c) => c.query === truy vấn && c.type === loại);
+    if (! target) trả về;
+    hành động const = target.disabled? 'kích hoạt' : 'vô hiệu hóa';
+    withLoading(`toggleCategory_${query__${type}`, () =>
+      callCategoryApi({hành động, truy vấn, loại })
     ).catch(() => {
-      console.error('操作失败', action, query, type);
+      console.error('Thao tác thất bại', hành động, truy vấn, loại);
     });
   };
 
-  const handleDelete = (query: string, type: 'movie' | 'tv') => {
-    withLoading(`deleteCategory_${query}_${type}`, () =>
+  const handDelete = (truy vấn: chuỗi, gõ: 'phim' | 'tv') => {
+    withLoading(`deleteCategory_${query__${type}`, () =>
       callCategoryApi({ action: 'delete', query, type })
     ).catch(() => {
-      console.error('操作失败', 'delete', query, type);
+      console.error('Thao tác thất bại', 'xóa', truy vấn, loại);
     });
   };
 
-  const handleAddCategory = () => {
+  const handAddCategory = () => {
     if (!newCategory.name || !newCategory.query) return;
     withLoading('addCategory', async () => {
-      await callCategoryApi({
-        action: 'add',
-        name: newCategory.name,
-        type: newCategory.type,
-        query: newCategory.query,
+      đang chờ callCategoryApi({
+        hành động: 'thêm',
+        tên: newCategory.name,
+        loại: newCategory.type,
+        truy vấn: newCategory.query,
       });
       setNewCategory({
-        name: '',
-        type: 'movie',
-        query: '',
-        disabled: false,
-        from: 'custom',
+        tên: '',
+        loại: 'phim',
+        truy vấn: '',
+        bị vô hiệu hóa: sai,
+        từ: 'tùy chỉnh',
       });
-      setShowAddForm(false);
+      setShowAddForm(sai);
     }).catch(() => {
-      console.error('操作失败', 'add', newCategory);
+      console.error('Thao tác thất bại', 'thêm', newCategory);
     });
   };
 
-  const handleDragEnd = (event: any) => {
-    const { active, over } = event;
+  const handDragEnd = (sự kiện: bất kỳ) => {
+    const { hoạt động, kết thúc } = sự kiện;
     if (!over || active.id === over.id) return;
-    const oldIndex = categories.findIndex(
+    const oldIndex = chuyên mục.findIndex(
       (c) => `${c.query}:${c.type}` === active.id
     );
-    const newIndex = categories.findIndex(
+    const newIndex = chuyên mục.findIndex(
       (c) => `${c.query}:${c.type}` === over.id
     );
     setCategories((prev) => arrayMove(prev, oldIndex, newIndex));
     setOrderChanged(true);
   };
 
-  const handleSaveOrder = () => {
-    const order = categories.map((c) => `${c.query}:${c.type}`);
+  const handSaveOrder = () => {
+    const order = Category.map((c) => `${c.query}:${c.type}`);
     withLoading('saveCategoryOrder', () =>
       callCategoryApi({ action: 'sort', order })
     )
       .then(() => {
-        setOrderChanged(false);
+        setOrderChanged(sai);
       })
       .catch(() => {
-        console.error('操作失败', 'sort', order);
+        console.error('Thao tác thất bại', 'sắp xếp', thứ tự);
       });
   };
 
-  // 可拖拽行封装 (dnd-kit)
-  const DraggableRow = ({ category }: { category: CustomCategory }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } =
+  // Bao bì hàng có thể kéo được (dnd-kit)
+  const DraggableRow = ({ Category }: { Category: CustomCategory }) => {
+    const { thuộc tính, trình nghe, setNodeRef, biến đổi, chuyển đổi } =
       useSortable({ id: `${category.query}:${category.type}` });
 
-    const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-    } as React.CSSProperties;
+    kiểu const = {
+      biến đổi: CSS.Transform.toString(biến đổi),
+      chuyển tiếp,
+    } dưới dạng React.CSSProperties;
 
-    return (
+    trở lại (
       <tr
         ref={setNodeRef}
-        style={style}
+        phong cách={style}
         className='hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors select-none'
       >
         <td
-          className='px-2 py-4 cursor-grab text-gray-400'
+          className='px-2 py-4 lấy con trỏ text-gray-400'
           style={{ touchAction: 'none' }}
-          {...{ ...attributes, ...listeners }}
+          {...{ ...thuộc tính, ...người nghe }}
         >
-          <GripVertical size={16} />
+          <Kích thước GripVertical={16} />
         </td>
         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100'>
           {category.name || '-'}
         </td>
         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100'>
-          <span
-            className={`px-2 py-1 text-xs rounded-full ${
-              category.type === 'movie'
-                ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300'
+          <nhịp
+            className={`px-2 py-1 text-xs được làm tròn-đầy đủ ${
+              Category.type === 'phim'
+                ? 'bg-blue-100 tối:bg-blue-900/20 văn bản-blue-800 tối:text-blue-300'
                 : 'bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300'
             }`}
           >
-            {category.type === 'movie' ? '电影' : '电视剧'}
+            {category.type === 'phim' ? 'Phim' : 'Phim truyền hình'}
           </span>
         </td>
         <td
-          className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 max-w-[12rem] truncate'
-          title={category.query}
+          className='px-6 py-4 whitespace-nowwrap text-sm text-gray-900 dark:text-gray-100 max-w-[12rem] cắt ngắn'
+          tiêu đề={category.query}
         >
           {category.query}
         </td>
         <td className='px-6 py-4 whitespace-nowrap max-w-[1rem]'>
-          <span
-            className={`px-2 py-1 text-xs rounded-full ${
+          <nhịp
+            className={`px-2 py-1 text-xs được làm tròn-đầy đủ ${
               !category.disabled
-                ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-                : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300'
+                ? 'bg-green-100 tối:bg-green-900/20 văn bản-xanh-800 tối:văn bản-xanh-300'
+                : 'bg-red-100 tối:bg-red-900/20 văn bản-đỏ-800 tối: văn bản-đỏ-300'
             }`}
           >
-            {!category.disabled ? '启用中' : '已禁用'}
+            {!category.disabled ? 'Đã bật' : 'Đã tắt'}
           </span>
         </td>
         <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2'>
-          <button
-            onClick={() => handleToggleEnable(category.query, category.type)}
-            disabled={isLoading(
-              `toggleCategory_${category.query}_${category.type}`
+          <nút
+            onClick={() => handToggleEnable(category.query, Category.type)}
+            bị vô hiệu hóa={isLoading(
+              `toggleCategory_${category.query__${category.type}`
             )}
-            className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${
+            className={`inline-flex items-center px-3 py-1.5 round-full text-xs font-medium ${
               !category.disabled ? styles.roundedDanger : styles.roundedSuccess
-            } transition-colors ${
-              isLoading(`toggleCategory_${category.query}_${category.type}`)
-                ? 'opacity-50 cursor-not-allowed'
+            } màu chuyển tiếp ${
+              isLoading(`toggleCategory_${category.query__${category.type}`)
+                ? 'không cho phép con trỏ opacity-50'
                 : ''
             }`}
           >
-            {!category.disabled ? '禁用' : '启用'}
+            {!category.disabled ? 'đã tắt' : 'đã bật'}
           </button>
           {category.from !== 'config' && (
-            <button
-              onClick={() => handleDelete(category.query, category.type)}
-              disabled={isLoading(
-                `deleteCategory_${category.query}_${category.type}`
+            <nút
+              onClick={() => HandleDelete(category.query, Category.type)}
+              bị vô hiệu hóa={isLoading(
+                `deleteCategory_${category.query__${category.type}`
               )}
               className={`${styles.roundedSecondary} ${
-                isLoading(`deleteCategory_${category.query}_${category.type}`)
-                  ? 'opacity-50 cursor-not-allowed'
+                isLoading(`deleteCategory_${category.query__${category.type}`)
+                  ? 'không cho phép con trỏ opacity-50'
                   : ''
               }`}
             >
-              删除
+              Xóa
             </button>
           )}
         </td>
@@ -254,18 +254,18 @@ const CategorySection = ({
     );
   };
 
-  if (!config) {
-    return (
+  nếu (!config) {
+    trở lại (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-        加载中...
+        Đang tải...
       </div>
     );
   }
 
-  return (
+  trở lại (
     <div className='space-y-6'>
       <div className={`${styles.roundedCard}`}>
-        {/* 添加分类表单 */}
+        {/* Thêm biểu mẫu phân loại */}
         <div className='flex items-center justify-between'>
           <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'></h4>
           <button
@@ -274,54 +274,54 @@ const CategorySection = ({
               showAddForm ? styles.secondary : styles.success
             }`}
           >
-            {showAddForm ? '取消' : '添加分类'}
+            {showAddForm ? 'Hủy' : 'Thêm danh mục'}
           </button>
         </div>
 
         {showAddForm && (
-          <div className='p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4'>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-              <input
-                type='text'
-                placeholder='分类名称'
+          <div className='p-4 bg-gray-50 dark:bg-gray-900 round-lg border border-gray-200 dark:border-gray-700 space-y-4'>
+            <div className='lưới lưới-cols-1 sm:grid-cols-2 khoảng cách-4'>
+              <đầu vào
+                gõ='văn bản'
+                placeholder='tên danh mục'
                 value={newCategory.name}
                 onChange={(e) =>
                   setNewCategory((prev) => ({ ...prev, name: e.target.value }))
                 }
-                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
-              <select
+              <chọn
                 value={newCategory.type}
                 onChange={(e) =>
                   setNewCategory((prev) => ({
-                    ...prev,
-                    type: e.target.value as 'movie' | 'tv',
+                    ...trước,
+                    gõ: e.target.value dưới dạng 'phim' | 'truyền hình',
                   }))
                 }
-                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               >
-                <option value='movie'>电影</option>
-                <option value='tv'>电视剧</option>
+                <option value='movie'>Phim</option>
+                <option value='tv'>Phim truyền hình</option>
               </select>
-              <input
-                type='text'
-                placeholder='搜索关键词'
+              <đầu vào
+                gõ='văn bản'
+                placeholder='từ khóa tìm kiếm'
                 value={newCategory.query}
                 onChange={(e) =>
                   setNewCategory((prev) => ({ ...prev, query: e.target.value }))
                 }
-                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
             </div>
-            <div className='flex justify-end'>
-              <button
+            <div className='flex biện minh-end'>
+              <nút
                 onClick={handleAddCategory}
-                disabled={
+                bị vô hiệu hóa={
                   !newCategory.name ||
                   !newCategory.query ||
                   isLoading('addCategory')
                 }
-                className={`w-full sm:w-auto px-4 py-2 ${
+                tên lớp={`w-full sm:w-auto px-4 py-2 ${
                   !newCategory.name ||
                   !newCategory.query ||
                   isLoading('addCategory')
@@ -329,43 +329,43 @@ const CategorySection = ({
                     : styles.success
                 }`}
               >
-                {isLoading('addCategory') ? '添加中...' : '添加'}
+                {isLoading('addCategory') ? 'Đang thêm...' : 'Thêm'}
               </button>
             </div>
           </div>
         )}
 
-        {/* 分类表格 */}
+        {/* Bảng phân loại */}
         <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
+          cảm biến={cảm biến}
+          va chạmDetection={closestCenter}
           onDragEnd={handleDragEnd}
           autoScroll={false}
-          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+          modifiers={[restrictToVerticalAxis, limitToParentElement]}
         >
-          <div className='border border-gray-200 dark:border-gray-700 rounded-lg max-h-[28rem] overflow-y-auto overflow-x-auto relative'>
-            <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
-              <thead className='bg-gray-50 dark:bg-gray-900 sticky top-0 z-10'>
+          <div className='border border-gray-200 dark:border-gray-700 round-lg max-h-[28rem] tràn-y-auto tràn-x-auto tương đối'>
+            <table className='min-w-full chia-y chia-gray-200 dark:divide-gray-700'>
+              <thead className='bg-gray-50 dark:bg-gray-900 dính top-0 z-10'>
                 <tr>
                   <th className='w-8' />
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                    分类名称
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
+                    Tên danh mục
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                    类型
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
+                    loại
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                    搜索关键词
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
+                    Tìm kiếm từ khóa
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                    状态
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
+                    Trạng thái
                   </th>
-                  <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
-                    操作
+                  <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
+                    hoạt động
                   </th>
                 </tr>
               </thead>
-              <SortableContext
+              <Bối cảnh có thể sắp xếp
                 items={categories.map((c) => `${c.query}:${c.type}`)}
                 strategy={verticalListSortingStrategy}
               >
@@ -373,27 +373,27 @@ const CategorySection = ({
                   {categories.map((category) => (
                     <DraggableRow
                       key={`${category.query}:${category.type}`}
-                      category={category}
+                      danh mục={danh mục}
                     />
                   ))}
                 </tbody>
-              </SortableContext>
-            </table>
+              </Sắp xếpContext>
+            </bảng>
           </div>
         </DndContext>
-        {/* 保存排序按钮 */}
+        {/* Nút lưu sắp xếp */}
         {orderChanged && (
-          <div className='flex justify-end'>
-            <button
+          <div className='flex biện minh-end'>
+            <nút
               onClick={handleSaveOrder}
-              disabled={isLoading('saveCategoryOrder')}
-              className={`px-3 py-1.5 text-sm ${
+              bị vô hiệu hóa={isLoading('saveCategoryOrder')}
+              tên lớp={`px-3 py-1.5 text-sm ${
                 isLoading('saveCategoryOrder')
                   ? styles.disabled
                   : styles.primary
               }`}
             >
-              {isLoading('saveCategoryOrder') ? '保存中...' : '保存排序'}
+              {isLoading('saveCategoryOrder') ? 'Đang lưu...' : 'Lưu sắp xếp'}
             </button>
           </div>
         )}

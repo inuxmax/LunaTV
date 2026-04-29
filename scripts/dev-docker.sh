@@ -8,33 +8,33 @@ COMPOSE_FILE="docker-compose.dev.yml"
 
 case "${1:-up}" in
   up)
-    echo "🚀 构建并启动服务..."
+    echo "🚀 Xây dựng và bắt đầu dịch vụ..."
     docker compose -f "$COMPOSE_FILE" up -d --build
     echo ""
-    echo "✅ 服务已启动"
-    echo "   应用: http://localhost:3000"
+    echo " ✅Dịch vụ đã được kích hoạt"
+    echo "Ứng dụng: http://localhost:3000"
     echo "   Redis: localhost:6379"
     echo ""
-    echo "   默认账号: admin / admin123"
-    echo "   查看日志: ./scripts/dev-docker.sh logs"
-    echo "   停止服务: ./scripts/dev-docker.sh down"
+    echo "Tài khoản mặc định: admin/admin123"
+    echo "Xem nhật ký: nhật ký ./scripts/dev-docker.sh"
+    echo "Dừng dịch vụ: ./scripts/dev-docker.sh down"
     ;;
   down)
-    echo "🛑 停止并移除服务..."
+    echo "🛑 Dừng và xóa dịch vụ..."
     docker compose -f "$COMPOSE_FILE" down
-    echo "✅ 已停止"
+    echo " ✅ Đã dừng"
     ;;
   rebuild)
-    echo "🔄 重新构建并启动..."
+    echo "🔄 Xây dựng lại và bắt đầu..."
     docker compose -f "$COMPOSE_FILE" down
     docker compose -f "$COMPOSE_FILE" up -d --build --force-recreate
-    echo "✅ 已重新构建并启动"
+    echo " ✅ Được xây dựng lại và ra mắt"
     ;;
   logs)
     docker compose -f "$COMPOSE_FILE" logs -f
     ;;
   *)
-    echo "用法: $0 [up|down|rebuild|logs]"
+    echo "Cách sử dụng: $0 [lên|xuống|xây dựng lại|log]"
     exit 1
     ;;
 esac

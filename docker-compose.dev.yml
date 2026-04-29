@@ -24,15 +24,15 @@ services:
       redis:
         condition: service_healthy
     environment:
-      # 存储类型：使用 redis
+#Loại lưu trữ: sử dụng redis
       - NEXT_PUBLIC_STORAGE_TYPE=redis
-      # Redis 连接地址（容器内通过 service name 访问）
+# Địa chỉ kết nối Redis (được truy cập thông qua tên dịch vụ trong vùng chứa)
       - REDIS_URL=redis://redis:6379
-      # 站长账号
+#tài khoản quản trị trang web
       - USERNAME=admin
-      # 站长密码
+#Mật khẩu quản trị trang web
       - PASSWORD=admin123
-      # 站点名称（可选）
+# Tên trang web (tùy chọn)
       - NEXT_PUBLIC_SITE_NAME=MoonTV
 
 volumes:

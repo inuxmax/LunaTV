@@ -1,39 +1,39 @@
-# ---- 第 1 阶段：安装依赖 ----
+# ---- Giai đoạn 1: Cài đặt các phụ thuộc ----
 FROM node:20-alpine AS deps
 RUN apk add --no-cache git
-# 启用 corepack 并激活 pnpm（Node20 默认提供 corepack）
+# Kích hoạt corepack và kích hoạt pnpm (Node20 cung cấp corepack theo mặc định)
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-# 仅复制依赖清单，提高构建缓存利用率
+# Chỉ sao chép danh sách phụ thuộc để cải thiện việc sử dụng bộ nhớ đệm của bản dựng
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY .git ./.git
-# 安装所有依赖（含 devDependencies，后续会裁剪）
+# Cài đặt tất cả các phần phụ thuộc (bao gồm cả devDependency, sẽ được cắt bớt sau)
 RUN pnpm install --frozen-lockfile
 
-# ---- 第 2 阶段：构建项目 ----
+# ---- Giai đoạn 2: Xây dựng dự án ----
 FROM node:20-alpine AS builder
 RUN apk add --no-cache git
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
-# 复制依赖
+#Sao chép phần phụ thuộc
 COPY --from=deps /app/node_modules ./node_modules
-# 复制全部源代码
+# Sao chép toàn bộ mã nguồn
 COPY . .
 COPY --from=deps /app/.git ./.git
 
-# 在构建阶段也显式设置 DOCKER_ENV，
+# Đồng thời đặt DOCKER_ENV một cách rõ ràng trong giai đoạn xây dựng,
 ENV DOCKER_ENV=true
 
-# 生成生产构建
+# Tạo bản dựng sản xuất
 RUN pnpm run build
 
-# ---- 第 3 阶段：生成运行时镜像 ----
+# ---- Giai đoạn 3: Tạo ảnh thời gian chạy ----
 FROM node:20-alpine AS runner
 RUN apk add --no-cache git libc6-compat sqlite
-# 创建非 root 用户
+#Tạo người dùng không phải root
 RUN addgroup -g 1001 -S nodejs && adduser -u 1001 -S nextjs -G nodejs
 
 WORKDIR /app
@@ -45,20 +45,20 @@ ENV SQLITE_PATH=/app/data/tv.db
 
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
-# 从构建器中复制 standalone 输出
+# Sao chép đầu ra độc lập từ trình tạo
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-# 从构建器中复制 scripts 目录
+# Sao chép thư mục script từ trình tạo
 COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
-# 从构建器中复制 start.js
+# Sao chép start.js từ trình tạo
 COPY --from=builder --chown=nextjs:nodejs /app/start.js ./start.js
-# 从构建器中复制 public 和 .next/static 目录
+# Sao chép thư mục public và .next/static từ trình tạo
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# 切换到非特权用户
+# Chuyển sang người dùng không có đặc quyền
 USER nextjs
 
 EXPOSE 3000
 
-# 使用自定义启动脚本，先预加载配置再启动服务器
+# Sử dụng tập lệnh khởi động tùy chỉnh để tải trước cấu hình trước khi khởi động máy chủ
 CMD ["node", "start.js"] 

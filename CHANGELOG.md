@@ -2,489 +2,489 @@
 
 ### Fixed
 
-- 解决无痕模式对搜索历史不生效
-- 【APP】替换下载链接
-- 【播放源】敏感词过滤
-- 在播放和直播页引入动态加载以消除 'length' 属性错误
-- 【TVBOX】站点名称修改不刷新
+- Giải quyết vấn đề chế độ ẩn danh không ảnh hưởng đến lịch sử tìm kiếm
+-[APP]Thay thế link tải
+- [Nguồn phát] Lọc từ nhạy cảm
+- Giới thiệu tính năng tải động trên các trang phát lại và phát sóng trực tiếp để loại bỏ các lỗi thuộc tính 'độ dài'
+- [TVBOX] Sửa đổi tên trang web không làm mới
 
 ### Changed
 
-- 上游分支同步修改，主要影响Redis作为存储的用户，使用该版本前最好先备份数据，以免造成任何损失
-- 【100.1.1】搜索页使用虚拟滚动，优化滚动性能
-- 【100.1.0】优化用户数据存储结构，加速数据获取
-- 【100.1.0】新增数据自动迁移
-- 优化TVBOX菜单和APP入口
+- Nhánh ngược dòng được sửa đổi đồng bộ, điều này chủ yếu ảnh hưởng đến người dùng Redis làm nơi lưu trữ. Tốt nhất bạn nên sao lưu dữ liệu trước khi sử dụng phiên bản này để tránh những tổn thất.
+-[100.1.1]Trang tìm kiếm sử dụng tính năng cuộn ảo để tối ưu hóa hiệu suất cuộn
+- 【100.1.0】Tối ưu hóa cấu trúc lưu trữ dữ liệu người dùng và tăng tốc thu thập dữ liệu
+- [100.1.0] Tự động di chuyển dữ liệu mới
+- Tối ưu hóa menu TVBOX và lối vào APP
 
 ### Added
 
-- 【播放源】记住筛选条件
-- 移动端顶部导航优化 
+- [Nguồn phát] Ghi nhớ các điều kiện lọc
+- Tối ưu hóa điều hướng hàng đầu trên thiết bị di động
 
 ## [5.0.8] - 2026-02-11
 
 ### Fixed
 
-- 【TVBox】开关状态显示错误
-- 【TVBox】优化短剧精准查询
-- 【TVBox】豆瓣推荐数据过滤榜单类型
+- [TVBox] Lỗi hiển thị trạng thái Switch
+- [TVBox] Tối ưu truy vấn chính xác phim ngắn
+- [TVBox] Douban đề xuất loại danh sách lọc dữ liệu
 
 ### Added
 
-- 【TVBox】适配TVBOX同步播放记录、收藏、搜索历史
-- 【TVBox】增加代理去广告功能（开发中，请勿开启）
-- 【TVBox】增加数据同步开关
-- 【WEB】增加无痕浏览，开启后将不会同步播放记录
+- [TVBox] Thích ứng với TVBOX để đồng bộ hóa các bản ghi phát lại, bộ sưu tập và lịch sử tìm kiếm
+- [TVBox] Thêm chức năng quảng cáo proxy (đang phát triển, vui lòng không kích hoạt)
+- [TVBox] Thêm switch đồng bộ dữ liệu
+- [WEB] Đã thêm tính năng duyệt web ẩn danh. Sau khi được bật, các bản ghi sẽ không được phát đồng thời.
 
 ### Changed
 
-- 【播放源】增加关键字搜索、页面交互优化
-- 主题菜单优化
+- [Play source] Thêm từ khóa tìm kiếm và tối ưu hóa tương tác trang
+- Tối ưu hóa menu chủ đề
 
 ## [5.0.7] - 2026-01-29
 
 ### Fixed
 
-- 【TVBox】壁纸切换不生效
-- 【用户】密码修改失败
+- [TVBox] Chuyển đổi hình nền không có hiệu lực
+- [Người dùng] Sửa đổi mật khẩu không thành công
 
 ### Added
 
-- 增加【短剧】分类
-- 增加【视频源】页面
-- 【功能配置】用于配置功能菜单的显隐
-- 【首页】增加播放记录单独标签页
+- Đã thêm danh mục [Phim ngắn]
+- Đã thêm trang [Nguồn video]
+- [Cấu hình chức năng] được sử dụng để định cấu hình hiển thị và ẩn các menu chức năng
+- [Trang chủ] Thêm một trang tab riêng cho các bản ghi phát lại
 
 ### Changed
 
-- 【用户】Key生成加盐
-- 【移动端】底部菜单自动定位到当前菜单
-- 【管理面版】修改布局
+- [Người dùng] Tạo khóa và tạo muối
+- [Phiên bản di động] Menu phía dưới tự động định vị menu hiện tại
+- [Bảng quản lý] Sửa đổi bố cục
 
 ## [5.0.6] - 2026-01-27
 
 ### Fixed
 
-- 由于TVBox地址变更，请及时更新
-- 【用户】增加Key刷新按钮，用于兼容旧数据
+- Do thay đổi địa chỉ TVBox, vui lòng cập nhật kịp thời
+- [Người dùng] Thêm nút làm mới Key để tương thích với dữ liệu cũ
 
 
 ## [5.0.5] - 2026-01-27
 
 ### Fixed
 
-- 禁用图片代理-浏览器直连，请避免选择此项，否则可能导致海报无法显示
-- 【tvbox】修复详情页数据错误（提升搜索精准度）
+- Tắt kết nối trực tiếp trình duyệt proxy hình ảnh, vui lòng tránh chọn tùy chọn này, nếu không áp phích có thể không được hiển thị
+- [tvbox] Đã sửa lỗi dữ liệu trên trang chi tiết (cải thiện độ chính xác của tìm kiếm)
 
 ### Added
 
-- 【用户】增加短key，当前主要用于tvbox，区分不同用户，未来将用于播放记录和收藏同步
-- 【站点配置】增加开放注册开关，开启后用户可以进行注册账户
+- [Người dùng] Thêm khóa ngắn, hiện chủ yếu được sử dụng cho tvbox để phân biệt những người dùng khác nhau và sẽ được sử dụng để phát lại các bản ghi và đồng bộ hóa bộ sưu tập trong tương lai
+- [Cấu hình trang web] Thêm nút đăng ký mở. Sau khi được bật, người dùng có thể đăng ký tài khoản.
 
 ### Changed
 
-- 【tvbox】豆瓣数据及图片策略跟随系统设置
-- 【用户】密码存储改为密文
+- [tvbox] Chiến lược dữ liệu và hình ảnh Douban tuân theo cài đặt hệ thống
+- [Người dùng] Lưu trữ mật khẩu đã thay đổi thành bản mã
 
 ## [5.0.4] - 2025-09-25
 
 ### Fixed
 
-- 修复错误的环境变量 ADMIN_USERNAME
-- 修复 bangumi 数据中没有图片导致首页崩溃问题
+- Đã sửa lỗi biến môi trường sai ADMIN_USERNAME
+- Đã khắc phục sự cố treo trang chủ do không có hình ảnh trong dữ liệu bangumi
 
 ## [5.0.3] - 2025-09-09
 
 ### Added
 
-- 增加sqlite支持，并将sqlite设置为默认
-- 【继续观看】增加展开收起/按钮
+- Thêm hỗ trợ sqlite và đặt sqlite làm mặc định
+- [Tiếp tục xem] Thêm nút mở rộng/thu gọn/nút
 
 ### Changed
 
-- 【tvbox】增加接口缓存、超时、豆瓣配置读取优化、搜索接口修改
+- [tvbox] Thêm bộ đệm giao diện, thời gian chờ, tối ưu hóa đọc cấu hình Douban, sửa đổi giao diện tìm kiếm
 
 ## [5.0.2] - 2025-09-05
 
 ### Fixed
 
-- 【后台管理】点击Tab控制台错误
-- 查看版本信息页面闪烁
+- [Quản lý phụ trợ] Lỗi bảng điều khiển Click Tab
+- Xem trang thông tin phiên bản nhấp nháy
 
 ### Added
 
-- TvBox支持
-- 【继续观看】增加展开收起/按钮
+- Hỗ trợ TvBox
+- [Tiếp tục xem] Thêm nút mở rộng/thu gọn/nút
 
 ### Changed
 
-- 【直播】添加了对flv、mp4格式的支持
+- [Phát sóng trực tiếp] Đã thêm hỗ trợ cho các định dạng flv và mp4
 
 ## [5.0.1] - 2025-09-01
 
 ### Fixed
 
-- main分支构建失败
+- Xây dựng chi nhánh chính không thành công
 
 ### Added
 
-- 登录增加密码查看按钮
+- Đăng nhập để thêm nút xem mật khẩu
 
 ### Changed
 
-- 优化自动化构建流程：区分版本号、分支、简化Release流程
-- 合并时自动更新Release Note
+- Tối ưu hóa quy trình build tự động: phân biệt số phiên bản, nhánh và đơn giản hóa quy trình Release
+- Tự động cập nhật Release Note khi sáp nhập
 
 ## [5.0.0] - 2025-08-28
 
 ### Fixed
 
-- 修复版本号显示
+- Đã sửa lỗi hiển thị số phiên bản
 
 ### Changed
 
-- 更新docker-image.yml，推送镜像使用当前仓库、优化分支和标签命名
-- 既然项目已经改名，全站更换站点名称LunaTV
-- 添加一些logo、图标、海报
+- Cập nhật docker-image.yml và đẩy image để sử dụng kho hiện tại, tối ưu hóa việc đặt tên nhánh và thẻ
+- Bây giờ dự án đã được đổi tên, toàn bộ trang web sẽ được đổi tên thành LunaTV
+- Thêm một số logo, biểu tượng, poster
 
 
 ## [100.0.0] - 2025-08-26
 
 ### Added
 
-- 新增对 SITE_BASE 环境变量的支持，解决 m3u8 重写时 base url 错误的问题
+- Đã thêm hỗ trợ cho biến môi trường SITE_BASE để giải quyết vấn đề lỗi url cơ sở trong quá trình viết lại m3u8
 
 ### Changed
 
-- 移除授权相关逻辑
-- 移除代码混淆
-- 移除 melody-cdn-sharon
+- Loại bỏ logic liên quan đến ủy quyền
+- Loại bỏ sự xáo trộn mã
+- Loại bỏ giai điệu-cdn-sharon
 
 ## [4.3.0] - 2025-08-26
 
 ### Added
 
-- 支持将 IPTV 频道添加到收藏中
+- Hỗ trợ thêm các kênh IPTV vào mục yêu thích
 
 ### Changed
 
-- 禁用 flv 直播，仅支持 m3u8 直播
-- 降低代理 ts 分片的内存占用
+- Tắt phát sóng trực tiếp flv, chỉ hỗ trợ phát sóng trực tiếp m3u8
+- Giảm mức sử dụng bộ nhớ của phân đoạn ts proxy
 
 ## [4.2.1] - 2025-08-26
 
 ### Fixed
 
-- 修复直播源加载失败或离开页面后依然无限加载的问题
+- Đã khắc phục sự cố nguồn phát sóng trực tiếp không tải được hoặc tiếp tục tải vô hạn sau khi rời khỏi trang
 
 ## [4.2.0] - 2025-08-26
 
 ### Added
 
-- 支持 flv 直播和直播地址解析到 mp4 的处理
-- 增加直播台标的 proxy 以防止 cors
-- 支持播放页选集分组的滚动翻页
+- Hỗ trợ xử lý độ phân giải địa chỉ phát sóng trực tiếp flv và phát sóng trực tiếp sang mp4
+- Thêm proxy cho logo đài phát sóng trực tiếp để ngăn chặn cors
+- Hỗ trợ cuộn trang chuyển nhóm lựa chọn trang chơi
 
 ### Changed
 
-- 管理后台页面的按钮增加加载中的 UI
+-Thêm nút UI tải vào trang nền quản lý
 
 ### Fixed
 
-- /api/proxy/m3u8 仅对 m3u8 内容反序列化，降低内存和 CPU 消耗
+- /api/proxy/m3u8 chỉ giải tuần tự hóa nội dung m3u8 để giảm mức tiêu thụ bộ nhớ và CPU
 
 ## [4.1.1] - 2025-08-25
 
 ### Changed
 
-- 增加对 url-tvg 和多 epg url 的支持
+- Đã thêm hỗ trợ cho url url-tvg và multi-epg
 
 ### Fixed
 
-- 修复 epg 数据清洗中去重叠逻辑未考虑日期导致的问题
+- Đã khắc phục sự cố do logic khử chồng chéo trong quá trình làm sạch dữ liệu epg không tính đến ngày
 
 ## [4.1.0] - 2025-08-24
 
 ### Added
 
-- 解析 m3u 自带的 epg 和自定义 epg，增加今日节目单
+- Phân tích epg tích hợp và epg tùy chỉnh của m3u và thêm danh sách chương trình ngày hôm nay
 
 ### Changed
 
-- 直播源数据刷新改为并发刷新
+- Làm mới dữ liệu nguồn phát sóng trực tiếp đã thay đổi thành làm mới đồng thời
 
 ## [4.0.0] - 2025-08-24
 
 ### Added
 
-- 增加 iptv 订阅和播放功能
+- Thêm chức năng đăng ký và phát lại iptv
 
 ### Changed
 
-- 搜索页面视频卡片移动端/右键菜单添加豆瓣链接
-- 搜索建议遵循色情过滤
+- Thêm liên kết Douban vào trang tìm kiếm card màn hình thiết bị đầu cuối di động/menu chuột phải
+- Đề xuất tìm kiếm theo bộ lọc khiêu dâm
 
 ## [3.2.1] - 2025-08-22
 
 ### Changed
 
-- 新增色色过滤分类
-- 调整搜索建议框层级
+- Đã thêm danh mục bộ lọc màu
+- Điều chỉnh mức độ của hộp gợi ý tìm kiếm
 
 ## [3.2.0] - 2025-08-22
 
 ### Added
 
-- 视频源管理支持批量启用、禁用、删除
-- 用户管理支持批量设置用户组
-- 视频卡片右键/长按菜单新增新标签页播放
+- Quản lý nguồn video hỗ trợ bật, tắt và xóa hàng loạt
+- Quản lý người dùng hỗ trợ cài đặt hàng loạt nhóm người dùng
+- Thêm tính năng phát lại tab mới vào menu chuột phải/nhấn và giữ của card màn hình
 
 ### Changed
 
-- 视频卡片移动端 hover 时仅保留播放按钮
-- 微调管理页面 UI 和视频卡片右键/长按菜单中的收藏样式
+- Chỉ giữ lại nút play khi di chuột card màn hình trên phiên bản di động
+- Tinh chỉnh kiểu bộ sưu tập trong giao diện người dùng trang quản lý và menu nhấp chuột phải/nhấn và giữ thẻ video
 
 ### Fixed
 
-- 修复了搜索栏 enter 键自动选中第一个建议项的问题
+- Đã khắc phục sự cố phím enter trong thanh tìm kiếm tự động chọn mục được đề xuất đầu tiên
 
 ## [3.1.2] - 2025-08-22
 
 ### Fixed
 
-- 修复移动端卡片无法点击的问题
+-Sửa lỗi không bấm được thẻ di động
 
 ## [3.1.1] - 2025-08-21
 
 ### Fixed
 
-- 修复了视频卡片 hover 的非播放按钮点击后进入播放页的问题
+- Đã khắc phục sự cố vào trang phát sau khi nhấp vào nút không phát của thẻ video khi di chuột
 
 ## [3.1.0] - 2025-08-21
 
 ### Added
 
-- 增加用户组管理和用户组播放源限制
-- 增加管理面板视频源有效性检查
-- 搜索栏增加一键删除按钮
+- Đã thêm quản lý nhóm người dùng và hạn chế nguồn phát của nhóm người dùng
+- Đã thêm kiểm tra tính hợp lệ của nguồn video trong bảng quản lý
+- Đã thêm nút xóa bằng một cú nhấp chuột vào thanh tìm kiếm
 
 ### Changed
 
-- 放宽授权心跳对于网络问题的判断标准
-- 统一管理面板弹窗使用 createPortal
-- VideoCard 允许移动端响应 hover 事件
-- 移动端布局 header 常驻，搜索按钮移动到 header 右侧
-- 调大搜索接口超时时间
+- Giảm bớt các tiêu chí đánh giá sự cố mạng bằng nhịp tim được ủy quyền
+- Thống nhất cửa sổ bật lên bảng quản lý bằng createPortal
+- VideoCard cho phép thiết bị đầu cuối di động phản hồi các sự kiện di chuột
+- Tiêu đề bố cục trên thiết bị di động là cố định và nút tìm kiếm được chuyển sang bên phải của tiêu đề
+- Tăng thời gian chờ giao diện tìm kiếm
 
 ### Fixed
 
-- 修复 bangumi 返回的整数评分无小数导致 UI 不对齐的问题
+- Đã khắc phục sự cố trong đó xếp hạng số nguyên được bangumi trả về không có số thập phân, khiến giao diện người dùng bị căn chỉnh sai
 
 ## [3.0.2] - 2025-08-20
 
 ### Changed
 
-- 优化机器码生成逻辑
+- Tối ưu hóa logic tạo mã máy
 
 ### Fixed
 
-- 修复 redis url 不支持 rediss 协议的问题
+-Đã khắc phục sự cố url redis không hỗ trợ giao thức rediss
 
 ## [3.0.1] - 2025-08-20
 
 ### Fixed
 
-- 修复授权初始化错误
+- Đã sửa lỗi khởi tạo ủy quyền
 
 ## [3.0.0] - 2025-08-20
 
 ### Added
 
-- 防盗卖加固
-- 支持自定义用户可用视频源
+- Tăng cường chống trộm
+- Hỗ trợ các nguồn video tùy chỉnh có sẵn của người dùng
 
 ### Changed
 
-- 右键视频卡片可弹出操作菜单
+- Nhấp chuột phải vào card màn hình để bật lên menu thao tác
 
 ### Fixed
 
-- 过滤掉集数为 0 的搜索结果
+- Lọc kết quả tìm kiếm tập số 0
 
 ## [2.7.1] - 2025-08-17
 
 ### Fixed
 
-- 修复 iOS 下版本面板可穿透滚动背景的问题
+- Đã khắc phục sự cố bảng phiên bản trong iOS có thể xuyên qua nền cuộn
 
 ## [2.7.0] - 2025-08-17
 
 ### Added
 
-- 视频卡片新增移动端操作面板，优化触控屏操作体验
+- Bảng điều khiển di động mới được thêm vào card màn hình để tối ưu hóa trải nghiệm thao tác trên màn hình cảm ứng.
 
 ### Changed
 
-- 优化集数标题的匹配和展示逻辑
+- Tối ưu hóa việc so khớp và hiển thị logic tiêu đề các tập phim
 
 ### Fixed
 
-- 修复设置面板和修改密码面板背景可被拖动的问题
+- Đã khắc phục sự cố có thể kéo nền của bảng cài đặt và bảng thay đổi mật khẩu
 
 ## [2.6.0] - 2025-08-17
 
 ### Added
 
-- 新增搜索流式输出接口，并设置流式搜索为默认搜索接口，优化搜索体验
-- 新增源站搜索结果内存缓存，粒度为源站+关键词+页数，缓存 10 分钟
-- 新增豆瓣 CDN provided by @JohnsonRan
+- Đã thêm giao diện đầu ra phát trực tuyến tìm kiếm mới và đặt tìm kiếm phát trực tuyến làm giao diện tìm kiếm mặc định để tối ưu hóa trải nghiệm tìm kiếm
+- Đã thêm bộ đệm bộ nhớ kết quả tìm kiếm trang gốc, độ chi tiết là trang gốc + từ khóa + số trang, bộ nhớ đệm trong 10 phút
+- Đã thêm CDN Douban do @JohnsonRan cung cấp
 
 ### Changed
 
-- 搜索结果默认为无排序状态，不再默认按照年份排序
-- 常规搜索接口无结果时，不再设置响应的缓存头
-- 移除豆瓣数据源中的 cors-anywhere 方式
+- Kết quả tìm kiếm mặc định không được sắp xếp và không còn được sắp xếp theo năm nữa.
+- Khi không có kết quả trong giao diện tìm kiếm thông thường, tiêu đề bộ đệm phản hồi không còn được đặt.
+- Loại bỏ phương thức cors-anywhere trong nguồn dữ liệu Douban
 
 ### Fixed
 
-- 数据导出时导出站长密码，保证迁移到新账户时原站长用户可正常登录
-- 聚合卡片优化移动端源信息展示
+- Xuất mật khẩu quản trị trang web khi xuất dữ liệu để đảm bảo người dùng quản trị trang web ban đầu có thể đăng nhập bình thường khi di chuyển sang tài khoản mới.
+- Thẻ tổng hợp tối ưu hóa việc hiển thị thông tin nguồn trên thiết bị đầu cuối di động
 
 ## [2.4.1] - 2025-08-15
 
 ### Fixed
 
-- 对导入和 db 读取的配置文件做自检，防止 USERNAME 修改导致用户状态异常
+- Thực hiện tự kiểm tra trên các tệp cấu hình đã nhập và đọc DB để ngăn việc sửa đổi TÊN NGƯỜI DÙNG gây ra trạng thái người dùng bất thường
 
 ## [2.4.0] - 2025-08-15
 
 ### Added
 
-- 支持 kvrocks 存储（持久化 kv 存储）
+- Hỗ trợ lưu trữ kvrocks (lưu trữ kv liên tục)
 
 ### Fixed
 
-- 修复搜索结果排序不稳定的问题
-- 导入数据时同时更新内存缓存的管理员配置
+- Đã sửa lỗi sắp xếp kết quả tìm kiếm không ổn định
+- Cập nhật cấu hình quản trị viên của bộ nhớ cache khi nhập dữ liệu
 
 ## [2.3.0] - 2025-08-15
 
 ### Added
 
-- 支持站长导入导出整站数据
+-Hỗ trợ quản trị viên web nhập và xuất toàn bộ dữ liệu trang web
 
 ### Changed
 
-- 仅允许站长操作配置文件
-- 微调搜索结果过滤面板的移动端样式
+- Chỉ quản trị viên web mới được phép vận hành các tập tin cấu hình
+- Tinh chỉnh kiểu di động của bảng lọc kết quả tìm kiếm
 
 ## [2.2.1] - 2025-08-14
 
 ### Fixed
 
-- 修复了筛选 panel 打开时滚动页面 panel 不跟随的问题
+- Đã khắc phục sự cố bảng điều khiển không theo trang cuộn khi mở bảng lọc.
 
 ## [2.2.0] - 2025-08-14
 
 ### Added
 
-- 搜索结果支持按播放源、标题和年份筛选，支持按年份排序
-- 搜索界面视频卡片展示年份信息，聚合卡片展示播放源
+- Kết quả tìm kiếm hỗ trợ lọc theo nguồn phát, tiêu đề và năm, đồng thời hỗ trợ sắp xếp theo năm
+- Card video trên giao diện tìm kiếm hiển thị thông tin năm, còn card tổng hợp hiển thị nguồn phát
 
 ### Fixed
 
-- 修复 /api/search/resources 返回空的问题
-- 修复 upstash 实例无法编辑自定义分类的问题
+- Đã khắc phục sự cố /api/search/resources trả về sản phẩm trống
+- Đã khắc phục sự cố các phiên bản upstash không thể chỉnh sửa danh mục tùy chỉnh
 
 ## [2.1.0] - 2025-08-13
 
 ### Added
 
-- 支持通过订阅获取配置文件
+-Hỗ trợ lấy file cấu hình thông qua đăng ký
 
 ### Changed
 
-- 微调部分文案和 UI
-- 删除部分无用代码
+- Tinh chỉnh một số copywriting và giao diện người dùng
+- Xóa một số mã vô dụng
 
 ## [2.0.1] - 2025-08-13
 
 ### Changed
 
-- 版本检查和变更日志请求 Github
+- Kiểm tra phiên bản và yêu cầu thay đổi Github
 
 ### Fixed
 
-- 微调管理面板样式
+- Tinh chỉnh kiểu bảng quản trị
 
 ## [2.0.0] - 2025-08-13
 
 ### Added
 
-- 支持配置文件在线配置和编辑
-- 搜索页搜索框实时联想
-- 去除对 localstorage 模式的支持
+- Hỗ trợ cấu hình trực tuyến và chỉnh sửa file cấu hình
+- Liên kết thời gian thực của hộp tìm kiếm trên trang tìm kiếm
+- Loại bỏ hỗ trợ cho chế độ lưu trữ cục bộ
 
 ### Changed
 
-- 播放记录删除按钮改为垃圾桶图标以消除歧义
+- Đã thay đổi nút xóa bản ghi phát thành biểu tượng thùng rác để loại bỏ sự mơ hồ
 
 ### Fixed
 
-- 限制设置面板的最大长度，防止超出视口
+- Giới hạn độ dài tối đa của bảng cài đặt để ngăn nó vượt quá khung nhìn
 
 ## [1.1.1] - 2025-08-12
 
 ### Changed
-- 修正 zwei 提供的 cors proxy 地址
-- 移除废弃代码
+- Sửa địa chỉ proxy cors do zwei cung cấp
+- Loại bỏ mã lỗi thời
 
 ### Fixed
-- [运维] docker workflow release 日期使用东八区日期
+- [Vận hành và bảo trì] Ngày phát hành quy trình làm việc của Docker sử dụng ngày của Quận Dongba
 
 ## [1.1.0] - 2025-08-12
 
 ### Added
-- 每日新番放送功能，展示每日新番放送的番剧
+- Chức năng phát sóng chương trình mới hàng ngày, chiếu các bộ phim truyền hình phát sóng chương trình mới hàng ngày
 
 ### Fixed
-- 修复远程 CHANGELOG 无法提取变更内容的问题
+-Đã khắc phục sự cố CHANGELOG từ xa không thể trích xuất nội dung đã thay đổi
 
 ## [1.0.5] - 2025-08-12
 
 ### Changed
-- 实现基于 Git 标签的自动 Release 工作流
+- Triển khai quy trình phát hành tự động dựa trên thẻ Git
 
 ## [1.0.4] - 2025-08-11
 
 ### Added
-- 优化版本管理工作流，实现单点修改
+- Tối ưu hóa quy trình quản lý phiên bản để đạt được sửa đổi một điểm
 
 ### Changed
-- 版本号现在从 CHANGELOG 自动提取，无需手动维护 VERSION.txt
+- Số phiên bản hiện được trích xuất tự động từ CHANGELOG, loại bỏ nhu cầu duy trì VERSION.txt theo cách thủ công
 
 ## [1.0.3] - 2025-08-11
 
 ### Changed
 
-- 升级播放器 Artplayer 至版本 5.2.5
+- Nâng cấp trình phát Artplayer lên phiên bản 5.2.5
 
 ## [1.0.2] - 2025-08-11
 
 ### Changed
 
-- 版本号比较机制恢复为数字比较，仅当最新版本大于本地版本时才认为有更新
-- [运维] 自动替换 version.ts 中的版本号为 VERSION.txt 中的版本号
+- Cơ chế so sánh số phiên bản quay về so sánh số và chỉ khi phiên bản mới nhất lớn hơn phiên bản cục bộ thì mới được coi là đã cập nhật.
+- [Vận hành và bảo trì] Tự động thay thế số phiên bản trong version.ts bằng số phiên bản trong VERSION.txt
 
 ## [1.0.1] - 2025-08-11
 
 ### Fixed
 
-- 修复版本检查功能，只要与最新版本号不一致即认为有更新
+- Đã sửa chức năng kiểm tra phiên bản, miễn là nó không phù hợp với số phiên bản mới nhất sẽ được coi là bản cập nhật.
 
 ## [1.0.0] - 2025-08-10
 
 ### Added
 
-- 基于 Semantic Versioning 的版本号机制
-- 版本信息面板，展示本地变更日志和远程更新日志
+- Cơ chế đánh số phiên bản dựa trên Semantic Versioning
+- Bảng thông tin phiên bản, hiển thị nhật ký thay đổi cục bộ và nhật ký cập nhật từ xa

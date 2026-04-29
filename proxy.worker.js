@@ -1,14 +1,14 @@
 /* eslint-disable */
 
-addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request));
+addEventListener('fetch', (sự kiện) => {
+  sự kiện.respondWith(handleRequest(event.request));
 });
 
-async function handleRequest(request) {
-  try {
-    const url = new URL(request.url);
+hàm không đồng bộ handRequest(request) {
+  thử {
+    const url = URL mới(request.url);
 
-    // 如果访问根目录，返回HTML
+    // Nếu truy cập vào thư mục gốc thì trả về HTML
     if (url.pathname === '/') {
       return new Response(getRootHtml(), {
         headers: {
@@ -17,114 +17,114 @@ async function handleRequest(request) {
       });
     }
 
-    // 从请求路径中提取目标 URL
-    let actualUrlStr = decodeURIComponent(url.pathname.replace('/', ''));
+    // Trích xuất URL mục tiêu từ đường dẫn yêu cầu
+    hãy để thực tếUrlStr = giải mãURIComponent(url.pathname.replace('/', ''));
 
-    // 判断用户输入的 URL 是否带有协议
-    actualUrlStr = ensureProtocol(actualUrlStr, url.protocol);
+    // Xác định xem URL được người dùng nhập có giao thức hay không
+    thực tếUrlStr = đảm bảoProtocol (UrlStr thực tế, url.protocol);
 
-    // 保留查询参数
-    actualUrlStr += url.search;
+    //Giữ tham số truy vấn
+    thực tếUrlStr += url.search;
 
-    // 创建新 Headers 对象，排除以 'cf-' 开头的请求头
+    //Tạo một đối tượng Headers mới, loại trừ các ký tự bắt đầu bằng 'cf-' Tiêu đề yêu cầu bắt đầu bằng '
     const newHeaders = filterHeaders(
-      request.headers,
-      (name) => !name.startsWith('cf-')
+      yêu cầu.headers,
+      (tên) => !name.startsWith('cf-')
     );
 
-    // 创建一个新的请求以访问目标 URL
-    const modifiedRequest = new Request(actualUrlStr, {
-      headers: newHeaders,
-      method: request.method,
-      body: request.body,
-      redirect: 'manual',
+    // Tạo một yêu cầu mới để truy cập URL mục tiêu
+    const đã sửa đổiRequest = Yêu cầu mới (actualUrlStr, {
+      tiêu đề: newHeaders,
+      phương thức: request.method,
+      cơ thể: request.body,
+      chuyển hướng: 'manual',
     });
 
-    // 发起对目标 URL 的请求
-    const response = await fetch(modifiedRequest);
-    let body = response.body;
+    // Bắt đầu một yêu cầu tới URL mục tiêu
+    phản hồi const = đang chờ tìm nạp(modifiedRequest);
+    let body = reply.body;
 
-    // 处理重定向
+    // Xử lý chuyển hướng
     if ([301, 302, 303, 307, 308].includes(response.status)) {
-      body = response.body;
-      // 创建新的 Response 对象以修改 Location 头部
-      return handleRedirect(response, body);
-    } else if (response.headers.get('Content-Type')?.includes('text/html')) {
-      body = await handleHtmlContent(
-        response,
+      body = phản hồi.body;
+      // Tạo một đối tượng Response mới để sửa đổi tiêu đề Vị trí
+      return handRedirect(response, body);
+    } khác nếu (response.headers.get('Content-Type')?.includes('text/html')) {
+      body = đang chờ xử lýHtmlContent(
+        phản ứng,
         url.protocol,
         url.host,
-        actualUrlStr
+        UrlStr thực tế
       );
     }
 
-    // 创建修改后的响应对象
-    const modifiedResponse = new Response(body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: response.headers,
+    // Tạo đối tượng phản hồi đã sửa đổi
+    const đã sửa đổiResponse = Phản hồi mới (nội dung, {
+      trạng thái: phản hồi.status,
+      statusText: phản hồi.statusText,
+      tiêu đề: phản hồi.headers,
     });
 
-    // 添加禁用缓存的头部
+    //Thêm tiêu đề để tắt bộ nhớ đệm
     setNoCacheHeaders(modifiedResponse.headers);
 
-    // 添加 CORS 头部，允许跨域访问
+    // Thêm tiêu đề CORS để cho phép truy cập nhiều tên miền
     setCorsHeaders(modifiedResponse.headers);
 
-    return modifiedResponse;
-  } catch (error) {
-    // 如果请求目标地址时出现错误，返回带有错误消息的响应和状态码 500（服务器错误）
-    return jsonResponse(
+    trả về Đã sửa đổiPhản hồi;
+  } bắt (lỗi) {
+    // Nếu xảy ra lỗi khi yêu cầu địa chỉ đích, hãy trả về phản hồi kèm theo thông báo lỗi và mã trạng thái 500 (Lỗi Máy chủ)
+    trả về jsonResponse(
       {
-        error: error.message,
+        lỗi: error.message,
       },
       500
     );
   }
 }
 
-// 确保 URL 带有协议
-function ensureProtocol(url, defaultProtocol) {
-  return url.startsWith('http://') || url.startsWith('https://')
+// Đảm bảo URL có giao thức
+hàm đảm bảoProtocol(url, defaultProtocol) {
+  trả về url.startsWith('http://') || url.startsWith('https://')
     ? url
     : defaultProtocol + '//' + url;
 }
 
-// 处理重定向
-function handleRedirect(response, body) {
-  const location = new URL(response.headers.get('location'));
+// Xử lý chuyển hướng
+hàm xử lýRedirect(phản hồi, nội dung) {
+  const location = URL mới(response.headers.get('location'));
   const modifiedLocation = `/${encodeURIComponent(location.toString())}`;
-  return new Response(body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers: {
+  trả về Phản hồi mới (nội dung, {
+    trạng thái: phản hồi.status,
+    statusText: phản hồi.statusText,
+    tiêu đề: {
       ...response.headers,
-      Location: modifiedLocation,
+      Vị trí: đã sửa đổiLocation,
     },
   });
 }
 
-// 处理 HTML 内容中的相对路径
-async function handleHtmlContent(response, protocol, host, actualUrlStr) {
-  const originalText = await response.text();
-  const regex = new RegExp('((href|src|action)=["\'])/(?!/)', 'g');
-  let modifiedText = replaceRelativePaths(
-    originalText,
-    protocol,
-    host,
-    new URL(actualUrlStr).origin
+// Xử lý đường dẫn tương đối trong nội dung HTML
+hàm không đồng bộ xử lýHtmlContent(phản hồi, giao thức, máy chủ, thực tếUrlStr) {
+  const originalText = đang chờ phản hồi.text();
+  const Regex = new RegExp('((href|src|action)=["\'])/(?!/)', 'g');
+  hãy sửa đổiText = thay thếRelativePaths(
+    văn bản gốc,
+    giao thức,
+    chủ nhà,
+    URL mới(actualUrlStr).origin
   );
 
-  return modifiedText;
+  trả lại văn bản đã sửa đổi;
 }
 
-// 替换 HTML 内容中的相对路径
-function replaceRelativePaths(text, protocol, host, origin) {
-  const regex = new RegExp('((href|src|action)=["\'])/(?!/)', 'g');
-  return text.replace(regex, `$1${protocol}//${host}/${origin}/`);
+// Thay thế đường dẫn tương đối trong nội dung HTML
+hàm thay thếRelativePaths(văn bản, giao thức, máy chủ, nguồn gốc) {
+  const Regex = new RegExp('((href|src|action)=["\'])/(?!/)', 'g');
+  trả về văn bản.replace(regex, `$1${protocol}//${host}/${origin}/`);
 }
 
-// 返回 JSON 格式的响应
+// Trả về phản hồi ở định dạng JSON
 function jsonResponse(data, status) {
   return new Response(JSON.stringify(data), {
     status: status,
@@ -134,91 +134,91 @@ function jsonResponse(data, status) {
   });
 }
 
-// 过滤请求头
-function filterHeaders(headers, filterFunc) {
-  return new Headers([...headers].filter(([name]) => filterFunc(name)));
+// Lọc tiêu đề yêu cầu
+hàm filterHeaders(tiêu đề, filterFunc) {
+  trả về Tiêu đề mới([...headers].filter(([name]) => filterFunc(name)));
 }
 
-// 设置禁用缓存的头部
-function setNoCacheHeaders(headers) {
-  headers.set('Cache-Control', 'no-store');
+// Đặt tiêu đề để tắt bộ nhớ đệm
+hàm setNoCacheHeaders(tiêu đề) {
+  tiêu đề.set('Cache-Control', 'no-store');
 }
 
-// 设置 CORS 头部
-function setCorsHeaders(headers) {
-  headers.set('Access-Control-Allow-Origin', '*');
+// Đặt tiêu đề CORS
+hàm setCorsHeaders(tiêu đề) {
+  tiêu đề.set('Access-Control-Allow-Origin', '*');
   headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   headers.set('Access-Control-Allow-Headers', '*');
 }
 
-// 返回根目录的 HTML
-function getRootHtml() {
-  return `<!DOCTYPE html>
+// Trả về HTML của thư mục gốc
+hàm getRootHtml() {
+  trả về `<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
+<đầu>
+  <bộ ký tự meta="UTF-8">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-  <title>Proxy Everything</title>
+  <title>Proxy mọi thứ</title>
   <link rel="icon" type="image/png" href="https://img.icons8.com/color/1000/kawaii-bread-1.png">
-  <meta name="Description" content="Proxy Everything with CF Workers.">
-  <meta property="og:description" content="Proxy Everything with CF Workers.">
+  <meta name="Description" content="Proxy mọi thứ với CF Workers.">
+  <meta property="og:description" content="Proxy mọi thứ với CF Workers.">
   <meta property="og:image" content="https://img.icons8.com/color/1000/kawaii-bread-1.png">
   <meta name="robots" content="index, follow">
   <meta http-equiv="Content-Language" content="zh-CN">
-  <meta name="copyright" content="Copyright © ymyuuu">
-  <meta name="author" content="ymyuuu">
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://img.icons8.com/color/1000/kawaii-bread-1.png">
+  <meta name="copyright" content="Bản quyền © ymyuuu">
+  <meta name="tác giả" nội dung="ymyuuu">
+  <link rel="apple-touch-icon-precompose" size="120x120" href="https://img.icons8.com/color/1000/kawaii-bread-1.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-  <style>
-      body, html {
-          height: 100%;
-          margin: 0;
+  <meta name="viewport" content="width=device-width, user-scalable=no, first-scale=1.0, max-scale=1.0, Mini-scale=1.0, user-scalable=no">
+  <phong cách>
+      nội dung, html {
+          chiều cao: 100%;
+          lề: 0;
       }
       .background {
-          background-image: url('https://imgapi.cn/bing.php');
-          background-size: cover;
-          background-position: center;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          hình nền: url('https://imgapi.cn/bing.php');
+          kích thước nền: bìa;
+          vị trí nền: trung tâm;
+          chiều cao: 100%;
+          hiển thị: linh hoạt;
+          căn chỉnh các mục: giữa;
+          biện minh-nội dung: trung tâm;
       }
       .card {
-          background-color: rgba(255, 255, 255, 0.8);
-          transition: background-color 0.3s ease, box-shadow 0.3s ease;
+          màu nền: rgba(255, 255, 255, 0.8);
+          quá trình chuyển đổi: màu nền dễ dàng 0,3 giây, bóng hộp dễ dàng 0,3 giây;
       }
-      .card:hover {
-          background-color: rgba(255, 255, 255, 1);
-          box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+      .card: di chuột {
+          màu nền: rgba(255, 255, 255, 1);
+          bóng hộp: 0px 8px 16px rgba(0, 0, 0, 0.3);
       }
       .input-field input[type=text] {
-          color: #2c3e50;
+          màu: #2c3e50;
       }
       .input-field input[type=text]:focus+label {
-          color: #2c3e50 !important;
+          màu sắc: #2c3e50 !quan trọng;
       }
       .input-field input[type=text]:focus {
-          border-bottom: 1px solid #2c3e50 !important;
-          box-shadow: 0 1px 0 0 #2c3e50 !important;
+          viền-dưới: 1px Solid #2c3e50 !important;
+          box-shadow: 0 1px 0 0 #2c3e50 !quan trọng;
       }
   </style>
 </head>
-<body>
+<cơ thể>
   <div class="background">
       <div class="container">
-          <div class="row">
+          <div lớp="hàng">
               <div class="col s12 m8 offset-m2 l6 offset-l3">
-                  <div class="card">
+                  <div lớp="thẻ">
                       <div class="card-content">
-                          <span class="card-title center-align"><i class="material-icons left">link</i>Proxy Everything</span>
+                          <span class="card-title center-align"><i class="material-icons left">liên kết</i>Proxy Mọi thứ</span>
                           <form id="urlForm" onsubmit="redirectToProxy(event)">
                               <div class="input-field">
-                                  <input type="text" id="targetUrl" placeholder="在此输入目标地址" required>
-                                  <label for="targetUrl">目标地址</label>
+                                  <input type="text" id="targetUrl" placeholder="Nhập địa chỉ mục tiêu vào đây" bắt buộc>
+                                  <label for="targetUrl">Địa chỉ đích</label>
                               </div>
-                              <button type="submit" class="btn waves-effect waves-light teal darken-2 full-width">跳转</button>
+                              <button type="submit" class="btn wave-effect Wave-light Teal darken-2 full-width">Nhảy</button>
                           </form>
                       </div>
                   </div>
@@ -227,9 +227,9 @@ function getRootHtml() {
       </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-      function redirectToProxy(event) {
-          event.preventDefault();
+  <kịch bản>
+      hàm redirectToProxy(sự kiện) {
+          sự kiện.preventDefault();
           const targetUrl = document.getElementById('targetUrl').value.trim();
           const currentOrigin = window.location.origin;
           window.open(currentOrigin + '/' + encodeURIComponent(targetUrl), '_blank');

@@ -1,84 +1,84 @@
 /* eslint-disable no-console */
-'use client';
+'sử dụng ứng dụng khách';
 
-import {
-  Box,
-  Database,
-  FileText,
-  FolderOpen,
-  LayoutDashboard,
-  Settings,
+nhập khẩu {
+  hộp,
+  Cơ sở dữ liệu,
+  văn bản tập tin,
+  Thư mụcMở,
+  Bố cụcBảng điều khiển,
+  Cài đặt,
   ToggleRight,
-  Tv,
-  Users,
+  truyền hình,
+  Người dùng,
   Video,
-} from 'lucide-react';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+} từ 'phản ứng sáng suốt';
+nhập { Suspense, useCallback, useEffect, useState } từ 'react';
+nhập { createPortal } từ 'Reac-dom';
 
-import { AdminConfig, AdminConfigResult } from '@/lib/admin.types';
+nhập { AdminConfig, AdminConfigResult } từ '@/lib/admin.types';
 
-import DataMigration from '@/components/DataMigration';
-import PageLayout from '@/components/PageLayout';
+nhập DataMigration từ '@/thành phần/DataMigration';
+nhập PageLayout từ '@/comComponents/PageLayout';
 
-import CategorySection from '@/app/admin/components/CategorySection';
-import ConfigFile from '@/app/admin/components/ConfigFileSection';
-import FeaturesSection from '@/app/admin/components/FeaturesSection';
-import LiveSourceSection from '@/app/admin/components/LiveSourceSection';
-import SiteSection from '@/app/admin/components/SiteSection';
-import SourceSection from '@/app/admin/components/SourceSection';
-import TVBoxSection from '@/app/admin/components/TVBoxSection';
-import {
+nhập CategorySection từ '@/app/admin/comComponents/CategorySection';
+nhập ConfigFile từ '@/app/admin/comComponents/ConfigFileSection';
+nhập Phần tính năng từ '@/app/admin/comComponents/FeaturesSection';
+nhập LiveSourceSection từ '@/app/admin/comComponents/LiveSourceSection';
+nhập SiteSection từ '@/app/admin/comComponents/SiteSection';
+nhập SourceSection từ '@/app/admin/comComponents/SourceSection';
+nhập TVBoxSection từ '@/app/admin/comComponents/TVBoxSection';
+nhập khẩu {
   AlertModal,
-  showError,
-  showSuccess,
-  styles,
-  useAlertModal,
-  useLoadingState,
-} from '@/app/admin/components/UIComponents';
-import UserSection from '@/app/admin/components/UserSection';
+  hiển thịLỗi,
+  hiển thịThành công,
+  phong cách,
+  sử dụngAlertModal,
+  sử dụngLoadingState,
+} từ '@/app/admin/thành phần/UIComponents';
+nhập UserSection từ '@/app/admin/comComponents/UserSection';
 
-function AdminPageClient() {
+hàm AdminPageClient() {
   const [config, setConfig] = useState<AdminConfig | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [lỗi, setError] = useState<string | null>(null);
   const { isLoading, withLoading } = useLoadingState();
   const [showResetConfigModal, setShowResetConfigModal] = useState(false);
-  const [role, setRole] = useState<any>(null);
+  const [vai trò, setRole] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('');
-  const { alertModal, showAlert, hideAlert } = useAlertModal();
+  const { cảnh báoModal, showAlert, ẩnAlert } = useAlertModal();
   useEffect(() => {
-    const savedTab = localStorage.getItem('admin_active_tab');
-    if (savedTab) {
+    const đã lưuTab = localStorage.getItem('admin_active_tab');
+    nếu (savedTab) {
       setActiveTab(savedTab);
-    } else {
-      setActiveTab('site');
+    } khác {
+      setActiveTab('trang web');
     }
   }, []);
   useEffect(() => {
-    if (activeTab) {
+    nếu (Tab hoạt động) {
       localStorage.setItem('admin_active_tab', activeTab);
     }
   }, [activeTab]);
 
-  const fetchConfig = useCallback(async () => {
+  const getConfig = useCallback(async() => {
     return withLoading(`FetchConfig`, async () => {
-      try {
-        const resp = await fetch('/api/admin/config');
+      thử {
+        const resp = đang chờ tìm nạp('/api/admin/config');
         const data = (await resp.json()) as AdminConfigResult;
-        if (data) {
+        nếu (dữ liệu) {
           setConfig(data.Config);
           setRole(data.Role);
         }
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : '获取配置失败';
-        showError(msg, showAlert);
-        setError(msg);
+      } bắt (lỗi) {
+        const msg = err instanceof Lỗi? err.message: 'Không lấy được cấu hình';
+        showError(tin nhắn, showAlert);
+        setError(tin nhắn);
       }
     });
   }, [withLoading, showAlert]);
   useEffect(() => {
-    fetchConfig();
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    tìm nạpConfig();
+    /* eslint-disable-next-line Reac-hooks/exhaustive-deps */
   }, []);
 
   const handleResetConfig = () => {
@@ -86,40 +86,40 @@ function AdminPageClient() {
   };
 
   const handleConfirmResetConfig = async () => {
-    await withLoading('resetConfig', async () => {
-      try {
-        const response = await fetch(`/api/admin/reset`);
-        if (!response.ok) {
-          throw new Error(`重置失败: ${response.status}`);
+    await withLoading('resetConfig', không đồng bộ () => {
+      thử {
+        const phản hồi = đang chờ tìm nạp(`/api/admin/reset`);
+        nếu (!response.ok) {
+          ném Lỗi mới(`Đặt lại không thành công: ${response.status}`);
         }
-        showSuccess('重置成功，请刷新页面！', showAlert);
+        showThành công('重置成功，请刷新页面！', showAlert);
         await fetchConfig();
         setShowResetConfigModal(false);
       } catch (err) {
-        showError(err instanceof Error ? err.message : '重置失败', showAlert);
+        showError(err instanceof Error ? err.message : 'Đặt lại không thành công', showAlert);
         throw err;
       }
     });
   };
   const tabs = [
-    { id: 'configFile', label: '配置文件', icon: <FileText size={16} /> },
-    { id: 'site', label: '站点配置', icon: <Settings size={16} /> },
-    { id: 'toggles', label: '功能配置', icon: <ToggleRight size={16} /> },
-    { id: 'user', label: '用户权限', icon: <Users size={16} /> },
-    { id: 'source', label: '视频源配置', icon: <Video size={16} /> },
-    { id: 'liveSource', label: '直播源配置', icon: <Tv size={16} /> },
-    { id: 'tvbox', label: 'TVBox配置', icon: <Box size={16} /> },
-    { id: 'category', label: '分类配置', icon: <FolderOpen size={16} /> },
-    { id: 'migration', label: '迁移备份', icon: <Database size={16} /> },
+    { id: 'configFile', label: 'Tệp cấu hình', icon: <FileText size={16} /> },
+    { id: 'site', label: 'Cấu hình trang web', icon: <Settings size={16} /> },
+    { id: 'toggles', label: 'Cấu hình chức năng', icon: <ToggleRight size={16} /> },
+    { id: 'user', label: 'Quyền của người dùng', icon: <Users size={16} /> },
+    { id: 'source', label: 'Cấu hình nguồn video', icon: <Video size={16} /> },
+    { id: 'liveSource', label: 'Cấu hình nguồn trực tiếp', icon: <Tv size={16} /> },
+    { id: 'tvbox', label: 'Cấu hình TVBox', icon: <Box size={16} /> },
+    { id: 'category', label: 'Cấu hình phân loại', icon: <FolderOpen size={16} /> },
+    { id: 'migration', label: 'Di chuyển bản sao lưu', icon: <Database size={16} /> },
   ];
   const SectionSkeleton = () => (
     <div className='animate-pulse space-y-8'>
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-        {/* 模拟两个主要的配置卡片 */}
+        {/* Mô phỏng hai thẻ cấu hình chính */}
         {[1, 2].map((i) => (
           <div
-            key={i}
-            className='p-6 bg-gray-100/50 dark:bg-gray-800/20 border border-gray-200/50 dark:border-white/5 rounded-3xl space-y-6'
+            khóa={i}
+            tên lớp='p-6 bg-gray-100/50 dark:bg-gray-800/20 border border-gray-200/50 dark:border-white/5 rounded-3xl space-y-6'
           >
             <div className='flex items-center gap-2 mb-4'>
               <div className='w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded-full' />
@@ -132,7 +132,7 @@ function AdminPageClient() {
           </div>
         ))}
       </div>
-      {/* 模拟下方的保存按钮 */}
+      {/* Mô phỏng nút lưu bên dưới */}
       <div className='mt-12 flex justify-center md:justify-end'>
         <div className='h-10 w-28 bg-gray-200 dark:bg-gray-700 rounded-xl' />
       </div>
@@ -141,9 +141,9 @@ function AdminPageClient() {
   if (isLoading('FetchConfig')) {
     return (
       <PageLayout activePath='/admin'>
-        {/* 调整容器宽度为 max-w-7xl (1280px) 或自定义宽度 */}
+        {/* Điều chỉnh chiều rộng vùng chứa thành max-w-7xl (1280px) hoặc chiều rộng tùy chỉnh */}
         <div className='mx-auto pb-10 px-4 sm:px-8 lg:px-12 max-w-[1440px]'>
-          {/* 标题区 */}
+          {/* khu vực tiêu đề */}
           <div className='pt-8 pb-4 flex items-center gap-3'>
             <div className='flex items-center gap-3'>
               <div className='p-2.5 bg-emerald-500/10 rounded-xl'>
@@ -153,56 +153,56 @@ function AdminPageClient() {
                 管理面板
               </h1>
             </div>
-            {/* 重置按钮 */}
+            {/* Nút đặt lại */}
             <button
               onClick={handleResetConfig}
               className={`${styles.dangerSmall}`}
             >
-              <span>重置配置</span>
+              <span>Đặt lại cấu hình</span>
             </button>
           </div>
         </div>
       </PageLayout>
     );
   }
-  if (error) {
-    // 错误已通过弹窗展示，此处直接返回空
-    return null;
+  nếu (lỗi) {
+    // Lỗi đã được hiển thị thông qua cửa sổ bật lên và trống được trả về trực tiếp tại đây.
+    trả về giá trị rỗng;
   }
-  return (
+  trở lại (
     <PageLayout activePath='/admin'>
-      {/* 调整容器宽度为 max-w-7xl (1280px) 或自定义宽度 */}
+      {/* Điều chỉnh chiều rộng vùng chứa thành max-w-7xl (1280px) hoặc chiều rộng tùy chỉnh */}
       <div className='mx-auto pb-10 px-4 sm:px-8 lg:px-12 max-w-[1440px]'>
-        {/* 标题区 */}
-        <div className='pt-8 pb-4 flex items-center gap-3'>
-          <div className='flex items-center gap-3'>
-            <div className='p-2.5 bg-emerald-500/10 rounded-xl'>
+        {/* khu vực tiêu đề */}
+        <div className='pt-8 pb-4 flex items-center Gap-3'>
+          <div className='flex items-center Gap-3'>
+            <div className='p-2.5 bg-emerald-500/10 round-xl'>
               <LayoutDashboard className='text-emerald-500 w-7 h-7' />
             </div>
-            <h1 className='text-2xl font-bold dark:text-white text-gray-900 tracking-tight'>
-              管理面板
+            <h1 className='text-2xl font-bold dark:text-white text-gray-900 track-tight'>
+              Bảng quản trị
             </h1>
           </div>
-          {/* 重置按钮 */}
-          <button
+          {/* Nút đặt lại */}
+          <nút
             onClick={handleResetConfig}
-            className={`${styles.dangerSmall}`}
+            tên lớp={`${styles.dangerSmall}`}
           >
-            <span>重置配置</span>
+            <span>Đặt lại cấu hình</span>
           </button>
         </div>
 
-        {/* 顶部 Tab：全宽适应设计 */}
-        <div className='sticky top-0 z-30 bg-transparent backdrop-blur-md pt-2 pb-6'>
-          <div className='overflow-x-auto no-scrollbar touch-pan-x overscroll-contain'>
-            <div className='inline-flex items-center gap-2 p-1.5 bg-gray-200/40 dark:bg-gray-800/45 border border-gray-200/50 dark:border-white/5 rounded-2xl min-w-max'>
+        {/*Tab trên cùng: thiết kế thích ứng với toàn bộ chiều rộng */}
+        <div className='sticky top-0 z-30 bg-trong suốt phông nền-blur-md pt-2 pb-6'>
+          <div className='overflow-x-auto không có thanh cuộn touch-pan-x overscroll-contain'>
+            <div className='inline-flex items-center Gap-2 p-1.5 bg-gray-200/40 dark:bg-gray-800/45 border border-gray-200/50 dark:border-white/5 round-2xl min-w-max'>
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id;
-                return (
-                  <button
+                trở lại (
+                  <nút
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`
+                    tên lớp={`
                       relative flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-xl whitespace-nowrap
                       ${
                         isActive
@@ -220,10 +220,10 @@ function AdminPageClient() {
                     >
                       {tab.icon}
                     </span>
-                    <span className='relative z-10'>{tab.label}</span>
+                    <span className='relative z-10'>{tab.label</span>
 
                     {isActive && (
-                      <span className='absolute inset-0 rounded-xl bg-emerald-500/[0.02] dark:bg-emerald-400/[0.02] pointer-events-none' />
+                      <span className='absolute inset-0 round-xl bg-emerald-500/[0.02] dark:bg-emerald-400/[0.02] con trỏ-sự kiện-none' />
                     )}
                   </button>
                 );
@@ -232,130 +232,130 @@ function AdminPageClient() {
           </div>
         </div>
 
-        {/* 主内容区 */}
+        {/* Khu vực nội dung chính */}
         <div className='min-h-[400px]'>
-          {!config ? (
-            <SectionSkeleton /> // 数据未加载时显示骨架
+          {!cấu hình ? (
+            <SectionSkeleton /> // Hiển thị bộ xương khi dữ liệu không được tải
           ) : (
-            <div className='animate-in fade-in slide-in-from-bottom-2 duration-500'>
+            <div className='animate-in fade-in slide-in-from-bottom-2 thời lượng-500'>
               {activeTab === 'configFile' && (
-                <ConfigFile
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+                <Tệp cấu hình
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'site' && (
-                <SiteSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+              {activeTab === 'trang web' && (
+                <Phần trang web
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'toggles' && (
-                <FeaturesSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+              {activeTab === 'chuyển đổi' && (
+                <Phần tính năng
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'user' && (
-                <UserSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+              {activeTab === 'người dùng' && (
+                <Phần người dùng
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'source' && (
-                <SourceSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+              {activeTab === 'nguồn' && (
+                <Phần nguồn
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
               {activeTab === 'liveSource' && (
-                <LiveSourceSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+                <Phần nguồn trực tiếp
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'category' && (
-                <CategorySection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+              {activeTab === 'danh mục' && (
+                <Phần danh mục
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
               {activeTab === 'tvbox' && (
-                <TVBoxSection
-                  config={config}
-                  role={role}
-                  refresh={fetchConfig}
+                <Phần TVBox
+                  cấu hình={cấu hình}
+                  vai trò={vai trò}
+                  làm mới={tìm nạpConfig}
                   showAlert={showAlert}
                   showError={showError}
-                  showSuccess={showSuccess}
+                  showThành công={showThành công}
                 />
               )}
-              {activeTab === 'migration' && <DataMigration />}
-              {activeTab === '' && <div>加载中...</div>}
+              {activeTab === 'di chuyển' && <DataMigration />}
+              {activeTab === '' && <div>Đang tải...</div>}
             </div>
           )}
         </div>
       </div>
 
       <AlertModal {...alertModal} onClose={hideAlert} />
-      {/* 重置配置确认弹窗 */}
+      {/* Đặt lại cửa sổ bật lên xác nhận cấu hình */}
       {showResetConfigModal &&
         createPortal(
           <div
-            className='fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4'
+            className='đã sửa lỗi inset-0 bg-black bg-opacity-50 z-50 flex items-center biện minh-center p-4'
             onClick={() => setShowResetConfigModal(false)}
           >
             <div
-              className='bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full'
+              className='bg-white dark:bg-gray-800 round-lg Shadow-xl max-w-2xl w-full'
               onClick={(e) => e.stopPropagation()}
             >
               <div className='p-6'>
-                <div className='flex items-center justify-between mb-6'>
+                <div className='flex items-center biện minh-giữa mb-6'>
                   <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-                    确认重置配置
+                    Xác nhận đặt lại cấu hình
                   </h3>
-                  <button
+                  <nút
                     onClick={() => setShowResetConfigModal(false)}
-                    className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors'
+                    className='text-gray-400 di chuột:text-gray-600 dark:hover:text-gray-300 màu chuyển tiếp'
                   >
                     <svg
                       className='w-6 h-6'
-                      fill='none'
-                      stroke='currentColor'
+                      điền='không'
+                      đột quỵ='currentColor'
                       viewBox='0 0 24 24'
                     >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
+                      <đường dẫn
+                        nétLinecap='vòng'
+                        StrokeLinejoin='vòng'
+                        đột quỵWidth={2}
                         d='M6 18L18 6M6 6l12 12'
                       />
                     </svg>
@@ -363,47 +363,47 @@ function AdminPageClient() {
                 </div>
 
                 <div className='mb-6'>
-                  <div className='bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4'>
+                  <div className='bg-vàng-50 tối:bg-vàng-900/20 viền viền-vàng-200 tối:viền-vàng-800 round-lg p-4 mb-4'>
                     <div className='flex items-center space-x-2 mb-2'>
                       <svg
-                        className='w-5 h-5 text-yellow-600 dark:text-yellow-400'
-                        fill='none'
-                        stroke='currentColor'
+                        className='w-5 h-5 văn bản-vàng-600 tối: văn bản-vàng-400'
+                        điền='không'
+                        đột quỵ='currentColor'
                         viewBox='0 0 24 24'
                       >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
+                        <đường dẫn
+                          nétLinecap='vòng'
+                          StrokeLinejoin='vòng'
+                          đột quỵWidth={2}
                           d='M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
                         />
                       </svg>
-                      <span className='text-sm font-medium text-yellow-800 dark:text-yellow-300'>
-                        ⚠️ 危险操作警告
+                      <span className='text-sm font-medium text- yellow-800 dark:text- yellow-300'>
+                        ⚠️Cảnh báo vận hành nguy hiểm
                       </span>
                     </div>
-                    <p className='text-sm text-yellow-700 dark:text-yellow-400'>
-                      此操作将重置用户封禁和管理员设置、自定义视频源，站点配置将重置为默认值，是否继续？
+                    <p className='text-sm text- yellow-700 dark:text- yellow-400'>
+                      Hành động này sẽ đặt lại các lệnh cấm người dùng và cài đặt quản trị viên, nguồn video tùy chỉnh và cấu hình trang web về mặc định. Bạn có muốn tiếp tục không?
                     </p>
                   </div>
                 </div>
 
-                {/* 操作按钮 */}
-                <div className='flex justify-end space-x-3'>
-                  <button
+                {/* Nút thao tác */}
+                <div className='flexjustify-end space-x-3'>
+                  <nút
                     onClick={() => setShowResetConfigModal(false)}
-                    className={`px-6 py-2.5 text-sm font-medium ${styles.secondary}`}
+                    tên lớp={`px-6 py-2.5 text-sm font-medium ${styles.secondary}`}
                   >
-                    取消
+                    Hủy bỏ
                   </button>
-                  <button
+                  <nút
                     onClick={handleConfirmResetConfig}
-                    disabled={isLoading('resetConfig')}
-                    className={`px-6 py-2.5 text-sm font-medium ${
+                    bị vô hiệu hóa={isLoading('resetConfig')}
+                    tên lớp={`px-6 py-2.5 text-sm font-medium ${
                       isLoading('resetConfig') ? styles.disabled : styles.danger
                     }`}
                   >
-                    {isLoading('resetConfig') ? '重置中...' : '确认重置'}
+                    {isLoading('resetConfig') ? 'Đặt lại...' : 'Xác nhận đặt lại'}
                   </button>
                 </div>
               </div>
