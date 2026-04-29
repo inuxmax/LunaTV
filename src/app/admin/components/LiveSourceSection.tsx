@@ -26,7 +26,7 @@ import React, { useEffect, useState } from 'react';
 import { SectionConfigProps } from '@/lib/admin.types';
 
 import { styles, useLoadingState } from '@/app/admin/components/UIComponents';
-// Kiểu dữ liệu nguồn trực tiếp
+// 直播源数据类型
 interface LiveDataSource {
   name: string;
   key: string;
@@ -60,31 +60,31 @@ const LiveSourceSection = ({
     from: 'custom',
   });
 
-// cảm biến dnd-kit
+  // dnd-kit 传感器
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-khoảng cách: 5, // Kích hoạt bởi sự dịch chuyển nhẹ
+        distance: 5, // 轻微位移即可触发
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-độ trễ: 150, // Được kích hoạt sau khi nhấn lâu trong 150 mili giây，Tránh xung đột khi cuộn
+        delay: 150, // 长按 150ms 后触发，避免与滚动冲突
         tolerance: 5,
       },
     })
   );
 
-// khởi tạo
+  // 初始化
   useEffect(() => {
     if (config?.LiveConfig) {
       setLiveSources(config.LiveConfig);
-//Đặt lại thứ tựĐã thay đổi khi nhập
+      // 进入时重置 orderChanged
       setOrderChanged(false);
     }
   }, [config]);
 
-// Yêu cầu API chung
+  // 通用 API 请求
   const callLiveSourceApi = async (body: Record<string, any>) => {
     try {
       const resp = await fetch('/api/admin/live', {
@@ -95,14 +95,14 @@ khoảng cách: 5, // Kích hoạt bởi sự dịch chuyển nhẹ
 
       if (!resp.ok) {
         const data = await resp.json().catch(() => ({}));
-ném Lỗi mới(data.error || `Thao tác không thành công: ${resp.status}`);
+        throw new Error(data.error || `操作失败: ${resp.status}`);
       }
 
-// Làm mới cấu hình sau khi thành công
+      // 成功后刷新配置
       await refresh();
     } catch (err) {
-showError(err instanceof Error? err.message: 'Thao tác thất bại', showAlert);
-ném lỗi; // Ném lên trên để thuận tiện cho việc phán đoán tại vị trí gọi
+      showError(err instanceof Error ? err.message : '操作失败', showAlert);
+      throw err; // 向上抛出方便调用处判断
     }
   };
 
@@ -113,7 +113,7 @@ ném lỗi; // Ném lên trên để thuận tiện cho việc phán đoán tạ
     withLoading(`toggleLiveSource_${key}`, () =>
       callLiveSourceApi({ action, key })
     ).catch(() => {
-console.error('Thao tác thất bại', action, key);
+      console.error('操作失败', action, key);
     });
   };
 
@@ -121,11 +121,11 @@ console.error('Thao tác thất bại', action, key);
     withLoading(`deleteLiveSource_${key}`, () =>
       callLiveSourceApi({ action: 'delete', key })
     ).catch(() => {
-console.error('Thao tác thất bại', 'xóa', key);
+      console.error('操作失败', 'delete', key);
     });
   };
 
-// Làm mới nguồn phát sóng trực tiếp
+  // 刷新直播源
   const handleRefreshLiveSources = async () => {
     if (isRefreshing) return;
 
@@ -139,19 +139,19 @@ console.error('Thao tác thất bại', 'xóa', key);
 
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
-ném Lỗi mới(data.error || `Làm mới không thành công: ${response.status}`);
+          throw new Error(data.error || `刷新失败: ${response.status}`);
         }
 
-// Lấy lại cấu hình sau khi làm mới thành công
+        // 刷新成功后重新获取配置
         await refresh();
         showAlert({
           type: 'success',
-title: 'Làm mới thành công',
-thông báo: 'Nguồn phát sóng trực tiếp đã được làm mới',
+          title: '刷新成功',
+          message: '直播源已刷新',
           timer: 2000,
         });
       } catch (err) {
-showError(err instanceof Error? err.message: 'Làm mới không thành công', showAlert);
+        showError(err instanceof Error ? err.message : '刷新失败', showAlert);
         throw err;
       } finally {
         setIsRefreshing(false);
@@ -181,7 +181,7 @@ showError(err instanceof Error? err.message: 'Làm mới không thành công', s
       });
       setShowAddForm(false);
     }).catch(() => {
-console.error('Thao tác thất bại', 'thêm', newLiveSource);
+      console.error('操作失败', 'add', newLiveSource);
     });
   };
 
@@ -199,7 +199,7 @@ console.error('Thao tác thất bại', 'thêm', newLiveSource);
       });
       setEditingLiveSource(null);
     }).catch(() => {
-console.error('Thao tác thất bại', 'chỉnh sửa', editLiveSource);
+      console.error('操作失败', 'edit', editingLiveSource);
     });
   };
 
@@ -225,11 +225,11 @@ console.error('Thao tác thất bại', 'chỉnh sửa', editLiveSource);
         setOrderChanged(false);
       })
       .catch(() => {
-console.error('Thao tác thất bại', 'sắp xếp', thứ tự);
+        console.error('操作失败', 'sort', order);
       });
   };
 
-// Bao bì hàng có thể kéo được (dnd-kit)
+  // 可拖拽行封装 (dnd-kit)
   const DraggableRow = ({ liveSource }: { liveSource: LiveDataSource }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id: liveSource.key });
@@ -290,7 +290,7 @@ console.error('Thao tác thất bại', 'sắp xếp', thứ tự);
                 : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300'
             }`}
           >
-{!liveSource.disabled ? 'Đang kích hoạt' : 'Đã tắt'}
+            {!liveSource.disabled ? '启用中' : '已禁用'}
           </span>
         </td>
         <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2'>
@@ -307,7 +307,7 @@ console.error('Thao tác thất bại', 'sắp xếp', thứ tự);
                 : ''
             }`}
           >
-{!liveSource.disabled ? 'đã tắt' : 'đã bật'}
+            {!liveSource.disabled ? '禁用' : '启用'}
           </button>
           {liveSource.from !== 'config' && (
             <>
@@ -320,7 +320,7 @@ console.error('Thao tác thất bại', 'sắp xếp', thứ tự);
                     : ''
                 }`}
               >
-biên tập
+                编辑
               </button>
               <button
                 onClick={() => handleDelete(liveSource.key)}
@@ -331,7 +331,7 @@ biên tập
                     : ''
                 }`}
               >
-xóa bỏ
+                删除
               </button>
             </>
           )}
@@ -343,7 +343,7 @@ xóa bỏ
   if (!config) {
     return (
       <div className='text-center text-gray-500 dark:text-gray-400'>
-đang tải...
+        加载中...
       </div>
     );
   }
@@ -351,7 +351,7 @@ xóa bỏ
   return (
     <div className='space-y-6'>
       <div className={`${styles.roundedCard}`}>
-{/* Thêm biểu mẫu nguồn trực tiếp */}
+        {/* 添加直播源表单 */}
         <div className='flex items-center justify-between'>
           <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'></h4>
           <div className='flex items-center space-x-2'>
@@ -364,83 +364,83 @@ xóa bỏ
                   : 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors'
               }`}
             >
-              <nhịp>
+              <span>
                 {isRefreshing || isLoading('refreshLiveSources')
-                  ? 'Mới mẻ...'
-                  : 'Làm mới nguồn trực tiếp'}
+                  ? '刷新中...'
+                  : '刷新直播源'}
               </span>
             </button>
-            <nút
+            <button
               onClick={() => setShowAddForm(!showAddForm)}
               className={showAddForm ? styles.secondary : styles.success}
             >
-              {showAddForm ? 'Hủy' : 'Thêm nguồn trực tiếp'}
+              {showAddForm ? '取消' : '添加直播源'}
             </button>
           </div>
         </div>
 
         {showAddForm && (
-          <div className='p-4 bg-gray-50 dark:bg-gray-900 round-lg border border-gray-200 dark:border-gray-700 space-y-4'>
-            <div className='lưới lưới-cols-1 sm:grid-cols-2 khoảng cách-4'>
-              <đầu vào
-                gõ='văn bản'
-                giữ chỗ='tên'
+          <div className='p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <input
+                type='text'
+                placeholder='名称'
                 value={newLiveSource.name}
                 onChange={(e) =>
                   setNewLiveSource((prev) => ({
-                    ...trước,
-                    tên: e.target.value,
+                    ...prev,
+                    name: e.target.value,
                   }))
                 }
-                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
-              <đầu vào
-                gõ='văn bản'
-                giữ chỗ='Khóa'
+              <input
+                type='text'
+                placeholder='Key'
                 value={newLiveSource.key}
                 onChange={(e) =>
                   setNewLiveSource((prev) => ({ ...prev, key: e.target.value }))
                 }
-                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
-              <đầu vào
-                gõ='văn bản'
-                placeholder='địa chỉ M3U'
+              <input
+                type='text'
+                placeholder='M3U 地址'
                 value={newLiveSource.url}
                 onChange={(e) =>
                   setNewLiveSource((prev) => ({ ...prev, url: e.target.value }))
                 }
-                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
-              <đầu vào
-                gõ='văn bản'
-                placeholder='Địa chỉ chương trình (tùy chọn)'
+              <input
+                type='text'
+                placeholder='节目单地址（选填）'
                 value={newLiveSource.epg}
                 onChange={(e) =>
                   setNewLiveSource((prev) => ({ ...prev, epg: e.target.value }))
                 }
-                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
-              <đầu vào
-                gõ='văn bản'
-                placeholder='UA tùy chỉnh (tùy chọn)'
+              <input
+                type='text'
+                placeholder='自定义 UA（选填）'
                 value={newLiveSource.ua}
                 onChange={(e) =>
                   setNewLiveSource((prev) => ({ ...prev, ua: e.target.value }))
                 }
-                className='px-3 py-2 viền border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                className='px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
               />
             </div>
-            <div className='flex biện minh-end'>
-              <nút
+            <div className='flex justify-end'>
+              <button
                 onClick={handleAddLiveSource}
-                bị vô hiệu hóa={
+                disabled={
                   !newLiveSource.name ||
                   !newLiveSource.key ||
                   !newLiveSource.url ||
                   isLoading('addLiveSource')
                 }
-                tên lớp={`w-full sm:w-auto px-4 py-2 ${
+                className={`w-full sm:w-auto px-4 py-2 ${
                   !newLiveSource.name ||
                   !newLiveSource.key ||
                   !newLiveSource.url ||
@@ -449,111 +449,111 @@ xóa bỏ
                     : styles.success
                 }`}
               >
-                {isLoading('addLiveSource') ? 'Đang thêm...' : 'Thêm'}
+                {isLoading('addLiveSource') ? '添加中...' : '添加'}
               </button>
             </div>
           </div>
         )}
 
-        {/* Chỉnh sửa biểu mẫu nguồn trực tiếp */}
-        {editLiveSource && (
-          <div className='p-4 bg-gray-50 dark:bg-gray-900 round-lg border border-gray-200 dark:border-gray-700 space-y-4'>
-            <div className='flex items-center biện minh-giữa'>
+        {/* 编辑直播源表单 */}
+        {editingLiveSource && (
+          <div className='p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4'>
+            <div className='flex items-center justify-between'>
               <h5 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                Chỉnh sửa nguồn trực tiếp: {editingLiveSource.name}
+                编辑直播源: {editingLiveSource.name}
               </h5>
-              <nút
+              <button
                 onClick={handleCancelEdit}
-                className='text-gray-600 dark:text-gray-400 di chuột:text-gray-800 dark:hover:text-gray-200'
+                className='text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
               >
                 ✕
               </button>
             </div>
-            <div className='lưới lưới-cols-1 sm:grid-cols-2 khoảng cách-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
               <div>
                 <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  Tên
-                </nhãn>
-                <đầu vào
-                  gõ='văn bản'
+                  名称
+                </label>
+                <input
+                  type='text'
                   value={editingLiveSource.name}
                   onChange={(e) =>
-                    setEditingLiveSource((trước) =>
-                      trước đó ? { ...prev, name: e.target.value } : null
+                    setEditingLiveSource((prev) =>
+                      prev ? { ...prev, name: e.target.value } : null
                     )
                   }
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                 />
               </div>
               <div>
                 <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  Chìa khóa (không thể chỉnh sửa)
-                </nhãn>
-                <đầu vào
-                  gõ='văn bản'
-                  value={editLiveSource.key}
-                  bị vô hiệu hóa
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 round-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 con trỏ không được phép'
+                  Key (不可编辑)
+                </label>
+                <input
+                  type='text'
+                  value={editingLiveSource.key}
+                  disabled
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                 />
               </div>
               <div>
                 <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  Địa chỉ M3U
-                </nhãn>
-                <đầu vào
-                  gõ='văn bản'
-                  value={editLiveSource.url}
+                  M3U 地址
+                </label>
+                <input
+                  type='text'
+                  value={editingLiveSource.url}
                   onChange={(e) =>
-                    setEditingLiveSource((trước) =>
-                      trước đó ? { ...prev, url: e.target.value } : null
+                    setEditingLiveSource((prev) =>
+                      prev ? { ...prev, url: e.target.value } : null
                     )
                   }
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                 />
               </div>
               <div>
                 <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  Địa chỉ chương trình (tùy chọn)
-                </nhãn>
-                <đầu vào
-                  gõ='văn bản'
+                  节目单地址（选填）
+                </label>
+                <input
+                  type='text'
                   value={editingLiveSource.epg}
                   onChange={(e) =>
-                    setEditingLiveSource((trước) =>
-                      trước đó ? { ...prev, epg: e.target.value } : null
+                    setEditingLiveSource((prev) =>
+                      prev ? { ...prev, epg: e.target.value } : null
                     )
                   }
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                 />
               </div>
               <div>
                 <label className='block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1'>
-                  UA tùy chỉnh (tùy chọn)
-                </nhãn>
-                <đầu vào
-                  gõ='văn bản'
+                  自定义 UA（选填）
+                </label>
+                <input
+                  type='text'
                   value={editingLiveSource.ua}
                   onChange={(e) =>
-                    setEditingLiveSource((trước) =>
-                      trước đó ? { ...prev, ua: e.target.value } : null
+                    setEditingLiveSource((prev) =>
+                      prev ? { ...prev, ua: e.target.value } : null
                     )
                   }
-                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 round-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                  className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                 />
               </div>
             </div>
-            <div className='flexjustify-end space-x-2'>
+            <div className='flex justify-end space-x-2'>
               <button onClick={handleCancelEdit} className={styles.secondary}>
-                Hủy bỏ
+                取消
               </button>
-              <nút
+              <button
                 onClick={handleEditLiveSource}
-                bị vô hiệu hóa={
+                disabled={
                   !editingLiveSource.name ||
                   !editingLiveSource.url ||
                   isLoading('editLiveSource')
                 }
-                tên lớp={`${
+                className={`${
                   !editingLiveSource.name ||
                   !editingLiveSource.url ||
                   isLoading('editLiveSource')
@@ -561,85 +561,85 @@ xóa bỏ
                     : styles.success
                 }`}
               >
-                {isLoading('editLiveSource') ? 'Đang lưu...' : 'Lưu'}
+                {isLoading('editLiveSource') ? '保存中...' : '保存'}
               </button>
             </div>
           </div>
         )}
 
-        {/* Bảng nguồn trực tiếp */}
+        {/* 直播源表格 */}
         <DndContext
-          cảm biến={cảm biến}
-          va chạmDetection={closestCenter}
+          sensors={sensors}
+          collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
           autoScroll={false}
-          modifiers={[restrictToVerticalAxis, limitToParentElement]}
+          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
         >
           <div
-            className='border border-gray-200 dark:border-gray-700 round-lg max-h-[28rem] tràn-y-auto tràn-x-auto tương đối'
-            data-table='danh sách nguồn trực tiếp'
+            className='border border-gray-200 dark:border-gray-700 rounded-lg max-h-[28rem] overflow-y-auto overflow-x-auto relative'
+            data-table='live-source-list'
           >
-            <table className='min-w-full chia-y chia-gray-200 dark:divide-gray-700'>
-              <thead className='bg-gray-50 dark:bg-gray-900 dính top-0 z-10'>
+            <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
+              <thead className='bg-gray-50 dark:bg-gray-900 sticky top-0 z-10'>
                 <tr>
                   <th className='w-8' />
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Tên
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    名称
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Chìa khóa
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    Key
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Địa chỉ M3U
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    M3U 地址
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Địa chỉ chương trình
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    节目单地址
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    UA tùy chỉnh
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    自定义 UA
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Số lượng kênh
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    频道数
                   </th>
-                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    Trạng thái
+                  <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    状态
                   </th>
-                  <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 chữ hoa theo dõi-wider'>
-                    hoạt động
+                  <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
+                    操作
                   </th>
                 </tr>
               </thead>
 
-              <Bối cảnh có thể sắp xếp
+              <SortableContext
                 items={liveSources.map((s) => s.key)}
-                chiến lược={verticalListSortingStrategy}
+                strategy={verticalListSortingStrategy}
               >
-                <tbody className='divide-y chia-gray-200 dark:divide-gray-700'>
+                <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
                   {liveSources.map((liveSource) => (
-                    <Hàng có thể kéo được
+                    <DraggableRow
                       key={liveSource.key}
                       liveSource={liveSource}
                     />
                   ))}
                 </tbody>
-              </Sắp xếpContext>
-            </bảng>
+              </SortableContext>
+            </table>
           </div>
         </DndContext>
 
-        {/* Nút lưu sắp xếp */}
+        {/* 保存排序按钮 */}
         {orderChanged && (
-          <div className='flex biện minh-end'>
-            <nút
+          <div className='flex justify-end'>
+            <button
               onClick={handleSaveOrder}
-              bị vô hiệu hóa={isLoading('saveLiveSourceOrder')}
-              tên lớp={`px-3 py-1.5 text-sm ${
+              disabled={isLoading('saveLiveSourceOrder')}
+              className={`px-3 py-1.5 text-sm ${
                 isLoading('saveLiveSourceOrder')
                   ? styles.disabled
                   : styles.primary
               }`}
             >
-              {isLoading('saveLiveSourceOrder') ? 'Đang lưu...' : 'Lưu sắp xếp'}
+              {isLoading('saveLiveSourceOrder') ? '保存中...' : '保存排序'}
             </button>
           </div>
         )}

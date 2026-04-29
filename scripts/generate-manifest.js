@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 /* eslint-disable */
-// Tự động tạo tệp kê khai.json dựa trên NEXT_PUBLIC_SITE_NAME
+// 根据 NEXT_PUBLIC_SITE_NAME 动态生成 manifest.json
 
 const fs = require('fs');
 const path = require('path');
 
-// Lấy thư mục gốc của dự án
+// 获取项目根目录
 const projectRoot = path.resolve(__dirname, '..');
 const publicDir = path.join(projectRoot, 'public');
 const manifestPath = path.join(publicDir, 'manifest.json');
 
-// Lấy tên trang web từ các biến môi trường
+// 从环境变量获取站点名称
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'LunaTV';
 
-// mẫu tệp kê khai.json
-const bảng kê khaiTemplate = {
-  tên: tên trang web,
-  short_name: tên trang web,
-  mô tả: '影视聚合',
+// manifest.json 模板
+const manifestTemplate = {
+  name: siteName,
+  short_name: siteName,
+  description: '影视聚合',
   start_url: '/',
   scope: '/',
   display: 'standalone',
@@ -48,16 +48,16 @@ const bảng kê khaiTemplate = {
   ],
 };
 
-thử {
-  // Đảm bảo thư mục chung tồn tại
+try {
+  // 确保 public 目录存在
   if (!fs.existsSync(publicDir)) {
-    fs.mkdirSync(publicDir, { đệ quy: true });
+    fs.mkdirSync(publicDir, { recursive: true });
   }
 
-  //Viết bảng kê khai.json
+  // 写入 manifest.json
   fs.writeFileSync(manifestPath, JSON.stringify(manifestTemplate, null, 2));
-  console.log(` ✅ Đã tạo tệp kê khai.json với tên trang web: ${siteName}`);
-} bắt (lỗi) {
+  console.log(`✅ Generated manifest.json with site name: ${siteName}`);
+} catch (error) {
   console.error('❌ Error generating manifest.json:', error);
   process.exit(1);
 }

@@ -21,14 +21,14 @@ jobs:
       - name: Set branch-specific conditions
         id: branch_check
         run: |
-# Nếu đó là nhánh dev hoặc cập nhật bắt buộc, hãy đánh dấu trực tiếp để thực thi; nhánh chính cần kiểm tra các thay đổi CHANGELOG
+          # 如果是dev分支或强制更新，直接标记执行；main分支需检查CHANGELOG变更
           if [ "${{ github.ref_name }}" = "dev" ] || [ "${{ inputs.force }}" = "true" ]; then
             echo "should_execute=true" >> $GITHUB_OUTPUT
           else
             echo "should_execute=$([ -n "$(git diff --name-only HEAD^ HEAD CHANGELOG.md)" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
           fi
 
-# Các bước tiếp theo sẽ chỉ chạy nếu Should_execute là đúng
+      # 后续步骤仅当should_execute为true时运行
       - name: Set up Node.js
         if: steps.branch_check.outputs.should_execute == 'true'
         uses: actions/setup-node@v4

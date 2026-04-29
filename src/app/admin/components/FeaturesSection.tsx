@@ -1,96 +1,96 @@
 /* eslint-disable no-console */
-'sử dụng ứng dụng khách';
-nhập { Lưu } từ 'lucide-Reac';
-nhập { useState } từ 'Reac';
+'use client';
+import { Save } from 'lucide-react';
+import { useState } from 'react';
 
-nhập {SectionConfigProps } từ '@/lib/admin.types';
+import { SectionConfigProps } from '@/lib/admin.types';
 
-nhập ConfigToggle từ '@/app/admin/comComponents/ConfigToggle';
-nhập { styles, useLoadingState } từ '@/app/admin/comComponents/UIComponents';
+import ConfigToggle from '@/app/admin/components/ConfigToggle';
+import { styles, useLoadingState } from '@/app/admin/components/UIComponents';
 
-giao diện Tính năngConfig {
+interface FeaturesConfig {
   douban: boolean;
   shortDrama: boolean;
-  nguồn: boolean;
-  trực tiếp: boolean;
+  source: boolean;
+  live: boolean;
 }
-xuất hàm mặc định FeaturesSection({
-  cấu hình,
-  làm mới,
-  hiển thị,
-  hiển thịLỗi,
-  hiển thịThành công,
-}: MụcConfigProps) {
+export default function FeaturesSection({
+  config,
+  refresh,
+  showAlert,
+  showError,
+  showSuccess,
+}: SectionConfigProps) {
   const [featuresConfig, setFeaturesConfig] = useState<FeaturesConfig>({
-    douban: config?.FeaturesConfig?.douban ?? đúng,
-    shortDrama: config?.FeaturesConfig?.shortDrama ?? đúng,
-    nguồn: config?.FeaturesConfig?.source ?? sai,
-    trực tiếp: config?.FeaturesConfig?.live ?? sai,
+    douban: config?.FeaturesConfig?.douban ?? true,
+    shortDrama: config?.FeaturesConfig?.shortDrama ?? true,
+    source: config?.FeaturesConfig?.source ?? false,
+    live: config?.FeaturesConfig?.live ?? false,
   });
   const { isLoading, withLoading } = useLoadingState();
-  const handUpdateConfig = async () => {
+  const handleUpdateConfig = async () => {
     return withLoading(`TvboxConfig`, async () => {
-      thử {
-        const resp = đang chờ tìm nạp('/api/admin/features', {
-          phương thức: 'BÀI',
-          tiêu đề: { 'Content-Type': 'application/json' },
-          nội dung: JSON.stringify({ ...featuresConfig }),
+      try {
+        const resp = await fetch('/api/admin/features', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...featuresConfig }),
         });
-        nếu (!resp.ok) {
-          const data = đang chờ resp.json().catch(() => ({}));
-          ném Lỗi mới(data.error || `Lưu không thành công: ${resp.status}`);
+        if (!resp.ok) {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `保存失败: ${resp.status}`);
         }
-        nếu (resp.ok) {
-          showSuccess('Lưu thành công, vui lòng tải lại trang', showAlert);
-          làm mới();
+        if (resp.ok) {
+          showSuccess('保存成功, 请刷新页面', showAlert);
+          refresh();
         }
-      } bắt (lỗi) {
-        showError(err instanceof Error? err.message: 'Lưu không thành công', showAlert);
-        ném lỗi;
+      } catch (err) {
+        showError(err instanceof Error ? err.message : '保存失败', showAlert);
+        throw err;
       }
     });
   };
 
-  const handChange = (key: string, value: Any) => {
-    setFeaturesConfig((prev: Any) => ({ ...prev, [key]: value }));
+  const handleChange = (key: string, value: any) => {
+    setFeaturesConfig((prev: any) => ({ ...prev, [key]: value }));
   };
 
-  trở lại (
-    <div className='space-y-8 animate-in slide-in-from-bottom-4 thời lượng-500 pb-32'>
-      <div className='lưới lưới-cols-1'>
+  return (
+    <div className='space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32'>
+      <div className='grid grid-cols-1'>
         <div className={`${styles.roundedCard}`}>
-          <div className='lưới lưới-cols-1 khoảng cách-4'>
-            <Cấu hìnhChuyển đổi
-              label='Douban'
-              description='Đóng sẽ ảnh hưởng đến dữ liệu menu và trang chủ'
-              đã bật={featuresConfig.douban}
-              onChange={() => handChange('douban', !featuresConfig.douban)}
+          <div className='grid grid-cols-1 gap-4'>
+            <ConfigToggle
+              label='豆瓣'
+              description='关闭后将影响菜单和首页数据'
+              enabled={featuresConfig.douban}
+              onChange={() => handleChange('douban', !featuresConfig.douban)}
             />
-            <Cấu hìnhChuyển đổi
-              label='Phim ngắn'
-              description='Menu tiểu phẩm sẽ không được hiển thị sau khi đóng'
-              đã bật={featuresConfig.shortDrama}
+            <ConfigToggle
+              label='短剧'
+              description='关闭后将无法显示短剧菜单'
+              enabled={featuresConfig.shortDrama}
               onChange={() =>
-                handChange('shortDrama', !featuresConfig.shortDrama)
+                handleChange('shortDrama', !featuresConfig.shortDrama)
               }
             />
-            <Cấu hìnhChuyển đổi
-              label='phát sóng trực tiếp'
-              description='Menu phát sóng trực tiếp sẽ không được hiển thị sau khi đóng'
-              đã bật={featuresConfig.live}
-              onChange={() => handChange('live', !featuresConfig.live)}
+            <ConfigToggle
+              label='直播'
+              description='关闭后将无法显示直播菜单'
+              enabled={featuresConfig.live}
+              onChange={() => handleChange('live', !featuresConfig.live)}
             />
-            <Cấu hìnhChuyển đổi
-              label='nguồn phát'
-              description='Menu nguồn phát lại sẽ không được hiển thị sau khi đóng'
-              đã bật={featuresConfig.source}
-              onChange={() => handChange('source', !featuresConfig.source)}
+            <ConfigToggle
+              label='播放源'
+              description='关闭后将无法显示播放源菜单'
+              enabled={featuresConfig.source}
+              onChange={() => handleChange('source', !featuresConfig.source)}
             />
           </div>
         </div>
       </div>
 
-      {/* nút lưu */}
+      {/* 保存按钮 */}
       <div className='mt-12 mb-8 flex justify-center md:justify-end'>
         <button
           onClick={handleUpdateConfig}
@@ -104,7 +104,7 @@ xuất hàm mặc định FeaturesSection({
           ) : (
             <Save size={16} />
           )}
-          {isLoading('TvboxConfig') ? 'Đang lưu...' : 'cứu'}
+          {isLoading('TvboxConfig') ? '保存中...' : '保存'}
         </button>
       </div>
     </div>

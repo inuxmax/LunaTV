@@ -4,40 +4,40 @@ import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-// Hệ thống phong cách thống nhất
-xuất kiểu const = {
-  // Nút thao tác chính (màu xanh) - được sử dụng để cấu hình, cài đặt, xác nhận, v.v.
-  chính:
+// 统一样式系统
+export const styles = {
+  // 主要操作按钮（蓝色）- 用于配置、设置、确认等
+  primary:
     'px-3 py-1.5 text-sm font-medium bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors',
-  // Nút thao tác thành công (màu xanh lá cây) - dùng để thêm, bật, lưu, v.v.
-  thành công:
+  // 成功操作按钮（绿色）- 用于添加、启用、保存等
+  success:
     'px-3 py-1.5 text-sm font-medium bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-lg transition-colors',
-  // Nút hành động nguy hiểm (màu đỏ) - dùng để xóa, vô hiệu hóa, đặt lại, v.v.
-  nguy hiểm:
+  // 危险操作按钮（红色）- 用于删除、禁用、重置等
+  danger:
     'px-3 py-1.5 text-sm font-medium bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-lg transition-colors',
-  // Nút hành động phụ (màu xám) - dùng để hủy, đóng, v.v.
-  thứ cấp:
+  // 次要操作按钮（灰色）- 用于取消、关闭等
+  secondary:
     'px-3 py-1.5 text-sm font-medium bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white rounded-lg transition-colors',
-  // Nút hành động cảnh báo (màu vàng) - được sử dụng để vô hiệu hóa hàng loạt, v.v.
-  cảnh báo:
+  // 警告操作按钮（黄色）- 用于批量禁用等
+  warning:
     'px-3 py-1.5 text-sm font-medium bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-lg transition-colors',
-  // Nút chính có kích thước nhỏ
-  chínhNhỏ:
+  // 小尺寸主要按钮
+  primarySmall:
     'px-2 py-1 text-xs font-medium bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-md transition-colors',
-  // Nút thành công kích thước nhỏ
-  thành côngNhỏ:
+  // 小尺寸成功按钮
+  successSmall:
     'px-2 py-1 text-xs font-medium bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-md transition-colors',
-  // nút nguy hiểm nhỏ
-  nguy hiểmNhỏ:
+  // 小尺寸危险按钮
+  dangerSmall:
     'px-2 py-1 text-xs font-medium bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-md transition-colors',
-  // Nút phụ kích thước nhỏ
-  thứ cấpNhỏ:
+  // 小尺寸次要按钮
+  secondarySmall:
     'px-2 py-1 text-xs font-medium bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white rounded-md transition-colors',
-  // Nút cảnh báo kích thước nhỏ
-  cảnh báoNhỏ:
+  // 小尺寸警告按钮
+  warningSmall:
     'px-2 py-1 text-xs font-medium bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-md transition-colors',
-  // Nút tròn nhỏ (để thao tác với bảng)
-  làm trònPrimary:
+  // 圆角小按钮（用于表格操作）
+  roundedPrimary:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/40 dark:hover:bg-blue-900/60 dark:text-blue-200 transition-colors',
   roundedSuccess:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/40 dark:hover:bg-green-900/60 dark:text-green-200 transition-colors',
@@ -49,19 +49,19 @@ xuất kiểu const = {
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:text-yellow-200 transition-colors',
   roundedPurple:
     'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 dark:text-purple-200 transition-colors',
-  // trạng thái vô hiệu hóa
-  bị vô hiệu hóa:
+  // 禁用状态
+  disabled:
     'px-3 py-1.5 text-sm font-medium bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white rounded-lg transition-colors',
   disabledSmall:
     'px-2 py-1 text-xs font-medium bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white rounded-md transition-colors',
-  // Chuyển đổi kiểu nút
-  bật tắt: 'bg-green-600 dark:bg-green-600',
+  // 开关按钮样式
+  toggleOn: 'bg-green-600 dark:bg-green-600',
   toggleOff: 'bg-gray-200 dark:bg-gray-700',
   toggleThumb: 'bg-white',
   toggleThumbOn: 'translate-x-6',
   toggleThumbOff: 'translate-x-1',
-  // Kiểu nút hành động nhanh
-  hành động nhanh:
+  // 快速操作按钮样式
+  quickAction:
     'px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors',
   input:
     'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent',
@@ -73,42 +73,42 @@ interface AlertModalProps {
   isOpen: boolean;
   onClose: () => void;
   type: 'success' | 'error' | 'warning';
-  tiêu đề: chuỗi;
-  tin nhắn?: chuỗi;
-  hẹn giờ?: số;
+  title: string;
+  message?: string;
+  timer?: number;
   showConfirm?: boolean;
 }
 
-//Thành phần cảnh báo toàn cầu
-xuất const AlertModal = ({
-  đang mở,
-  trênĐóng,
-  loại,
-  tiêu đề,
-  tin nhắn,
-  hẹn giờ,
-  hiển thịXác nhận = sai,
+// 全局 Alert 组件
+export const AlertModal = ({
+  isOpen,
+  onClose,
+  type,
+  title,
+  message,
+  timer,
+  showConfirm = false,
 }: AlertModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    nếu (isOpen) {
+    if (isOpen) {
       setIsVisible(true);
-      nếu (bộ đếm thời gian) {
+      if (timer) {
         setTimeout(() => {
           onClose();
-        }, bộ đếm thời gian);
+        }, timer);
       }
-    } khác {
+    } else {
       setIsVisible(false);
     }
-  }, [isOpen, hẹn giờ, onClose]);
+  }, [isOpen, timer, onClose]);
 
-  if (!isOpen) trả về null;
+  if (!isOpen) return null;
 
   const getIcon = () => {
-    công tắc (loại) {
-      trường hợp 'success':
+    switch (type) {
+      case 'success':
         return <CheckCircle className='w-8 h-8 text-green-500' />;
       case 'error':
         return <AlertCircle className='w-8 h-8 text-red-500' />;
@@ -151,28 +151,28 @@ xuất const AlertModal = ({
           </h3>
 
           {message && (
-            <p className='text-gray-600 dark:text-gray-400 mb-4'>{tin nhắn</p>
+            <p className='text-gray-600 dark:text-gray-400 mb-4'>{message}</p>
           )}
 
           {showConfirm && (
-            <nút
+            <button
               onClick={onClose}
               className={`px-4 py-2 text-sm font-medium ${styles.primary}`}
             >
-              được rồi
+              确定
             </button>
           )}
         </div>
       </div>
     </div>,
-    tài liệu.body
+    document.body
   );
 };
-// Quản lý trạng thái cửa sổ bật lên
-xuất const useAlertModal = () => {
+// 弹窗状态管理
+export const useAlertModal = () => {
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
-    kiểu: 'success' | 'error' | 'warning';
+    type: 'success' | 'error' | 'warning';
     title: string;
     message?: string;
     timer?: number;
@@ -187,20 +187,20 @@ xuất const useAlertModal = () => {
     setAlertModal({ ...config, isOpen: true });
   };
 
-  const HideAlert = () => {
+  const hideAlert = () => {
     setAlertModal((prev) => ({ ...prev, isOpen: false }));
   };
 
-  return { cảnh báoModal, showAlert, ẩnAlert };
+  return { alertModal, showAlert, hideAlert };
 };
 
-// Phương thức bật lên thống nhất (phải được xác định trước lần sử dụng đầu tiên)
-xuất const showError = (
-  tin nhắn: chuỗi,
-  showAlert?: (cấu hình: bất kỳ) => void
+// 统一弹窗方法（必须在首次使用前定义）
+export const showError = (
+  message: string,
+  showAlert?: (config: any) => void
 ) => {
-  nếu (showAlert) {
-    showAlert({type: 'error', title: 'sai lầm', message, showConfirm: true });
+  if (showAlert) {
+    showAlert({ type: 'error', title: '错误', message, showConfirm: true });
   } else {
     console.error(message);
   }
@@ -211,13 +211,13 @@ export const showSuccess = (
   showAlert?: (config: any) => void
 ) => {
   if (showAlert) {
-    showAlert({ type: 'success', title: 'thành công', message, timer: 2000 });
+    showAlert({ type: 'success', title: '成功', message, timer: 2000 });
   } else {
     console.log(message);
   }
 };
 
-// Hệ thống quản lý trạng thái tải phổ quát
+// 通用加载状态管理系统
 interface LoadingState {
   [key: string]: boolean;
 }

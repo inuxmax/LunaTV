@@ -1,185 +1,185 @@
 /* eslint-disable no-console */
-'sử dụng ứng dụng khách';
+'use client';
 
-nhập {ExternalLink, Globe, Link2, Save, ShieldCheck } từ 'lucide-react';
-nhập { useState } từ 'Reac';
+import { ExternalLink, Globe, Link2, Save, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
 
-nhập {SectionConfigProps } từ '@/lib/admin.types';
+import { SectionConfigProps } from '@/lib/admin.types';
 
-nhập CustomDropdown từ '@/thành phần/CustomDropdown';
+import CustomDropdown from '@/components/CustomDropdown';
 
-nhập ConfigToggle từ '@/app/admin/comComponents/ConfigToggle';
-nhập { styles, useLoadingState } từ '@/app/admin/comComponents/UIComponents';
+import ConfigToggle from '@/app/admin/components/ConfigToggle';
+import { styles, useLoadingState } from '@/app/admin/components/UIComponents';
 
-// Tùy chọn mặc định proxy Douban
+// 豆瓣代理预设选项
 const DOUBAN_PROXIES = [
-  { value: 'direct', label: 'Kết nối trực tiếp (máy chủ yêu cầu trực tiếp Douban)' },
-  { value: 'cors-proxy-zwei', nhãn: 'Cors Proxy của Zwei' },
-  { value: 'cmliussss-cdn-tencent', nhãn: 'Douban CDN của CMLiussss (Tencent Cloud)' },
-  { value: 'cmliussss-cdn-ali', nhãn: 'Douban CDN của CMLiussss (Đám mây Alibaba)' },
-  { value: 'custom', nhãn: 'tác nhân tùy chỉnh' },
+  { value: 'direct', label: '直连（服务器直接请求豆瓣）' },
+  { value: 'cors-proxy-zwei', label: 'Cors Proxy By Zwei' },
+  { value: 'cmliussss-cdn-tencent', label: '豆瓣 CDN By CMLiussss（腾讯云）' },
+  { value: 'cmliussss-cdn-ali', label: '豆瓣 CDN By CMLiussss（阿里云）' },
+  { value: 'custom', label: '自定义代理' },
 ];
 
 const DOUBAN_IMAGE_PROXIES = [
-  { value: 'direct', label: 'Kết nối trực tiếp (trình duyệt yêu cầu trực tiếp Douban)', bị vô hiệu hóa: true },
-  { value: 'server', label: 'Proxy máy chủ (proxy máy chủ yêu cầu Douban)' },
-  { value: 'img3', label: 'CDN cao cấp chính thức của Douban (Đám mây Alibaba)' },
-  { value: 'cmliussss-cdn-tencent', nhãn: 'Douban CDN của CMLiussss (Tencent Cloud)' },
-  { value: 'cmliussss-cdn-ali', nhãn: 'Douban CDN của CMLiussss (Đám mây Alibaba)' },
-  { value: 'custom', nhãn: 'tác nhân tùy chỉnh' },
+  { value: 'direct', label: '直连（浏览器直接请求豆瓣）', disabled: true },
+  { value: 'server', label: '服务器代理（由服务器代理请求豆瓣）' },
+  { value: 'img3', label: '豆瓣官方精品 CDN（阿里云）' },
+  { value: 'cmliussss-cdn-tencent', label: '豆瓣 CDN By CMLiussss（腾讯云）' },
+  { value: 'cmliussss-cdn-ali', label: '豆瓣 CDN By CMLiussss（阿里云）' },
+  { value: 'custom', label: '自定义代理' },
 ];
 
-xuất hàm mặc định SiteSection({
-  cấu hình,
-  làm mới,
-  hiển thịLỗi,
-  hiển thị,
-  hiển thịThành công,
-}: MụcConfigProps) {
+export default function SiteSection({
+  config,
+  refresh,
+  showError,
+  showAlert,
+  showSuccess,
+}: SectionConfigProps) {
   const [siteConfig, setSiteConfig] = useState(config?.SiteConfig);
   const { isLoading, withLoading } = useLoadingState();
 
-  const handUpdateConfig = async () => {
+  const handleUpdateConfig = async () => {
     return withLoading(`SiteConfig`, async () => {
-      thử {
-        const res = đang chờ tìm nạp('/api/admin/site', {
-          phương thức: 'BÀI',
-          tiêu đề: { 'Content-Type': 'application/json' },
-          nội dung: JSON.stringify({ ...siteConfig }),
+      try {
+        const res = await fetch('/api/admin/site', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...siteConfig }),
         });
-        nếu (res.ok) {
-          showSuccess('Lưu thành công, vui lòng tải lại trang', showAlert);
-          làm mới();
+        if (res.ok) {
+          showSuccess('保存成功, 请刷新页面', showAlert);
+          refresh();
         }
-      } bắt (lỗi) {
-        showError(err instanceof Error? err.message: 'Thao tác thất bại', showAlert);
-        ném lỗi;
+      } catch (err) {
+        showError(err instanceof Error ? err.message : '操作失败', showAlert);
+        throw err;
       }
     });
   };
-  const handChange = (key: string, value: Any) => {
-    setSiteConfig((prev: Any) => ({ ...prev, [key]: value }));
+  const handleChange = (key: string, value: any) => {
+    setSiteConfig((prev: any) => ({ ...prev, [key]: value }));
   };
-  trở lại (
-    <div className='space-y-8 animate-in slide-in-from-bottom-4 thời lượng-500 pb-32'>
-      <div className='lưới lưới-cols-1 lg:grid-cols-2 khoảng cách-8'>
+  return (
+    <div className='space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
         <div className='space-y-8'>
-          {/* Cài đặt cơ bản */}
+          {/* 基本设置 */}
           <div className={`${styles.roundedCard}`}>
-            <div className='flex items-center Gap-2 mb-2'>
+            <div className='flex items-center gap-2 mb-2'>
               <Globe className='text-green-500 w-5 h-5' />
-              <h3 className='font-bold dark:text-white text-lg'>Cài đặt cơ bản</h3>
+              <h3 className='font-bold dark:text-white text-lg'>基本设置</h3>
             </div>
             <div className='space-y-5'>
               <div>
-                <label className='block text-sm font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
-                  Tên trang web
-                </nhãn>
-                <đầu vào
+                <label className='block text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
+                  网站名称
+                </label>
+                <input
                   className={styles.input}
                   value={siteConfig?.SiteName}
-                  onChange={(e) => handChange('SiteName', e.target.value)}
+                  onChange={(e) => handleChange('SiteName', e.target.value)}
                 />
               </div>
               <div>
-                <label className='block text-sm font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
-                  Thông báo trang web
-                </nhãn>
-                <vùng văn bản
-                  tên lớp={`${styles.input} !rounded-2xl h-32 resize-none transition-all`}
-                  value={siteConfig?.Thông báo}
-                  onChange={(e) => handChange('Thông báo', e.target.value)}
+                <label className='block text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
+                  站点公告
+                </label>
+                <textarea
+                  className={`${styles.input} !rounded-2xl h-32 resize-none transition-all`}
+                  value={siteConfig?.Announcement}
+                  onChange={(e) => handleChange('Announcement', e.target.value)}
                 />
               </div>
             </div>
           </div>
 
-          {/* Cài đặt Douban */}
+          {/* 豆瓣设置 */}
           <div className={`${styles.roundedCard}`}>
-            <div className='flex items-center Gap-2'>
+            <div className='flex items-center gap-2'>
               <Link2 className='text-green-500 w-5 h-5' />
               <h3 className='font-bold dark:text-white text-lg'>
-                Đại lý dữ liệu Douban
+                豆瓣数据代理
               </h3>
             </div>
-            <div className='lưới lưới-cols-1 md:grid-cols-2 khoảng cách-6'>
-              {/* Proxy giao diện dữ liệu */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              {/* 数据接口代理 */}
               <div className='space-y-2'>
-                <label className='block text-xs font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 ml-1'>
-                  proxy giao diện dữ liệu
-                </nhãn>
-                <Thả xuống tùy chỉnh
-                  tùy chọn={DOUBAN_PROXIES}
+                <label className='block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1'>
+                  数据接口代理
+                </label>
+                <CustomDropdown
+                  options={DOUBAN_PROXIES}
                   value={siteConfig?.DoubanProxyType || ''}
                   onChange={(val: string) =>
-                    handChange('DoubanProxyType', val)
+                    handleChange('DoubanProxyType', val)
                   }
                   className='w-full'
                 />
-                {siteConfig?.DoubanProxyType === 'tùy chỉnh' && (
-                  <đầu vào
-                    placeholder='Vui lòng nhập địa chỉ proxy dữ liệu tùy chỉnh'
-                    tên lớp={`${styles.input} !text-[11px] !py-1.5 animate-in fade-in zoom-in-95 duration-200`}
+                {siteConfig?.DoubanProxyType === 'custom' && (
+                  <input
+                    placeholder='请输入自定义数据代理地址'
+                    className={`${styles.input} !text-[11px] !py-1.5 animate-in fade-in zoom-in-95 duration-200`}
                     value={siteConfig.DoubanProxy || ''}
                     onChange={(e) =>
-                      handChange('CustomDoubanProxy', e.target.value)
+                      handleChange('CustomDoubanProxy', e.target.value)
                     }
                   />
                 )}
                 <p className='text-[11px] text-gray-400 dark:text-gray-500 italic px-1'>
-                  Chọn cách lấy dữ liệu Douban
+                  选择获取豆瓣数据的方式
                 </p>
               </div>
 
-              {/* Cơ quan hình ảnh Douban */}
+              {/* 豆瓣图片代理 */}
               <div className='space-y-2'>
-                <label className='block text-xs font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 ml-1'>
-                  Hãng ảnh Douban
-                </nhãn>
-                <Thả xuống tùy chỉnh
-                  tùy chọn={DOUBAN_IMAGE_PROXIES}
+                <label className='block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ml-1'>
+                  豆瓣图片代理
+                </label>
+                <CustomDropdown
+                  options={DOUBAN_IMAGE_PROXIES}
                   value={siteConfig?.DoubanImageProxyType || ''}
                   onChange={(val: string) =>
-                    handChange('DoubanImageProxyType', val)
+                    handleChange('DoubanImageProxyType', val)
                   }
                   className='w-full'
                 />
-                {siteConfig?.DoubanImageProxyType === 'tùy chỉnh' && (
-                  <đầu vào
-                    placeholder='Vui lòng nhập địa chỉ đại lý hình ảnh tùy chỉnh'
-                    tên lớp={`${styles.input} !text-[11px] !py-1.5 animate-in fade-in zoom-in-95 duration-200`}
+                {siteConfig?.DoubanImageProxyType === 'custom' && (
+                  <input
+                    placeholder='请输入自定义图片代理地址'
+                    className={`${styles.input} !text-[11px] !py-1.5 animate-in fade-in zoom-in-95 duration-200`}
                     value={siteConfig?.DoubanImageProxy || ''}
                     onChange={(e) =>
-                      handChange('CustomDoubanImageProxy', e.target.value)
+                      handleChange('CustomDoubanImageProxy', e.target.value)
                     }
                   />
                 )}
                 <p className='text-[11px] text-gray-400 dark:text-gray-500 italic px-1'>
-                  Chọn cách lấy ảnh Douban
+                  选择获取豆瓣图片的方式
                 </p>
               </div>
             </div>
             <div className='pt-0 mt-1 space-y-2'>
-              <div className='px-1 flex items-center Gap-2'>
-                <span className='text-[10px] font-in đậm theo dõi chữ hoa-wider text-gray-400 dark:text-gray-500'>
-                  Cảm ơn:
+              <div className='px-1 flex items-center gap-2'>
+                <span className='text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500'>
+                  Thanks to:
                 </span>
-                <div className='flex items-center Gap-3'>
+                <div className='flex items-center gap-3'>
                   <a
                     href='https://github.com/cmliu'
-                    mục tiêu='_blank'
+                    target='_blank'
                     rel='noopener noreferrer'
-                    className='text-[11px] text-green-600/80 di chuột:text-green-500 dark:text-green-400/80 transition-colors flex items-center Gap-1'
+                    className='text-[11px] text-green-600/80 hover:text-green-500 dark:text-green-400/80 transition-colors flex items-center gap-1'
                   >
-                    @CMLiussss <Kích thước liên kết bên ngoài={10} />
+                    @CMLiussss <ExternalLink size={10} />
                   </a>
                   <a
                     href='https://douban.com'
-                    mục tiêu='_blank'
+                    target='_blank'
                     rel='noopener noreferrer'
-                    className='text-[11px] text-green-600/80 di chuột:text-green-500 dark:text-green-400/80 transition-colors flex items-center Gap-1'
+                    className='text-[11px] text-green-600/80 hover:text-green-500 dark:text-green-400/80 transition-colors flex items-center gap-1'
                   >
-                    Phim Douban <ExternalLink size={10} />
+                    豆瓣电影 <ExternalLink size={10} />
                   </a>
                 </div>
               </div>
@@ -187,78 +187,78 @@ xuất hàm mặc định SiteSection({
           </div>
         </div>
 
-        {/* chính sách hệ thống */}
+        {/* 系统策略 */}
         <div className={`${styles.roundedCard}`}>
-          <div className='flex items-center Gap-2 mb-2'>
+          <div className='flex items-center gap-2 mb-2'>
             <ShieldCheck className='text-green-500 w-5 h-5' />
-            <h3 className='font-bold dark:text-white text-lg'>Chính sách hệ thống</h3>
+            <h3 className='font-bold dark:text-white text-lg'>系统策略</h3>
           </div>
-          <div className='lưới lưới-cols-1 khoảng cách-4'>
+          <div className='grid grid-cols-1 gap-4'>
             <div>
-              <label className='block text-sm font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
-                Số lượng trang tối đa mà giao diện tìm kiếm có thể kéo
-              </nhãn>
-              <đầu vào
-                gõ='số'
-                phút={1}
+              <label className='block text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
+                搜索接口可拉取最大页数
+              </label>
+              <input
+                type='number'
+                min={1}
                 className={styles.input}
                 value={siteConfig?.SearchDownstreamMaxPage}
                 onChange={(e) =>
-                  handChange('SearchDownstreamMaxPage', e.target.value)
+                  handleChange('SearchDownstreamMaxPage', e.target.value)
                 }
               />
             </div>
             <div>
-              <label className='block text-sm font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
-                Thời gian lưu vào bộ đệm giao diện trang web (giây)
-              </nhãn>
-              <đầu vào
-                gõ='số'
-                phút={1}
+              <label className='block text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
+                站点接口缓存时间（秒）
+              </label>
+              <input
+                type='number'
+                min={1}
                 className={styles.input}
                 value={siteConfig?.SiteInterfaceCacheTime}
                 onChange={(e) =>
-                  handChange('SiteInterfaceCacheTime', e.target.value)
+                  handleChange('SiteInterfaceCacheTime', e.target.value)
                 }
               />
             </div>
-            <Cấu hìnhChuyển đổi
-              label='Tắt bộ lọc màu vàng'
-              description='Tắt tính năng lọc nội dung khiêu dâm'
-              đã bật={siteConfig?.DisableYellowFilter || sai}
+            <ConfigToggle
+              label='禁用黄色过滤器'
+              description='禁用黄色内容的过滤功能'
+              enabled={siteConfig?.DisableYellowFilter || false}
               onChange={() =>
-                xử lýChange(
-                  'Vô hiệu hóaYellowFilter',
+                handleChange(
+                  'DisableYellowFilter',
                   !siteConfig?.DisableYellowFilter
                 )
               }
             />
-            <Cấu hìnhChuyển đổi
-              label='Mở đăng ký'
-              description='Cho phép khách mới đăng ký tài khoản của riêng họ'
-              đã bật={siteConfig?.OpenRegister || sai}
+            <ConfigToggle
+              label='开放注册'
+              description='允许新访客自行注册账号'
+              enabled={siteConfig?.OpenRegister || false}
               onChange={() =>
-                handChange('OpenRegister', !siteConfig?.OpenRegister)
+                handleChange('OpenRegister', !siteConfig?.OpenRegister)
               }
             />
-            <Cấu hìnhChuyển đổi
-              label='Tìm kiếm trực tuyến'
-              description='Sau khi bật nó lên, các kết quả tìm kiếm sẽ được hiển thị lần lượt và hiển thị theo thời gian thực'
-              đã bật={siteConfig?.FluidSearch || đúng}
+            <ConfigToggle
+              label='流式搜索'
+              description='开启后搜索结果将实时逐个渲染显示'
+              enabled={siteConfig?.FluidSearch || true}
               onChange={() =>
-                handChange('FluidSearch', !siteConfig?.FluidSearch)
+                handleChange('FluidSearch', !siteConfig?.FluidSearch)
               }
             />
           </div>
         </div>
       </div>
 
-      {/* nút lưu */}
+      {/* 保存按钮 */}
       <div className='mt-12 mb-8 flex justify-center md:justify-end'>
-        <nút
+        <button
           onClick={handleUpdateConfig}
-          bị vô hiệu hóa={isLoading('SiteConfig')}
-          tên lớp={`
+          disabled={isLoading('SiteConfig')}
+          className={`
       flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium transition-all
       w-full md:w-auto ${
         isLoading('SiteConfig') ? styles.disabled : styles.success
@@ -270,7 +270,7 @@ xuất hàm mặc định SiteSection({
           ) : (
             <Save size={16} />
           )}
-          {isLoading('SiteConfig') ? 'Đang lưu...' : 'cứu'}
+          {isLoading('SiteConfig') ? '保存中...' : '保存'}
         </button>
       </div>
     </div>

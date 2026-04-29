@@ -1,214 +1,214 @@
 /* eslint-disable no-console */
-'sử dụng ứng dụng khách';
-nhập { Lưu } từ 'lucide-Reac';
-nhập { useEffect, useState } từ 'react';
+'use client';
+import { Save } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-nhập {SectionConfigProps } từ '@/lib/admin.types';
-nhập { getAuthInfoFromBrowserCookie } từ '@/lib/auth';
+import { SectionConfigProps } from '@/lib/admin.types';
+import { getAuthInfoFromBrowserCookie } from '@/lib/auth';
 
-nhập CustomDropdown từ '@/thành phần/CustomDropdown';
+import CustomDropdown from '@/components/CustomDropdown';
 
-nhập ConfigToggle từ '@/app/admin/comComponents/ConfigToggle';
-nhập CopyableInput từ '@/app/admin/comComponents/CopyableInput';
-nhập { styles, useLoadingState } từ '@/app/admin/comComponents/UIComponents';
+import ConfigToggle from '@/app/admin/components/ConfigToggle';
+import CopyableInput from '@/app/admin/components/CopyableInput';
+import { styles, useLoadingState } from '@/app/admin/components/UIComponents';
 
-giao diện TvBoxConfig {
-  bị vô hiệu hóa: boolean;
-  đồng bộ hóa: boolean;
+interface TvBoxConfig {
+  disabled: boolean;
+  sync: boolean;
   proxyFilterAds: boolean;
-  hết hạnGiây: số;
+  expireSeconds: number;
 }
 
-xuất hàm mặc định TVBoxSection({
-  cấu hình,
-  làm mới,
-  hiển thị,
-  hiển thịLỗi,
-  hiển thịThành công,
-}: MụcConfigProps) {
+export default function TVBoxSection({
+  config,
+  refresh,
+  showAlert,
+  showError,
+  showSuccess,
+}: SectionConfigProps) {
   const [tvboxConfig, setTvboxConfig] = useState<TvBoxConfig>({
-    bị vô hiệu hóa: config?.TvBoxConfig?.disabled ?? đúng,
-    đồng bộ hóa: config?.TvBoxConfig?.sync ?? sai,
-    proxyFilterAds: config?.TvBoxConfig?.proxyFilterAds ?? sai,
-    hết hạn giây: config?.TvBoxConfig?.expireSeconds ?? 12*60*60,
+    disabled: config?.TvBoxConfig?.disabled ?? true,
+    sync: config?.TvBoxConfig?.sync ?? false,
+    proxyFilterAds: config?.TvBoxConfig?.proxyFilterAds ?? false,
+    expireSeconds: config?.TvBoxConfig?.expireSeconds ?? 12 * 60 * 60,
   });
   const { isLoading, withLoading } = useLoadingState();
-  const initCacheTime = tvboxConfig.expireSeconds;
+  const initialCacheTime = tvboxConfig.expireSeconds;
   const [cacheTimeValue, setCacheTimeValue] = useState<number>(() => {
-    if (initialCacheTime% 2592000 === 0) trả về initCacheTime/2592000; // tháng
-    if (initialCacheTime% 604800 === 0) trả về initCacheTime/604800; // ngày trong tuần
-    if (initialCacheTime% 86400 === 0) trả về initCacheTime/86400; // ngày
-    if (initialCacheTime % 3600 === 0) trả về initCacheTime / 3600; // giờ
-    trả về initCacheTime/60; // phút (mặc định)
+    if (initialCacheTime % 2592000 === 0) return initialCacheTime / 2592000; // 月
+    if (initialCacheTime % 604800 === 0) return initialCacheTime / 604800; // 星期
+    if (initialCacheTime % 86400 === 0) return initialCacheTime / 86400; // 天
+    if (initialCacheTime % 3600 === 0) return initialCacheTime / 3600; // 小时
+    return initialCacheTime / 60; // 分钟（默认）
   });
 
   const [cacheTimeUnit, setCacheTimeUnit] = useState<string>(() => {
-    if (initialCacheTime % 2592000 === 0) trả về 'tháng';
-    if (initialCacheTime % 604800 === 0) trả về 'tuần';
-    if (initialCacheTime% 86400 === 0) trả về 'ngày';
-    if (initialCacheTime % 3600 === 0) trả về 'giờ';
-    trả về 'phút'; // mặc định
+    if (initialCacheTime % 2592000 === 0) return 'months';
+    if (initialCacheTime % 604800 === 0) return 'weeks';
+    if (initialCacheTime % 86400 === 0) return 'days';
+    if (initialCacheTime % 3600 === 0) return 'hours';
+    return 'minutes'; // 默认
   });
-  const handUpdateConfig = async () => {
+  const handleUpdateConfig = async () => {
     return withLoading(`TvboxConfig`, async () => {
-      thử {
-        const resp = đang chờ tìm nạp('/api/admin/tvbox', {
-          phương thức: 'BÀI',
-          tiêu đề: { 'Content-Type': 'application/json' },
-          nội dung: JSON.stringify({ ...tvboxConfig }),
+      try {
+        const resp = await fetch('/api/admin/tvbox', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...tvboxConfig }),
         });
-        nếu (!resp.ok) {
-          const data = đang chờ resp.json().catch(() => ({}));
-          ném Lỗi mới(data.error || `Lưu không thành công: ${resp.status}`);
+        if (!resp.ok) {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `保存失败: ${resp.status}`);
         }
-        nếu (resp.ok) {
-          showSuccess('Lưu thành công, vui lòng tải lại trang', showAlert);
-          làm mới();
+        if (resp.ok) {
+          showSuccess('保存成功, 请刷新页面', showAlert);
+          refresh();
         }
-      } bắt (lỗi) {
-        showError(err instanceof Error? err.message: 'Lưu không thành công', showAlert);
-        ném lỗi;
+      } catch (err) {
+        showError(err instanceof Error ? err.message : '保存失败', showAlert);
+        throw err;
       }
     });
   };
-  const CalculateSeconds = (val: number, unit: string) => {
-    hệ số const: Bản ghi<chuỗi, số> = {
-      phút: 60,
-      giờ: 3600,
-      ngày: 86400,
-      tuần: 604800,
-      tháng: 2592000,
+  const calculateSeconds = (val: number, unit: string) => {
+    const factors: Record<string, number> = {
+      minutes: 60,
+      hours: 3600,
+      days: 86400,
+      weeks: 604800,
+      months: 2592000,
     };
-    trả về val * (factors[unit] || 1);
+    return val * (factors[unit] || 1);
   };
-  const handChange = (key: string, value: Any) => {
-    setTvboxConfig((prev: Any) => ({ ...prev, [key]: value }));
+  const handleChange = (key: string, value: any) => {
+    setTvboxConfig((prev: any) => ({ ...prev, [key]: value }));
   };
   const getTvBoxApiUrl = () => {
-    const currentUsername = getAuthInfoFromBrowserCookie()?.username || vô giá trị;
+    const currentUsername = getAuthInfoFromBrowserCookie()?.username || null;
     const userMatch = config?.UserConfig.Users.find(
-      (u: bất kỳ) => u.tên người dùng === tên người dùng hiện tại
+      (u: any) => u.username === currentUsername
     );
     const userKey = userMatch ? userMatch.key : '';
     return `${window.location.protocol}//${window.location.host}/api/tvbox?k=${userKey}`;
   };
   useEffect(() => {
-    đặt giây: số;
-    chuyển đổi (cacheTimeUnit) {
-      trường hợp 'phút':
-        giây = cacheTimeValue * 60;
-        phá vỡ;
-      trường hợp 'giờ':
-        giây = cacheTimeValue * 3600;
-        phá vỡ;
-      trường hợp 'ngày':
-        giây = cacheTimeValue * 86400;
-        phá vỡ;
-      trường hợp 'tuần':
-        giây = cacheTimeValue * 604800;
-        phá vỡ;
-      trường hợp 'tháng':
-        giây = cacheTimeValue * 2592000;
-        phá vỡ;
-      mặc định:
-        giây = cacheTimeValue;
+    let seconds: number;
+    switch (cacheTimeUnit) {
+      case 'minutes':
+        seconds = cacheTimeValue * 60;
+        break;
+      case 'hours':
+        seconds = cacheTimeValue * 3600;
+        break;
+      case 'days':
+        seconds = cacheTimeValue * 86400;
+        break;
+      case 'weeks':
+        seconds = cacheTimeValue * 604800;
+        break;
+      case 'months':
+        seconds = cacheTimeValue * 2592000;
+        break;
+      default:
+        seconds = cacheTimeValue;
     }
     setTvboxConfig((prev) => ({
-      ...trước,
-      hết hạnGiây: giây,
+      ...prev,
+      expireSeconds: seconds,
     }));
   }, [cacheTimeValue, cacheTimeUnit]);
-  trở lại (
-    <div className='space-y-8 animate-in slide-in-from-bottom-4 thời lượng-500 pb-32'>
-      <div className='lưới lưới-cols-1'>
-        {/* chính sách hệ thống */}
+  return (
+    <div className='space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32'>
+      <div className='grid grid-cols-1'>
+        {/* 系统策略 */}
         <div className={`${styles.roundedCard}`}>
-          <div className='lưới lưới-cols-1 khoảng cách-4'>
-            <Cấu hìnhChuyển đổi
-              label='Mở TvBox'
-              description='Vì giao diện cấu hình không thể được xác thực sau khi được bật, vui lòng không tiết lộ địa chỉ giao diện của bạn cho người lạ. '
-              đã bật={!tvboxConfig.disabled}
-              onChange={() => handChange('disabled', !tvboxConfig.disabled)}
+          <div className='grid grid-cols-1 gap-4'>
+            <ConfigToggle
+              label='开启TvBox'
+              description='由于开启后无法对配置接口进行认证，请不要暴露你的接口地址给陌生人。'
+              enabled={!tvboxConfig.disabled}
+              onChange={() => handleChange('disabled', !tvboxConfig.disabled)}
             />
           </div>
-          <div className='lưới lưới-cols-1 khoảng cách-4'>
-            <Cấu hìnhChuyển đổi
-              label='đồng bộ hóa dữ liệu'
-              description='Sau khi bật, nó có thể đồng bộ hóa các bản ghi phát lại, bộ sưu tập và lịch sử tìm kiếm với phiên bản TVBox được sửa đổi kỳ diệu trong Lab'
-              đã bật={tvboxConfig.sync}
-              onChange={() => handChange('sync', !tvboxConfig.sync)}
+          <div className='grid grid-cols-1 gap-4'>
+            <ConfigToggle
+              label='数据同步'
+              description='开启后可与TVBox的Lab魔改版同步播放记录、收藏、搜索历史'
+              enabled={tvboxConfig.sync}
+              onChange={() => handleChange('sync', !tvboxConfig.sync)}
             />
           </div>
-          <div className='lưới lưới-cols-1 khoảng cách-4'>
-            <Cấu hìnhChuyển đổi
-              label='Tác nhân M3U8 loại bỏ quảng cáo (thử nghiệm)'
-              description='Proxy địa chỉ M3U8 của nguồn phát lại để triển khai lọc quảng cáo'
-              đã bật={tvboxConfig.proxyFilterAds}
+          <div className='grid grid-cols-1 gap-4'>
+            <ConfigToggle
+              label='M3U8代理去广告（实验性）'
+              description='代理播放源的M3U8地址，实现广告过滤'
+              enabled={tvboxConfig.proxyFilterAds}
               onChange={() =>
-                handChange('proxyFilterAds', !tvboxConfig.proxyFilterAds)
+                handleChange('proxyFilterAds', !tvboxConfig.proxyFilterAds)
               }
             />
           </div>
 
           <div>
-            <label className='block text-sm font-in đậm theo dõi chữ hoa-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
-              Thời hạn hiệu lực của bộ đệm
-            </nhãn>
-            <div className='flex khoảng cách-2'>
-              <đầu vào
-                gõ='số'
-                phút={0}
-                tên lớp={`!w-1/2 ${styles.input}`}
+            <label className='block text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2 ml-1'>
+              缓存有效期
+            </label>
+            <div className='flex gap-2'>
+              <input
+                type='number'
+                min={0}
+                className={`!w-1/2 ${styles.input}`}
                 value={cacheTimeValue}
                 onChange={(e) => {
-                  const newVal = Số(e.target.value);
+                  const newVal = Number(e.target.value);
                   setCacheTimeValue(newVal);
-                  xử lýChange(
-                    'hết hạn giây',
-                    tính toán Giây(newVal, cacheTimeUnit)
+                  handleChange(
+                    'expireSeconds',
+                    calculateSeconds(newVal, cacheTimeUnit)
                   );
                 }}
               />
-              {/* Hộp thả xuống đơn vị thời gian */}
-              <Thả xuống tùy chỉnh
-                tùy chọn={[
-                  { giá trị: 'phút', nhãn: 'phút' },
-                  { value: 'giờ', nhãn: 'giờ' },
-                  { value: 'ngày', nhãn: 'bầu trời' },
-                  { value: 'tuần', nhãn: 'tuần' },
-                  { giá trị: 'tháng', nhãn: 'tháng' },
+              {/* 时间单位下拉框 */}
+              <CustomDropdown
+                options={[
+                  { value: 'minutes', label: '分钟' },
+                  { value: 'hours', label: '小时' },
+                  { value: 'days', label: '天' },
+                  { value: 'weeks', label: '星期' },
+                  { value: 'months', label: '月' },
                 ]}
                 value={cacheTimeUnit}
                 onChange={(newUnit: string) => {
                   setCacheTimeUnit(newUnit);
-                  xử lýChange(
-                    'hết hạn giây',
-                    tính toánGiây(cacheTimeValue, newUnit)
+                  handleChange(
+                    'expireSeconds',
+                    calculateSeconds(cacheTimeValue, newUnit)
                   );
                 }}
               />
             </div>
 
             <p className='text-[11px] text-gray-400 dark:text-gray-500 italic px-1'>
-              Đặt thành 0 để tắt bộ nhớ đệm
+              设置成0可以关闭缓存
             </p>
           </div>
-          {/* Giao diện cấu hình */}
-          <Đầu vào có thể sao chép
-            label='giao diện cấu hình'
+          {/* 配置接口 */}
+          <CopyableInput
+            label='配置接口'
             value={getTvBoxApiUrl()}
-            description='Hãy điền liên kết này vào thanh địa chỉ cấu hình của TVBox'
+            description='请将此链接填入 TVBox 的配置地址栏中'
             readOnly={true}
           />
         </div>
       </div>
 
-      {/* nút lưu */}
+      {/* 保存按钮 */}
       <div className='mt-12 mb-8 flex justify-center md:justify-end'>
-        <nút
+        <button
           onClick={handleUpdateConfig}
-          bị vô hiệu hóa={isLoading('TvboxConfig')}
-          tên lớp={`flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium transition-all w-full md:w-auto ${
+          disabled={isLoading('TvboxConfig')}
+          className={`flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium transition-all w-full md:w-auto ${
             isLoading('TvboxConfig') ? styles.disabled : styles.success
           } `}
         >
@@ -217,7 +217,7 @@ xuất hàm mặc định TVBoxSection({
           ) : (
             <Save size={16} />
           )}
-          {isLoading('TvboxConfig') ? 'Đang lưu...' : 'cứu'}
+          {isLoading('TvboxConfig') ? '保存中...' : '保存'}
         </button>
       </div>
     </div>

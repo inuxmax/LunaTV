@@ -13,7 +13,7 @@ jobs:
       contents: write
     env:
       RELEASE_TAG: ${{ github.event.release.tag_name }}
-RELEASE_BODY: ${{ toJson(github.event.release.body) }} # Giao hàng an toàn
+      RELEASE_BODY: ${{ toJson(github.event.release.body) }} # 安全传递
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,11 +23,11 @@ RELEASE_BODY: ${{ toJson(github.event.release.body) }} # Giao hàng an toàn
       - name: Extract release notes
         id: extract-notes
         run: |
-# Số phiên bản quy trình
+          # 处理版本号
           RELEASE_VERSION="${RELEASE_TAG#v}"
           echo "DEBUG: RELEASE_VERSION=$RELEASE_VERSION"
 
-# Ghi chú phát hành quy trình
+          # 处理 release notes
           if [ -f CHANGELOG.md ]; then
             RELEASE_NOTES=$(awk -v version="$RELEASE_VERSION" '
               BEGIN {flag=0; count=0}
@@ -46,25 +46,25 @@ RELEASE_BODY: ${{ toJson(github.event.release.body) }} # Giao hàng an toàn
             RELEASE_NOTES=$(echo "$RELEASE_BODY" | jq -r . 2>/dev/null || echo "Failed to parse RELEASE_BODY")
           fi
 
-#Gỡ lỗi nội dung RELEASE_NOTES
+          # 调试 RELEASE_NOTES 内容
           echo "DEBUG: RELEASE_NOTES=$RELEASE_NOTES"
 
-# Nếu RELEASE_NOTES trống, đặt giá trị mặc định
+          # 如果 RELEASE_NOTES 为空，设置默认值
           if [ -z "$RELEASE_NOTES" ]; then
             RELEASE_NOTES="No release notes provided."
           fi
 
-# Định dạng đầu ra, chỉ giữ lại RELEASE_NOTES và hậu tố, xóa tiêu đề số phiên bản
+          # 格式化输出，仅保留 RELEASE_NOTES 和后缀，移除版本号标题
           NOTES_CONTENT=$(printf '%s\n\n_Updated from CHANGELOG.md_' \
             "$RELEASE_NOTES" | sed "s/'/\\'/g; s/\\r//g")
 
-#Ghi vào GITHUB_OUTPUT
+          # 写入 GITHUB_OUTPUT
           echo "version=$RELEASE_VERSION" >> $GITHUB_OUTPUT
           echo "notes<<EOF" >> $GITHUB_OUTPUT
           echo "$NOTES_CONTENT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-#Gỡ lỗi nội dung GITHUB_OUTPUT
+          # 调试 GITHUB_OUTPUT 内容
           echo "DEBUG: GITHUB_OUTPUT content:"
           cat "$GITHUB_OUTPUT"
 

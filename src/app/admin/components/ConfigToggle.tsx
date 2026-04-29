@@ -3,23 +3,23 @@
 
 import React from 'react';
 
-// Định nghĩa giao diện cho Props
-giao diện ConfigToggleProps {
-  nhãn: chuỗi;
-  mô tả?: chuỗi; // Dấu chấm hỏi biểu thị tùy chọn
-  đã bật: boolean;
-  onChange: () => void; // Đây là hàm không có tham số và không có giá trị trả về
+// 定义 Props 的接口
+interface ConfigToggleProps {
+  label: string;
+  description?: string; // 问号表示可选
+  enabled: boolean;
+  onChange: () => void; // 这是一个不带参数且无返回值的函数
 }
 
 const ConfigToggle: React.FC<ConfigToggleProps> = ({
-  nhãn,
-  mô tả,
-  đã bật,
+  label,
+  description,
+  enabled,
   onChange,
 }) => {
-  trở lại (
+  return (
     <div
-      tên lớp='flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 rounded-2xl transition-all hover:border-green-500/30 group cursor-pointer'
+      className='flex items-center justify-between p-4 bg-gray-50/50 dark:bg-gray-900/40 border border-gray-200/50 dark:border-white/5 rounded-2xl transition-all hover:border-green-500/30 group cursor-pointer'
       onClick={onChange}
     >
       <div className='flex flex-col gap-0.5 pr-4'>

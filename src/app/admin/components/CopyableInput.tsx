@@ -22,24 +22,24 @@ export default function CopyableInput({
   readOnly = true,
   placeholder = '',
 }: CopyableInputProps) {
-  const [đã sao chép, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const copyToClipboard = async () => {
-    if (!inputRef.current) trả về;
+    if (!inputRef.current) return;
 
-    const textToCopy = giá trị;
+    const textToCopy = value;
 
-    thử {
-      // 1. Trước tiên hãy thử các API hiện đại
+    try {
+      // 1. 优先尝试现代 API
       if (navigator.clipboard && window.isSecureContext) {
-        đang chờ navigator.clipboard.writeText(textToCopy);
+        await navigator.clipboard.writeText(textToCopy);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-        trở lại;
+        return;
       }
 
-      // 2. Thay thế: Tương thích với môi trường di động và không phải HTTPS
+      // 2. 备选方案：兼容移动端和非 HTTPS 环境
       const textArea = document.createElement('textarea');
       textArea.value = textToCopy;
       textArea.style.position = 'fixed';
@@ -57,8 +57,8 @@ export default function CopyableInput({
         setTimeout(() => setCopied(false), 2000);
       }
     } catch (err) {
-      console.error('Sao chép không thành công:', err);
-      inputRef.current.select(); // Nếu thất bại, hãy chọn văn bản và để người dùng sao chép thủ công
+      console.error('复制失败:', err);
+      inputRef.current.select(); // 失败时选中文字让用户手动复制
     }
   };
 
@@ -92,7 +92,7 @@ export default function CopyableInput({
               ? 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10'
               : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
           }`}
-          title={copied ? 'Đã sao chép' : 'Sao chép vào khay nhớ tạm'}
+          title={copied ? '已复制' : '复制到剪贴板'}
         >
           {copied ? (
             <Check className='w-4.5 h-4.5 animate-in zoom-in duration-300' />

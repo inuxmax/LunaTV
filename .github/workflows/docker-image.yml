@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-mô tả: 'Nhãn Docker'
+        description: 'Docker 标签'
         required: false
         default: 'latest'
         type: string

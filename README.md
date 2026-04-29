@@ -4,7 +4,7 @@
   <img src="public/logo.png" alt="LunaTV Logo" width="120">
 </div>
 
-> 🎬 **LunaTV** là một trình phát tổng hợp phim và truyền hình đa nền tảng, vượt trội. Nó được xây dựng dựa trên **Next.js 14** + **Tailwind CSS** + **TypeScript** và hỗ trợ tìm kiếm đa tài nguyên, phát lại trực tuyến, đồng bộ hóa bộ sưu tập, bản ghi phát lại và lưu trữ đám mây, cho phép bạn thưởng thức nội dung phim và truyền hình miễn phí khổng lồ mọi lúc, mọi nơi.
+> 🎬 **LunaTV** 是一个开箱即用的、跨平台的影视聚合播放器。它基于 **Next.js 14** + **Tailwind&nbsp;CSS** + **TypeScript** 构建，支持多资源搜索、在线播放、收藏同步、播放记录、云端存储，让你可以随时随地畅享海量免费影视内容。
 
 <div align="center">
 
@@ -18,95 +18,95 @@
 
 ---
 
-## 🎩 Phiên bản sửa đổi kỳ diệu
+## 🎩 魔改版
 
-### 📢 Tuyên bố
+### 📢 声明
 
-1. Dự án này chỉ nhằm mục đích bảo trì đơn giản, chủ yếu là sửa lỗi. Chúng tôi sẽ đặc biệt thận trọng về các tính năng mới. Điều duy nhất có thể được bổ sung chắc chắn là hỗ trợ cho tvbox.
-2. Bạn có thể [phản hồi](https://github.com/laboratorys/LunaTV/issues), nhưng tôi có thể không (có thể) giải quyết vấn đề đó và tôi sẽ chỉ để mọi việc diễn ra bình thường.
-3. Cố gắng giữ nó chân thực nhất có thể, cảm ơn nỗ lực của tác giả ban đầu và đứng trên vai những người khổng lồ!
+1. 本项目仅作简单维护，主要修复 BUG，对于新功能会特别慎重，唯一可以确定会增加的就是对 tvbox 的支持。
+2. 你可以[反馈](https://github.com/laboratorys/LunaTV/issues)，但是我不一定（能）解决，主打一个随性。
+3. 尽量保证原汁原味，感谢原作者的付出，站在巨人的肩膀上！
 
-### 🚀 Tổng quan về tính năng mới
+### 🚀 新特性概览
 
-- [x] Mở đăng ký
-- [x] Duyệt web riêng tư
-- [x] hỗ trợ hộp tv
-- [x] Hỗ trợ lưu trữ sqlite
-- [x] Phân loại vở kịch ngắn
-- [x] Duyệt nguồn video
-- [] Chơi trong khi tải xuống
+- [x] 开放注册
+- [x] 无痕浏览
+- [x] tvbox 支持
+- [x] 支持 sqlite 存储
+- [x] 短剧分类
+- [x] 视频源浏览
+- [ ] 边下边播
 
-### 🌿 Nhánh phiên bản
+### 🌿 版本分支
 
-- nhánh v100: mã cuối cùng của phiên bản v100 của dự án ban đầu, sẽ không có sửa đổi nào nữa
-- nhánh chính: phiên bản ổn định
-- nhánh dev: phiên bản phát triển
-- Phiên bản đầu tiên của phiên bản sửa đổi kỳ diệu là: 5.0.0
+- v100 分支：原项目 v100 版本的最终代码，不会再做任何修改
+- main 分支：稳定版
+- dev 分支：开发版
+- 魔改版的初始版本是:5.0.0
 
-### 🐳 Hình ảnh Docker
+### 🐳 Docker 镜像
 
-1. phiên bản mới nhất mới nhất: `ghcr.io/laboratorys/lunatv:latest`
-2. TAG tương ứng với phiên bản phát hành: `ghcr.io/laboratorys/lunatv:v5.0.0`
-3. phiên bản phát triển dev. Phiên bản này chưa được phát hành chính thức và có thể không ổn định. Vui lòng thận trọng khi sử dụng: `ghcr.io/laboratorys/lunatv:dev`
-4. Nếu các thẻ không liên tiếp thì phiên bản phát triển trung gian sẽ được sử dụng để chuyển đổi.
-5. Cập nhật đồng bộ docker.io: [iicm/lunatv](https://hub.docker.com/r/iicm/lunatv/tags)
+1. latest 最新版本：`ghcr.io/laboratorys/lunatv:latest`
+2. 对应 release 版本的 TAG：`ghcr.io/laboratorys/lunatv:v5.0.0`
+3. dev 开发版本，该版本未正式发布可能存在不稳定因素，谨慎食用：`ghcr.io/laboratorys/lunatv:dev`
+4. 如果 tag 不连续，那么中间的开发版本是做过渡使用
+5. 同步更新 docker.io：[iicm/lunatv](https://hub.docker.com/r/iicm/lunatv/tags)
 
-## ✨ Tính năng
+## ✨ 功能特性
 
-- 🔍 **Tìm kiếm tổng hợp nhiều nguồn**: Một tìm kiếm ngay lập tức trả về kết quả từ tất cả các nguồn.
-- 📄 **Trang chi tiết phong phú**: Hỗ trợ hiển thị thông tin đầy đủ như danh sách tập, diễn viên, năm, giới thiệu, v.v.
-- ▶️ **Phát lại trực tuyến mượt mà**: Tích hợp HLS.js & ArtPlayer.
-- ❤️ **Bộ sưu tập + Tiếp tục xem**: Hỗ trợ lưu trữ Kvrocks/Redis/Upstash, tiến trình đồng bộ hóa đa đầu.
-- 📱 **PWA**: Bộ nhớ đệm ngoại tuyến, cài đặt vào màn hình chính/máy tính để bàn, trải nghiệm di động gốc.
-- 🌗 **Bố cục đáp ứng**: Thanh bên của máy tính để bàn + điều hướng phía dưới thiết bị di động, thích ứng với nhiều kích thước màn hình khác nhau.
-- 👿 **Xóa quảng cáo thông minh**: Tự động bỏ qua các quảng cáo được cắt lát trong video (thử nghiệm).
+- 🔍 **多源聚合搜索**：一次搜索立刻返回全源结果。
+- 📄 **丰富详情页**：支持剧集列表、演员、年份、简介等完整信息展示。
+- ▶️ **流畅在线播放**：集成 HLS.js & ArtPlayer。
+- ❤️ **收藏 + 继续观看**：支持 Kvrocks/Redis/Upstash 存储，多端同步进度。
+- 📱 **PWA**：离线缓存、安装到桌面/主屏，移动端原生体验。
+- 🌗 **响应式布局**：桌面侧边栏 + 移动底部导航，自适应各种屏幕尺寸。
+- 👿 **智能去广告**：自动跳过视频中的切片广告（实验性）。
 
-### Lưu ý: Sau khi triển khai, dự án là dự án shell trống, không có nguồn phát lại và nguồn phát sóng trực tiếp tích hợp. Nó cần phải được thu thập bởi chính bạn.
+### 注意：部署后项目为空壳项目，无内置播放源和直播源，需要自行收集
 
 <details>
-<summary>Nhấp để xem ảnh chụp màn hình dự án</summary>
-<img src="public/screenshot1.png" alt="Ảnh chụp màn hình dự án" style="max-width:600px">
-<img src="public/screenshot2.png" alt="Ảnh chụp màn hình dự án" style="max-width:600px">
-<img src="public/screenshot3.png" alt="Ảnh chụp màn hình dự án" style="max-width:600px">
+  <summary>点击查看项目截图</summary>
+  <img src="public/screenshot1.png" alt="项目截图" style="max-width:600px">
+  <img src="public/screenshot2.png" alt="项目截图" style="max-width:600px">
+  <img src="public/screenshot3.png" alt="项目截图" style="max-width:600px">
 </details>
 
-### Vui lòng không xuất bản video hoặc bài viết để quảng bá dự án này trên các tài khoản công khai Bilibili, Xiaohongshu, WeChat, Douyin, Toutiao hoặc các nền tảng xã hội khác của Trung Quốc đại lục và không ủy quyền cho bất kỳ dự án hoặc trang web "Công nghệ hàng tuần/hàng tháng" nào đưa dự án này vào.
+### 请不要在 B 站、小红书、微信公众号、抖音、今日头条或其他中国大陆社交平台发布视频或文章宣传本项目，不授权任何“科技周刊/月刊”类项目或站点收录本项目。
 
-## 🗺 Mục lục
+## 🗺 目录
 
-- [Ngăn xếp công nghệ](#Ngăn xếp công nghệ)
-- [Triển khai](#triển khai)
-- [Triển khai bằng một cú nhấp chuột](#zeabur-Triển khai bằng một cú nhấp chuột)
-- [Triển khai Docker](#Kvrocks-Khuyến nghị lưu trữ)
-- [Tệp cấu hình](#tệp cấu hình)
-- [Đăng ký](#đăng ký)
-- [TỰ ĐỘNG CẬP NHẬT](#TỰ ĐỘNG CẬP NHẬT)
-- [Biến môi trường](#biến môi trường)
-- [Khách hàng](#khách hàng)
-- [Sử dụng AndroidTV](#AndroidTV-USE)
+- [技术栈](#技术栈)
+- [部署](#部署)
+  - [一键部署](#zeabur-一键部署)
+  - [Docker 部署](#Kvrocks-存储推荐)
+- [配置文件](#配置文件)
+- [订阅](#订阅)
+- [自动更新](#自动更新)
+- [环境变量](#环境变量)
+- [客户端](#客户端)
+- [AndroidTV 使用](#AndroidTV-使用)
 - [Roadmap](#roadmap)
-- [Lời nhắc về bảo mật và quyền riêng tư](#security&privacyreminder)
+- [安全与隐私提醒](#安全与隐私提醒)
 - [License](#license)
-- [CÁC NHẬN](#CÁC NHẬN)
+- [致谢](#致谢)
 
-## Ngăn xếp công nghệ
+## 技术栈
 
-| Phân loại | Phụ thuộc chính |
+| 分类      | 主要依赖                                                                                              |
 | --------- | ----------------------------------------------------------------------------------------------------- |
-| Khung giao diện người dùng | [Next.js 14](https://nextjs.org/) · Bộ định tuyến ứng dụng |
-| Giao diện người dùng & Phong cách | [Tailwind CSS 3](https://tailwindcss.com/) |
-| Ngôn ngữ | TypeScript 4 |
-| Người chơi | [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) · [HLS.js](https://github.com/video-dev/hls.js/) |
-| Chất lượng mã | ESLint · Đẹp hơn · Jest |
-| Triển khai | Docker |
+| 前端框架  | [Next.js 14](https://nextjs.org/) · App Router                                                        |
+| UI & 样式 | [Tailwind&nbsp;CSS 3](https://tailwindcss.com/)                                                       |
+| 语言      | TypeScript 4                                                                                          |
+| 播放器    | [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) · [HLS.js](https://github.com/video-dev/hls.js/) |
+| 代码质量  | ESLint · Prettier · Jest                                                                              |
+| 部署      | Docker                                                                                                |
 
-## Triển khai
+## 部署
 
-Dự án này **chỉ hỗ trợ triển khai Docker hoặc các nền tảng dựa trên Docker khác**.
+本项目**仅支持 Docker 或其他基于 Docker 的平台** 部署。
 
-### bộ nhớ sqlite (phương pháp 1-tạo thư mục theo cách thủ công)
+### sqlite 存储（方式 1-手动创建目录）
 
-**Vì vùng chứa được chạy bằng tài khoản không phải root nên bạn cần tạo một thư mục trên máy chủ và đặt quyền**
+**由于容器中以非 root 账户运行，需要在宿主机创建目录并设置权限**
 
 ```
 sudo mkdir -p /opt/lunatv/data
@@ -129,7 +129,7 @@ services:
       - /opt/lunatv/data:/app/data
 ```
 
-### lưu trữ sqlite (chế độ quản lý tự động ổ đĩa có tên 2)
+### sqlite 存储（方式 2-命名卷自动管理）
 
 ```yml
 services:
@@ -149,7 +149,7 @@ volumes:
   lunatv-data:
 ```
 
-### Kho lưu trữ Kvrocks
+### Kvrocks 存储
 
 ```yml
 services:
@@ -188,7 +188,7 @@ volumes:
       o: bind
 ```
 
-### Lưu trữ Redis (có nguy cơ mất dữ liệu nhất định)
+### Redis 存储（有一定的丢数据风险）
 
 ```yml
 services:
@@ -213,7 +213,7 @@ services:
     restart: unless-stopped
     networks:
       - lunatv-network
-# Vui lòng kích hoạt tính bền vững, nếu không dữ liệu sẽ bị mất sau khi nâng cấp/khởi động lại
+    # 请开启持久化，否则升级/重启后数据丢失
     volumes:
       - ./data:/data
 networks:
@@ -221,11 +221,11 @@ networks:
     driver: bridge
 ```
 
-### Bộ lưu trữ phía trên
+### Upstash 存储
 
-1. Đăng ký tài khoản tại [upstash](https://upstash.com/) và tạo một phiên bản Redis mới với bất kỳ tên nào.
-2. Sao chép **HTTPS ENDPOINT và TOKEN** của cơ sở dữ liệu mới
-3. Sử dụng docker soạn sau
+1. 在 [upstash](https://upstash.com/) 注册账号并新建一个 Redis 实例，名称任意。
+2. 复制新数据库的 **HTTPS ENDPOINT 和 TOKEN**
+3. 使用如下 docker compose
 
 ```yml
 services:
@@ -239,125 +239,125 @@ services:
       - USERNAME=admin
       - PASSWORD=admin_password
       - NEXT_PUBLIC_STORAGE_TYPE=upstash
-- UPSTASH_URL=HTTPS ENDPOINT bắt đầu bằng https ở trên
-- UPSTASH_TOKEN=TOKEN ở trên
+      - UPSTASH_URL=上面 https 开头的 HTTPS ENDPOINT
+      - UPSTASH_TOKEN=上面的 TOKEN
 ```
 
-### Triển khai Zeabur chỉ bằng một cú nhấp chuột
+### zeabur 一键部署
 
-Nhấp vào nút bên dưới để triển khai bằng một cú nhấp chuột và cấu hình tự động cơ sở dữ liệu LunaTV + Kvrocks:
+点击下方按钮即可一键部署，自动配置 LunaTV + Kvrocks 数据库：
 
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8MPTQU/deploy)
 
-**Thuận lợi**:
+**优势**：
 
-- ✅ Không cần cấu hình, khởi động chỉ bằng một cú nhấp chuột (tự động triển khai môi trường hoàn chỉnh)
-- ✅ Tự động tăng tốc HTTPS và CDN toàn cầu
-- ✅ Lưu trữ liên tục, dữ liệu sẽ không bao giờ bị mất
-- ✅ Dung lượng miễn phí đủ cho mục đích sử dụng cá nhân
+- ✅ 无需配置，一键启动（自动部署完整环境）
+- ✅ 自动 HTTPS 和全球 CDN 加速
+- ✅ 持久化存储，数据永不丢失
+- ✅ 免费额度足够个人使用
 
-**⚠️Mẹo quan trọng**: Sau khi triển khai hoàn tất, bạn cần đặt tên miền truy cập (Miền) cho dịch vụ LunaTV ở Zeabur trước khi có thể truy cập trên trình duyệt. Để biết chi tiết, hãy xem các bước bên dưới [Đặt tên miền truy cập] (#5-Bắt buộc phải đặt tên miền truy cập).
+**⚠️ 重要提示**：部署完成后，需要在 Zeabur 中为 LunaTV 服务设置访问域名（Domain）才能在浏览器中访问。详见下方 [设置访问域名](#5-设置访问域名必须) 步骤。
 
-### ☁️ Triển khai Zeabur (khuyên dùng)
+### ☁️ Zeabur 部署（推荐）
 
 Thanks to @SzeMeng76
 
-Zeabur là nền tảng triển khai đám mây một cửa sử dụng hình ảnh Docker dựng sẵn để triển khai nhanh chóng mà không cần chờ bản dựng.
+Zeabur 是一站式云端部署平台，使用预构建的 Docker 镜像可以快速部署，无需等待构建。
 
-**Các bước triển khai:**
+**部署步骤：**
 
-1. **Thêm dịch vụ KVRocks** (thêm cơ sở dữ liệu trước)
+1. **添加 KVRocks 服务**（先添加数据库）
 
-- Nhấp vào "Thêm dịch vụ"> "Hình ảnh Docker"
-- Nhập tên image: `apache/kvrocks`
-- Cấu hình cổng: `6666` (TCP)
-- **Ghi nhớ tên dịch vụ** (thường là `apachekvrocks`)
-- **Cấu hình khối lượng liên tục (quan trọng)**:
-- Tìm phần “Tập” trong cài đặt dịch vụ
-- Bấm vào "Thêm Tập" để thêm tập mới
-- Volume ID: `kvrocks-data` (có thể tùy chỉnh, chỉ hỗ trợ chữ cái, số và dấu gạch nối)
+   - 点击 "Add Service" > "Docker Images"
+   - 输入镜像名称：`apache/kvrocks`
+   - 配置端口：`6666` (TCP)
+   - **记住服务名称**（通常是 `apachekvrocks`）
+   - **配置持久化卷（重要）**：
+     - 在服务设置中找到 "Volumes" 部分
+     - 点击 "Add Volume" 添加新卷
+     - Volume ID: `kvrocks-data`（可自定义，仅支持字母、数字、连字符）
      - Path: `/var/lib/kvrocks/db`
-- Lưu cấu hình
+     - 保存配置
 
-> 💡 **Mẹo quan trọng**: Đường dẫn ổ đĩa cố định phải được đặt thành `/var/lib/kvrocks/db` (thư mục dữ liệu KVRocks), để tệp cấu hình vẫn còn trong vùng chứa, tệp cơ sở dữ liệu được duy trì và dữ liệu sẽ không bị mất sau khi khởi động lại!
+   > 💡 **重要提示**：持久化卷路径必须设置为 `/var/lib/kvrocks/db`（KVRocks 数据目录），这样配置文件保留在容器内，数据库文件持久化，重启后数据不会丢失！
 
-2. **Thêm dịch vụ LunaTV**
+2. **添加 LunaTV 服务**
 
-- Nhấp vào "Thêm dịch vụ"> "Hình ảnh Docker"
-- Nhập tên ảnh: `ghcr.io/moontechlab/lunatv:latest`
-- Cấu hình cổng: `3000` (HTTP)
+   - 点击 "Add Service" > "Docker Images"
+   - 输入镜像名称：`ghcr.io/moontechlab/lunatv:latest`
+   - 配置端口：`3000` (HTTP)
 
-3. **Cấu hình các biến môi trường**
+3. **配置环境变量**
 
-Thêm vào các biến môi trường của dịch vụ LunaTV:
+   在 LunaTV 服务的环境变量中添加：
 
    ```env
-# Bắt buộc: Tài khoản quản trị viên
+   # 必填：管理员账号
    USERNAME=admin
    PASSWORD=your_secure_password
 
-#Bắt buộc: cấu hình lưu trữ
+   # 必填：存储配置
    NEXT_PUBLIC_STORAGE_TYPE=kvrocks
    KVROCKS_URL=redis://apachekvrocks:6666
 
-# Tùy chọn: cấu hình trang web
+   # 可选：站点配置
    SITE_BASE=https://your-domain.zeabur.app
    NEXT_PUBLIC_SITE_NAME=LunaTV Enhanced
-ANNOUNCEMENT=Chào mừng đến với Phiên bản nâng cao của LunaTV
+   ANNOUNCEMENT=欢迎使用 LunaTV Enhanced Edition
 
-# Tùy chọn: Cấu hình proxy Douban (được khuyến nghị)
+   # 可选：豆瓣代理配置（推荐）
    NEXT_PUBLIC_DOUBAN_PROXY_TYPE=cmliussss-cdn-tencent
    NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE=cmliussss-cdn-tencent
    ```
 
-**Để ý**:
+   **注意**：
 
-- Sử dụng tên dịch vụ làm tên máy chủ: `redis://apachekvrocks:6666`
-- Nếu tên dịch vụ khác thì thay bằng tên thật
-- Cả hai dịch vụ phải nằm trong cùng một Dự án
+   - 使用服务名称作为主机名：`redis://apachekvrocks:6666`
+   - 如果服务名称不同，请替换为实际名称
+   - 两个服务必须在同一个 Project 中
 
-4. **Đã hoàn tất triển khai**
-- Zeabur sẽ tự động kéo image và khởi động dịch vụ
-- Sau khi đợi dịch vụ sẵn sàng, bạn cần tự tay thiết lập tên miền truy cập (xem bước tiếp theo)
+4. **部署完成**
+   - Zeabur 会自动拉取镜像并启动服务
+   - 等待服务就绪后，需要手动设置访问域名（见下一步）
 
-#### 5. Đặt tên miền truy cập (bắt buộc)
+#### 5. 设置访问域名（必须）
 
-- Trên trang dịch vụ LunaTV, nhấp vào tab "Mạng" hoặc "Mạng"
-- Bấm vào "Tạo miền" để tạo tên miền miễn phí do Zeabur cung cấp (chẳng hạn như `xxx.zeabur.app`)
-- Hoặc liên kết một tên miền tùy chỉnh:
-- Bấm vào "Add Domain" để thêm tên miền của bạn
-- Làm theo lời nhắc để định cấu hình bản ghi DNS CNAME để trỏ đến địa chỉ đích do Zeabur cung cấp
-- Sau khi thiết lập xong tên miền bạn có thể truy cập LunaTV thông qua tên miền
+- 在 LunaTV 服务页面，点击 "Networking" 或 "网络" 标签
+- 点击 "Generate Domain" 生成 Zeabur 提供的免费域名（如 `xxx.zeabur.app`）
+- 或者绑定自定义域名：
+  - 点击 "Add Domain" 添加你的域名
+  - 按照提示配置 DNS CNAME 记录指向 Zeabur 提供的目标地址
+- 设置完域名后即可通过域名访问 LunaTV
 
-6. **Ràng buộc một tên miền tùy chỉnh (tùy chọn)**
-- Nhấp vào "Tên miền" trong cài đặt dịch vụ
-- Thêm tên miền tùy chỉnh của bạn
-- Cấu hình bản ghi DNS CNAME để trỏ tới tên miền do Zeabur cung cấp
+6. **绑定自定义域名（可选）**
+   - 在服务设置中点击 "Domains"
+   - 添加你的自定义域名
+   - 配置 DNS CNAME 记录指向 Zeabur 提供的域名
 
-#### 🔄 Cập nhật hình ảnh Docker
+#### 🔄 更新 Docker 镜像
 
-Zeabur sẽ không tự động cập nhật khi phiên bản mới của hình ảnh Docker được phát hành. Cập nhật cần phải được kích hoạt bằng tay.
+当 Docker 镜像有新版本发布时，Zeabur 不会自动更新。需要手动触发更新。
 
-**Các bước cập nhật:**
+**更新步骤：**
 
-1. **Nhập trang dịch vụ**
+1. **进入服务页面**
 
-- Click vào dịch vụ cần cập nhật (LunaTV hoặc KVRocks)
+   - 点击需要更新的服务（LunaTV 或 KVRocks）
 
-2. **Khởi động lại dịch vụ**
-- Nhấp vào trang **"Trạng thái dịch vụ"**, sau đó nhấp vào nút **"Khởi động lại phiên bản hiện tại"**
-- Zeabur sẽ tự động kéo image `mới nhất` mới nhất và triển khai lại nó
+2. **重启服务**
+   - 点击 **"服务状态"** 页面，再点击 **"重启当前版本"** 按钮
+   - Zeabur 会自动拉取最新的 `latest` 镜像并重新部署
 
-> 💡 **Mẹo**:
+> 💡 **提示**：
 >
-> - Khi sử dụng thẻ `mới nhất`, Khởi động lại sẽ tự động lấy hình ảnh mới nhất
-> - Nên sử dụng thẻ phiên bản cố định (chẳng hạn như `v5.5.6`) trong môi trường sản xuất để tránh vô tình cập nhật
+> - 使用 `latest` 标签时，Restart 会自动拉取最新镜像
+> - 生产环境推荐使用固定版本标签（如 `v5.5.6`）避免意外更新
 
-## Tệp cấu hình
+## 配置文件
 
-Sau khi triển khai hoàn tất, nó sẽ là một ứng dụng shell trống không có nguồn phát lại. Quản trị viên web cần điền tệp cấu hình vào cài đặt tệp cấu hình của nền quản lý (đăng ký sẽ được hỗ trợ trong tương lai)
+完成部署后为空壳应用，无播放源，需要站长在管理后台的配置文件设置中填写配置文件（后续会支持订阅）
 
-Một tập tin cấu hình ví dụ như sau:
+配置文件示例如下：
 
 ```json
 {
@@ -365,133 +365,133 @@ Một tập tin cấu hình ví dụ như sau:
   "api_site": {
     "dyttzy": {
       "api": "http://xxx.com/api.php/provide/vod",
-"name": "Tài nguyên mẫu",
+      "name": "示例资源",
       "detail": "http://xxx.com"
     }
-// ... thêm trang web
+    // ...更多站点
   },
   "custom_category": [
     {
-"tên": "华语",
+      "name": "华语",
       "type": "movie",
-"truy vấn": "中文"
+      "query": "华语"
     }
   ]
 }
 ```
 
-- `cache_time`: thời gian lưu trữ giao diện (giây).
-- `api_site`: Bạn có thể thêm, xóa hoặc thay thế bất kỳ trang tài nguyên nào. Mô tả trường:
-- `key`: mã định danh duy nhất, giữ chữ/số viết thường.
-- `api`: `vod` Địa chỉ gốc API JSON do trạm tài nguyên cung cấp.
-- `name`: Tên hiển thị trong giao diện người-máy.
-- `detail`: (Tùy chọn) Một số trang web không thể lấy thông tin chi tiết về tập thông qua API cần cung cấp URL gốc của chi tiết trang web để thu thập thông tin.
-- `custom_category`: Cấu hình danh mục tùy chỉnh, được sử dụng để thêm các danh mục phim và truyền hình được cá nhân hóa trong điều hướng. Sử dụng loại + truy vấn làm mã định danh duy nhất. Các trường sau được hỗ trợ:
-- `name`: tên hiển thị danh mục (tùy chọn, nếu không được cung cấp, truy vấn sẽ được sử dụng làm tên hiển thị)
-- `type`: kiểu phân loại, hỗ trợ `movie` (phim) hoặc `tv` (tv series)
-- `query`: từ khóa tìm kiếm, dùng để tìm kiếm nội dung liên quan trong Douban API
+- `cache_time`：接口缓存时间（秒）。
+- `api_site`：你可以增删或替换任何资源站，字段说明：
+  - `key`：唯一标识，保持小写字母/数字。
+  - `api`：资源站提供的 `vod` JSON API 根地址。
+  - `name`：在人机界面中展示的名称。
+  - `detail`：（可选）部分无法通过 API 获取剧集详情的站点，需要提供网页详情根 URL，用于爬取。
+- `custom_category`：自定义分类配置，用于在导航中添加个性化的影视分类。以 type + query 作为唯一标识。支持以下字段：
+  - `name`：分类显示名称（可选，如不提供则使用 query 作为显示名）
+  - `type`：分类类型，支持 `movie`（电影）或 `tv`（电视剧）
+  - `query`：搜索关键词，用于在豆瓣 API 中搜索相关内容
 
-Các danh mục tùy chỉnh được custom_category hỗ trợ được biết như sau:
+custom_category 支持的自定义分类已知如下：
 
-- phim: nổi tiếng, mới nhất, cổ điển, điểm cao Douban, phim không được ưa chuộng, Trung Quốc, Âu Mỹ, Hàn Quốc, Nhật Bản, hành động, hài, tình yêu, khoa học viễn tưởng, hồi hộp, kinh dị, hàn gắn
-- tv: phim truyền hình nổi tiếng, phim truyền hình Mỹ, phim truyền hình Anh, phim truyền hình Hàn Quốc, phim truyền hình Nhật Bản, phim truyền hình trong nước, phim truyền hình Hồng Kông, phim hoạt hình Nhật Bản, chương trình tạp kỹ, phim tài liệu
+- movie：热门、最新、经典、豆瓣高分、冷门佳片、华语、欧美、韩国、日本、动作、喜剧、爱情、科幻、悬疑、恐怖、治愈
+- tv：热门、美剧、英剧、韩剧、日剧、国产剧、港剧、日本动画、综艺、纪录片
 
-Bạn cũng có thể nhập "Harry Potter" và hiệu quả tương đương với tìm kiếm Douban
+也可输入如 "哈利波特" 效果等同于豆瓣搜索
 
-LunaTV hỗ trợ định dạng API Apple CMS V10 tiêu chuẩn.
+LunaTV 支持标准的苹果 CMS V10 API 格式。
 
-## Đặt mua
+## 订阅
 
-Mã hóa tệp cấu hình hoàn chỉnh với base58 và cung cấp dịch vụ http là liên kết đăng ký, có thể được sử dụng trong chương trình phụ trợ/Helios của MoonTV.
+将完整的配置文件 base58 编码后提供 http 服务即为订阅链接，可在 MoonTV 后台/Helios 中使用。
 
-## Cập nhật tự động
+## 自动更新
 
-Vùng chứa hình ảnh có thể được cập nhật tự động với sự trợ giúp của [tháp canh](https://github.com/containrrr/watchtower)
+可借助 [watchtower](https://github.com/containrrr/watchtower) 自动更新镜像容器
 
-Docker soạn UI như dockge/komodo cũng có chức năng cập nhật tự động
+dockge/komodo 等 docker compose UI 也有自动更新功能
 
-## Biến môi trường
+## 环境变量
 
-| biến | mô tả | giá trị tùy chọn | giá trị mặc định |
+| 变量                                | 说明                     | 可选值                         | 默认值                                                                                                                     |
 | ----------------------------------- | ------------------------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| TÊN NGƯỜI DÙNG | Tài khoản quản trị trang web | Bất kỳ chuỗi nào | Không có trường mặc định, bắt buộc |
-| MẬT KHẨU | Mật khẩu quản trị trang web | Bất kỳ chuỗi nào | Không có trường mặc định, bắt buộc |
-| SITE_BASE | url trang web | ở dạng https://example.com | trống |
-| NEXT_PUBLIC_SITE_NAME | Tên trang web | Bất kỳ chuỗi nào | LunaTV |
-| THÔNG BÁO | Thông báo trang web | Chuỗi tùy ý | Trang web này chỉ cung cấp dịch vụ tìm kiếm thông tin phim và truyền hình và tất cả nội dung đều đến từ các trang web của bên thứ ba. Trang web này không lưu trữ bất kỳ tài nguyên video nào và không chịu trách nhiệm về tính chính xác, hợp pháp và đầy đủ của bất kỳ nội dung nào. |
-| NEXT_PUBLIC_STORAGE_TYPE | Phương pháp lưu trữ bản ghi/bộ sưu tập phát lại | sqlte, redis, kvrocks, upstash | Không có trường mặc định, bắt buộc |
-| KVROCKS_URL | url kết nối kvrocks | url kết nối | trống |
-| REDIS_URL | làm lại url kết nối | url kết nối | trống |
-| UPSTASH_URL | upstash url kết nối redis | url kết nối | trống |
-| UPSTASH_TOKEN | mã thông báo kết nối redis upstash | mã thông báo kết nối | trống |
-| NEXT_PUBLIC_SEARCH_MAX_PAGE | Số lượng trang tối đa mà giao diện tìm kiếm có thể kéo ra | 1-50 | 5 |
-| NEXT_PUBLIC_DOUBAN_PROXY_TYPE | Phương thức yêu cầu nguồn dữ liệu Douban | Xem bên dưới | trực tiếp |
-| NEXT_PUBLIC_DOUBAN_PROXY | URL proxy dữ liệu Douban được tùy chỉnh | tiền tố url | (trống) |
-| NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE | Loại proxy hình ảnh Douban | Xem bên dưới | trực tiếp |
-| NEXT_PUBLIC_DOUBAN_IMAGE_PROXY | URL proxy hình ảnh Douban được tùy chỉnh | tiền tố url | (trống) |
-| NEXT_PUBLIC_DISABLE_YELLOW_FILTER | Tắt tính năng lọc phim khiêu dâm | đúng/sai | sai |
-| NEXT_PUBLIC_FLUID_SEARCH | Có bật đầu ra phát trực tuyến của giao diện tìm kiếm hay không | đúng/sai | đúng |
+| USERNAME                            | 站长账号                 | 任意字符串                     | 无默认，必填字段                                                                                                           |
+| PASSWORD                            | 站长密码                 | 任意字符串                     | 无默认，必填字段                                                                                                           |
+| SITE_BASE                           | 站点 url                 | 形如 https://example.com       | 空                                                                                                                         |
+| NEXT_PUBLIC_SITE_NAME               | 站点名称                 | 任意字符串                     | LunaTV                                                                                                                     |
+| ANNOUNCEMENT                        | 站点公告                 | 任意字符串                     | 本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。 |
+| NEXT_PUBLIC_STORAGE_TYPE            | 播放记录/收藏的存储方式  | sqlte、redis、kvrocks、upstash | 无默认，必填字段                                                                                                           |
+| KVROCKS_URL                         | kvrocks 连接 url         | 连接 url                       | 空                                                                                                                         |
+| REDIS_URL                           | redis 连接 url           | 连接 url                       | 空                                                                                                                         |
+| UPSTASH_URL                         | upstash redis 连接 url   | 连接 url                       | 空                                                                                                                         |
+| UPSTASH_TOKEN                       | upstash redis 连接 token | 连接 token                     | 空                                                                                                                         |
+| NEXT_PUBLIC_SEARCH_MAX_PAGE         | 搜索接口可拉取的最大页数 | 1-50                           | 5                                                                                                                          |
+| NEXT_PUBLIC_DOUBAN_PROXY_TYPE       | 豆瓣数据源请求方式       | 见下方                         | direct                                                                                                                     |
+| NEXT_PUBLIC_DOUBAN_PROXY            | 自定义豆瓣数据代理 URL   | url prefix                     | (空)                                                                                                                       |
+| NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE | 豆瓣图片代理类型         | 见下方                         | direct                                                                                                                     |
+| NEXT_PUBLIC_DOUBAN_IMAGE_PROXY      | 自定义豆瓣图片代理 URL   | url prefix                     | (空)                                                                                                                       |
+| NEXT_PUBLIC_DISABLE_YELLOW_FILTER   | 关闭色情内容过滤         | true/false                     | false                                                                                                                      |
+| NEXT_PUBLIC_FLUID_SEARCH            | 是否开启搜索接口流式输出 | true/ false                    | true                                                                                                                       |
 
-Giải thích về tùy chọn NEXT_PUBLIC_DOUBAN_PROXY_TYPE:
+NEXT_PUBLIC_DOUBAN_PROXY_TYPE 选项解释：
 
-- trực tiếp: Máy chủ yêu cầu trực tiếp trạm nguồn Douban
-- cors-proxy-zwei: Trình duyệt yêu cầu dữ liệu Douban từ proxy cors, được xây dựng bởi [Zwei](https://github.com/bestzwei)
-- cmliussss-cdn-tencent: Trình duyệt yêu cầu dữ liệu từ Douban CDN, được xây dựng bởi [CMLiussss](https://github.com/cmliu) và được tăng tốc bởi Tencent Cloud CDN
-- cmliussss-cdn-ali: Trình duyệt yêu cầu dữ liệu từ Douban CDN, được xây dựng bởi [CMLiussss](https://github.com/cmliu) và được tăng tốc bởi Alibaba Cloud CDN
-- tùy chỉnh: proxy do người dùng xác định, được xác định bởi NEXT_PUBLIC_DOUBAN_PROXY
+- direct: 由服务器直接请求豆瓣源站
+- cors-proxy-zwei: 浏览器向 cors proxy 请求豆瓣数据，该 cors proxy 由 [Zwei](https://github.com/bestzwei) 搭建
+- cmliussss-cdn-tencent: 浏览器向豆瓣 CDN 请求数据，该 CDN 由 [CMLiussss](https://github.com/cmliu) 搭建，并由腾讯云 cdn 提供加速
+- cmliussss-cdn-ali: 浏览器向豆瓣 CDN 请求数据，该 CDN 由 [CMLiussss](https://github.com/cmliu) 搭建，并由阿里云 cdn 提供加速
+- custom: 用户自定义 proxy，由 NEXT_PUBLIC_DOUBAN_PROXY 定义
 
-Giải thích về tùy chọn NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE:
+NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE 选项解释：
 
-- direct: Trình duyệt yêu cầu trực tiếp tên miền hình ảnh mặc định do Douban gán
-- máy chủ: Tác nhân máy chủ yêu cầu tên miền hình ảnh mặc định do Douban gán
-- img3: Trình duyệt yêu cầu CDN chất lượng cao chính thức của Douban (Alibaba Cloud)
-- cmliussss-cdn-tencent: Trình duyệt yêu cầu Douban CDN, được xây dựng bởi [CMLiussss](https://github.com/cmliu) và được tăng tốc bởi Tencent Cloud cdn
-- cmliussss-cdn-ali: Trình duyệt yêu cầu Douban CDN, được xây dựng bởi [CMLiussss](https://github.com/cmliu) và được tăng tốc bởi Alibaba Cloud cdn
-- tùy chỉnh: proxy do người dùng xác định, được xác định bởi NEXT_PUBLIC_DOUBAN_IMAGE_PROXY
+- direct：由浏览器直接请求豆瓣分配的默认图片域名
+- server：由服务器代理请求豆瓣分配的默认图片域名
+- img3：由浏览器请求豆瓣官方的精品 cdn（阿里云）
+- cmliussss-cdn-tencent：由浏览器请求豆瓣 CDN，该 CDN 由 [CMLiussss](https://github.com/cmliu) 搭建，并由腾讯云 cdn 提供加速
+- cmliussss-cdn-ali：由浏览器请求豆瓣 CDN，该 CDN 由 [CMLiussss](https://github.com/cmliu) 搭建，并由阿里云 cdn 提供加速
+- custom: 用户自定义 proxy，由 NEXT_PUBLIC_DOUBAN_IMAGE_PROXY 定义
 
-## Khách hàng
+## 客户端
 
-Có thể sử dụng phiên bản v100.0.0 trở lên với [Selene](https://github.com/MoonTechLab/Selene). Trải nghiệm di động thân thiện hơn và dữ liệu được đồng bộ hóa hoàn toàn.
+v100.0.0 以上版本可配合 [Selene](https://github.com/MoonTechLab/Selene) 使用，移动端体验更加友好，数据完全同步
 
-##Sử dụng AndroidTV
+## AndroidTV 使用
 
-Hiện tại, bạn có thể sử dụng dự án này với [OrionTV](https://github.com/zimplexing/OrionTV) trên Android TV và có thể sử dụng trực tiếp làm chương trình phụ trợ OrionTV
+目前该项目可以配合 [OrionTV](https://github.com/zimplexing/OrionTV) 在 Android TV 上使用，可以直接作为 OrionTV 后端
 
-Đã đạt được sự đồng bộ hóa các bản ghi phát lại và các trang web
+已实现播放记录和网页端同步
 
-## Lời nhắc về bảo mật và quyền riêng tư
+## 安全与隐私提醒
 
-### Vui lòng đặt mật khẩu bảo vệ và đóng đăng ký mạng công cộng
+### 请设置密码保护并关闭公网注册
 
-Vì sự an toàn của bạn và để tránh những rủi ro pháp lý tiềm ẩn, chúng tôi yêu cầu **rất khuyến khích đóng đăng ký mạng công cộng** trong quá trình triển khai:
+为了您的安全和避免潜在的法律风险，我们要求在部署时**强烈建议关闭公网注册**：
 
-### Yêu cầu triển khai
+### 部署要求
 
-1. **Đặt biến môi trường `PASSWORD`**: Đặt mật khẩu mạnh cho phiên bản của bạn
-2. **Chỉ sử dụng cho mục đích cá nhân**: Vui lòng không chia sẻ hoặc phổ biến công khai liên kết phiên bản của bạn
-3. **Tuân thủ luật pháp địa phương**: Hãy đảm bảo rằng việc sử dụng của bạn tuân thủ luật pháp và quy định của địa phương
+1. **设置环境变量 `PASSWORD`**：为您的实例设置一个强密码
+2. **仅供个人使用**：请勿将您的实例链接公开分享或传播
+3. **遵守当地法律**：请确保您的使用行为符合当地法律法规
 
-### Tuyên bố quan trọng
+### 重要声明
 
-- Dự án này chỉ dành cho học tập và sử dụng cá nhân
-- Không sử dụng các phiên bản đã triển khai cho mục đích thương mại hoặc dịch vụ công cộng
-- Người dùng hoàn toàn chịu trách nhiệm về mọi vấn đề pháp lý phát sinh từ việc chia sẻ công khai
-- Nhà phát triển dự án không chịu bất kỳ trách nhiệm pháp lý nào đối với hành vi sử dụng của người dùng
-- Dự án này không cung cấp dịch vụ ở Trung Quốc đại lục. Nếu dự án này cung cấp dịch vụ cho Trung Quốc đại lục thì đó là hành động cá nhân. Các rủi ro và trách nhiệm pháp lý phát sinh khi sử dụng trong lĩnh vực này thuộc về hành vi cá nhân của người dùng và không liên quan gì đến dự án này và họ phải tự chịu hoàn toàn trách nhiệm. xin tuyên bố
+- 本项目仅供学习和个人使用
+- 请勿将部署的实例用于商业用途或公开服务
+- 如因公开分享导致的任何法律问题，用户需自行承担责任
+- 项目开发者不对用户的使用行为承担任何法律责任
+- 本项目不在中国大陆地区提供服务。如有该项目在向中国大陆地区提供服务，属个人行为。在该地区使用所产生的法律风险及责任，属于用户个人行为，与本项目无关，须自行承担全部责任。特此声明
 
 ## License
 
 [MIT](LICENSE) © 2025 LunaTV & Contributors
 
-## Lời cảm ơn
+## 致谢
 
-- [ts-nextjs-tailwind-starter](https://github.com/theodorusclarence/ts-nextjs-tailwind-starter) — Dự án ban đầu dựa trên giàn giáo này.
-- [LibreTV](https://github.com/LibreSpark/LibreTV) — Hãy lấy cảm hứng từ điều này và đứng trên vai những người khổng lồ.
-- [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) — Cung cấp trình phát video trên web mạnh mẽ.
-- [HLS.js](https://github.com/video-dev/hls.js) — Triển khai hỗ trợ phát lại phương tiện truyền phát trực tuyến HLS trong trình duyệt.
-- [Zwei](https://github.com/bestzwei) — Cung cấp proxy cors để lấy dữ liệu Douban
-- [CMLiussss](https://github.com/cmliu) — Cung cấp dịch vụ CDN Douban
-- Cảm ơn tất cả các trang web cung cấp giao diện xem phim, truyền hình miễn phí.
+- [ts-nextjs-tailwind-starter](https://github.com/theodorusclarence/ts-nextjs-tailwind-starter) — 项目最初基于该脚手架。
+- [LibreTV](https://github.com/LibreSpark/LibreTV) — 由此启发，站在巨人的肩膀上。
+- [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) — 提供强大的网页视频播放器。
+- [HLS.js](https://github.com/video-dev/hls.js) — 实现 HLS 流媒体在浏览器中的播放支持。
+- [Zwei](https://github.com/bestzwei) — 提供获取豆瓣数据的 cors proxy
+- [CMLiussss](https://github.com/cmliu) — 提供豆瓣 CDN 服务
+- 感谢所有提供免费影视接口的站点。
 
 ## Star History
 
