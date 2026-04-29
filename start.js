@@ -54,6 +54,11 @@ const intervalId = setInterval(() => {
   req.setTimeout(2000, () => {
     req.destroy();
   });
+
+  // Prevent noisy unhandled socket errors during early boot.
+  req.on('error', (err) => {
+    console.warn(`Health probe not ready: ${err.message}`);
+  });
 }, 1000);
 
 // 执行 cron 任务的函数

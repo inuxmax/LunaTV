@@ -60,10 +60,16 @@ function createRetryWrapper(
           // 尝试重新连接
           try {
             const client = getClient();
-            if (!client.isOpen) {
+            if (!client.isOpen && !client.isReady) {
               await client.connect();
             }
-          } catch (reconnectErr) {
+          } catch (reconnectErr: any) {
+            if (reconnectErr?.message?.includes('Socket already opened')) {
+              console.warn(
+                `${clientName} reconnect skipped: socket already opened`
+              );
+              continue;
+            }
             console.error('Failed to reconnect:', reconnectErr);
           }
 
